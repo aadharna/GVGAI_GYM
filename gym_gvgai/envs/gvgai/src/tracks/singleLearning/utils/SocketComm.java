@@ -5,20 +5,20 @@ package tracks.singleLearning.utils;
  */
 
 import core.competition.CompetitionParameters;
-import ontology.Types.LEARNING_SSO_TYPE;
+import core.game.SerializableStateObservation;
+import ontology.Types;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class SocketComm extends Comm {
 
 
     public int port = CompetitionParameters.SOCKET_PORT; //default
     private Socket socket;
-    private Scanner in;
-    private PrintStream out;
+    private DataInputStream in;
+    private DataOutputStream out;
     private boolean end;
     private static int THRESHOLD = 60000;
 
@@ -37,36 +37,35 @@ public class SocketComm extends Comm {
      */
     @Override
     public void initBuffers() {
-        try{
+        try {
             //Accepting the socket connection.
             while (socket == null) {
                 ServerSocket serverSocket = new ServerSocket(port);
+                serverSocket.setPerformancePreferences(0, 1, 2);
+
                 socket = serverSocket.accept();
+                socket.setTcpNoDelay(true);
             }
 
 
             //Initialize input and output through socket.
-            in = new Scanner(socket.getInputStream());
-            out = new PrintStream(socket.getOutputStream());
+            in = new DataInputStream(socket.getInputStream());
+            out = new DataOutputStream(socket.getOutputStream());
 
-        } catch(java.net.BindException e)
-        {
+        } catch (java.net.BindException e) {
             System.out.println(e.toString());
             e.printStackTrace();
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    public void start()
-    {
+    public void start() {
         try {
             initBuffers();
 
-            while(!end)
-            {
+            while (!end) {
 
             }
             //out.format("Sending back: " + received);
@@ -83,11 +82,18 @@ public class SocketComm extends Comm {
     /**
      * Sends a message through the pipe.
      *
-     * @param msg message to send.
+     * @param data message to send.
      */
-    public void commSend(String msg) throws IOException {
-        String message = messageId + TOKEN_SEP + msg + lineSep;
-        out.format(message);
+    public void commSend(Types.GAMESTATES gameState, byte[] data) throws IOException {
+        out.writeLong(messageId);
+        out.writeByte(gameState.ordinal());
+
+        if(data != null) {
+            out.writeInt(data.length);
+            out.write(data);
+        } else {
+            out.writeInt(0);
+        }
         out.flush();
         messageId++;
     }
@@ -97,120 +103,29 @@ public class SocketComm extends Comm {
      *
      * @return the response got from the client, or null if no response was received after due time.
      */
-//    public String commRecv() {
-//        String ret = null;
-//        if (in.hasNextLine()) {
-//            ret = in.nextLine();
-//            //System.out.println("Received in server: " + ret);
-//            if (ret != null && ret.trim().length() > 0) {
-//                String messageParts[] = ret.split(TOKEN_SEP);
-//                if (messageParts.length < 2) {
-//                    System.err.println("SocketComm: commRecv(): received message incomplete.");
-//                    return null;
-//                }
-//                int receivedID = Integer.parseInt(messageParts[0]);
-//                String msg = messageParts[1];
-//
-//                if (messageParts.length >= 3) {
-//                    String ssoType = messageParts[2];
-//                    switch (ssoType) {
-//                        case "JSON":
-//                            this.lastSsoType = LEARNING_SSO_TYPE.JSON;
-//                            break;
-//                        case "IMAGE":
-//                            this.lastSsoType = LEARNING_SSO_TYPE.IMAGE;
-//                            break;
-//                        case "BOTH":
-//                            this.lastSsoType = LEARNING_SSO_TYPE.BOTH;
-//                            break;
-//                        default:
-//                            System.err.println("SocketComm: commRecv(): This should never happen.");
-//                            break;
-//                    }
-//                }
-//
-//                if (receivedID == (messageId - 1)) {
-//                    return msg.trim();
-//                } else if (receivedID < (messageId - 1)) {
-//                    //Previous message, ignore and keep waiting.
-//                    return commRecv();
-//                } else {
-//                    //A message from the future? Ignore and return null;
-//                    System.err.println("SocketComm: commRecv: Communication Error! A message from the future!");
-//                    return null;
-//                }
-//            } else {
-//                return commRecv();
-//            }
-//        } else {
-//            return commRecv();
-//        }
-//    }
+    public byte[] commRecv() {
+        try {
+            long receivedId = in.readLong();
+            int ssoType = (int) in.readByte();
+            int length = in.readInt();
 
-    /**
-     * Receives a message from the client.
-     *
-     * @return the response got from the client, or null if no response was received after due time.
-     */
-    public String commRecv() {
-        float timeout = 0;
-        String response = null;
-        while (timeout < THRESHOLD && response == null)
-        {
-            response = processCommRecv();
-        }
-        if (response == null){
-            System.err.println("SocketComm: commRecv: No message received. Time threshold exceeded.");
-        }
-        return response;
-    }
+            this.lastSsoType = Types.LEARNING_SSO_TYPE.values()[ssoType];
 
-    private String processCommRecv(){
-        String ret = null;
-        if (in.hasNextLine()) {
-            ret = in.nextLine();
-            //System.out.println("Received in server: " + ret);
-            if (ret != null && ret.trim().length() > 0) {
-                String messageParts[] = ret.split(TOKEN_SEP);
-                if (messageParts.length < 2) {
-                    System.err.println("SocketComm: commRecv(): received message incomplete.");
-                    return null;
-                }
-                int receivedID = Integer.parseInt(messageParts[0]);
-                String msg = messageParts[1];
-
-                if (messageParts.length >= 3) {
-                    String ssoType = messageParts[2];
-                    switch (ssoType) {
-                        case "JSON":
-                            this.lastSsoType = LEARNING_SSO_TYPE.JSON;
-                            break;
-                        case "IMAGE":
-                            this.lastSsoType = LEARNING_SSO_TYPE.IMAGE;
-                            break;
-                        case "BOTH":
-                            this.lastSsoType = LEARNING_SSO_TYPE.BOTH;
-                            break;
-                        default:
-                            System.err.println("SocketComm: commRecv(): This should never happen.");
-                            break;
-                    }
-                }
-
-                if (receivedID == (messageId - 1)) {
-                    return msg.trim();
-                } else if (receivedID < (messageId - 1)) {
-                    //Previous message, ignore and keep waiting.
-                    return commRecv();
-                } else {
-                    //A message from the future? Ignore and return null;
-                    System.err.println("SocketComm: commRecv: Communication Error! A message from the future!");
-                    return null;
-                }
+            if (receivedId == (messageId - 1)) {
+                byte[] data = new byte[length];
+                in.read(data, 0, length);
+                return data;
+            } else if (receivedId < (messageId - 1)) {
+                //Previous message, ignore and keep waiting.
+                return commRecv();
             } else {
+                //A message from the future? Ignore and return null;
+                System.err.println("SocketComm: commRecv: Communication Error! A message from the future!");
                 return null;
             }
-        } else {
+
+        } catch (IOException e) {
+            System.err.println("SocketComm: commRecv: Communication Error!" + e.getMessage());
             return null;
         }
     }

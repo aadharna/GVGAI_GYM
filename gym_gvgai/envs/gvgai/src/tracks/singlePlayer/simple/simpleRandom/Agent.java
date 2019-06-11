@@ -1,10 +1,8 @@
 package tracks.singlePlayer.simple.simpleRandom;
 
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Random;
 
-import core.game.Observation;
 import core.game.StateObservation;
 import core.player.AbstractPlayer;
 import ontology.Types;

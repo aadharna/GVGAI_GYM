@@ -20,7 +20,7 @@ public class JavaServer {
         /** Init params */
         String game = "";
         int gameIdx = 0;
-        int portNum = 8080;
+        int portNum = 8083;
         String clientType = "java"; //"python"; // Type of client to test against (Python/Java)
         String shDir = "src/tracks/singleLearning/utils";
         String clientDir = ".";

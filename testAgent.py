@@ -21,6 +21,7 @@ for game in games:
             action_id = agent.act(stateObs, actions)
             # do action and get new state and its reward
             stateObs, diffScore, done, debug = env.step(action_id)
+            env.render()
             print("Action " + str(action_id) + " tick " + str(t+1) + " reward " + str(diffScore) + " win " + debug["winner"])
             # break loop when terminal state is reached
             if done:

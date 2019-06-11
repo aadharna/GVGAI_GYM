@@ -39,20 +39,20 @@ if __name__ == "__main__":
     gameFile = args.gameFile
     levelFile = args.levelFile
 
-    print("Run game " + str(gameId) + " with agent " + agentName)
-    if args.serverJar == '':
-        if CompetitionParameters.OS_WIN:
-            scriptFile = shDir + "\\runServer_nocompile_python.bat " + str(gameId) + " " + str(serverDir) + " " + str(visuals)
-        else:
-            scriptFile = os.path.join(shDir, "runServer_nocompile_python.sh " + str(gameId) + " " + str(serverDir) +
-                                      " " + str(visuals))
-    else:
-        # scriptFile = os.path.join(shDir, "runServer_compile.sh " + str(args.serverJar) + " " + str(gameId) + " " + str(serverDir))
-        scriptFile = os.path.join(shDir, "runServer_compile.sh " + str(args.serverJar) + " " + str(gameId) + " " + str(serverDir) + " " + gameFile + " " + levelFile)
+    # print("Run game " + str(gameId) + " with agent " + agentName)
+    # if args.serverJar == '':
+    #     if CompetitionParameters.OS_WIN:
+    #         scriptFile = shDir + "\\runServer_nocompile_python.bat " + str(gameId) + " " + str(serverDir) + " " + str(visuals)
+    #     else:
+    #         scriptFile = os.path.join(shDir, "runServer_nocompile_python.sh " + str(gameId) + " " + str(serverDir) +
+    #                                   " " + str(visuals))
+    # else:
+    #     # scriptFile = os.path.join(shDir, "runServer_compile.sh " + str(args.serverJar) + " " + str(gameId) + " " + str(serverDir))
+    #     scriptFile = os.path.join(shDir, "runServer_compile.sh " + str(args.serverJar) + " " + str(gameId) + " " + str(serverDir) + " " + gameFile + " " + levelFile)
 
     try:
-        print("scriptFile to run is: "+scriptFile)
-        p = subprocess.Popen(scriptFile, shell=True)
+        # print("scriptFile to run is: "+scriptFile)
+        # p = subprocess.Popen(scriptFile, shell=True)
         print("Run server process [OK]")
         # print(str(os.getcwd()))
         # stdout, stderr = p.communicate()

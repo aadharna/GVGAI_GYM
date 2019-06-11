@@ -6,10 +6,6 @@ import java.util.Random;
 import tools.Direction;
 import tools.Vector2d;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.lang.reflect.Field;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Diego
@@ -181,7 +177,7 @@ public class Types {
     /**
      * This is an enum type that describes the potential states of the game
      */
-    public static enum GAMESTATES{
+    public static enum GAMESTATES {
         INIT_STATE, ACT_STATE, END_STATE, ABORT_STATE, CHOOSE_LEVEL
     }
 
@@ -191,13 +187,10 @@ public class Types {
         MOVE
     }
 
-    /**
-     * This is an enum type that specifies the type of sso required
-     */
     public static enum LEARNING_SSO_TYPE {
         IMAGE,
-        JSON,
-        BOTH
+        DATA,
+        BOTH;
     }
 
     public static final int SCORE_DISQ = -1000;

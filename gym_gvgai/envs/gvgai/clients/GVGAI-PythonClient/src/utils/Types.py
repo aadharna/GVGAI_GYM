@@ -7,13 +7,13 @@ class ACTIONS:
     def __init__(self):
         pass
 
-    ACTION_NIL = 0
-    ACTION_UP = 1
-    ACTION_LEFT = 2
-    ACTION_DOWN = 3
-    ACTION_RIGHT = 4
-    ACTION_USE = 5
-    ACTION_ESCAPE = 6
+    ACTION_NIL = bytes([0])
+    ACTION_UP = bytes([1])
+    ACTION_LEFT = bytes([2])
+    ACTION_DOWN = bytes([3])
+    ACTION_RIGHT = bytes([4])
+    ACTION_USE = bytes([5])
+    ACTION_ESCAPE = bytes([6])
 
 
 class WINNER:
@@ -34,6 +34,17 @@ class LEARNING_SSO_TYPE():
     def __init__(self):
         pass
 
-    IMAGE = "IMAGE"
-    JSON = "JSON"
-    BOTH = "BOTH"
+    IMAGE = bytes([0])
+    DATA = bytes([1])
+    BOTH = bytes([2])
+
+class GAME_STATE:
+
+    def __init__(self):
+        pass
+
+    INIT_STATE = bytes([0])
+    ACT_STATE = bytes([1])
+    END_STATE = bytes([2])
+    ABORT_STATE = bytes([3])
+    CHOOSE_LEVEL = bytes([4])

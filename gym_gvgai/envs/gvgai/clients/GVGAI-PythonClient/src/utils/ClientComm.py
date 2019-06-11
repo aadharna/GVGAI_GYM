@@ -23,7 +23,7 @@ class ClientComm:
 
     def __init__(self, agentName):
         self.TOKEN_SEP = '#'
-        self.io = IOSocket(CompetitionParameters.SOCKET_PORT)
+        self.io = IOSocket("tmp/")
         self.sso = SerializableStateObservation()
         self.agentName = agentName
         self.lastMessageId = 0

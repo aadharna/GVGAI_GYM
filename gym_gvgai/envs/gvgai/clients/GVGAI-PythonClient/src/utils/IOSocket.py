@@ -4,6 +4,7 @@ import socket
 import sys
 import traceback
 import time
+from struct import pack_into, unpack_from
 
 from CompetitionParameters import CompetitionParameters
 
@@ -14,12 +15,14 @@ class IOSocket:
     """
 
     def __init__(self, tmpDir):
-        self.BUFF_SIZE = 8192
-        self.END = '\n'
-        self.TOKEN_SEP = '#'
-        self.hostname, self.port = self.getOpenAddress()
+        self.HEADER_SIZE = 13
+        self.BUFFER_SIZE = 8192
+        self.hostname = "127.0.0.1"
+        self.port = 8083
+        #self.hostname, self.port = self.getOpenAddress()
         self.connected = False
         self.socket = None
+        self._last_message_id = 0
         self.logfilename = os.path.normpath(os.path.join(tmpDir, "logs", "clientLog.txt"))
 
         os.makedirs(os.path.join(tmpDir, 'logs'), exist_ok=True)
@@ -30,6 +33,7 @@ class IOSocket:
         while not self.connected:
             try:
                 self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
                 self.socket.connect((self.hostname, self.port))
                 self.connected = True
                 print ("Client connected to server [OK]")
@@ -46,28 +50,33 @@ class IOSocket:
         sys.stdout.flush()
         self.logfile.flush()
 
-    def writeToServer(self, messageId, line, log):
-        msg = str(messageId) + self.TOKEN_SEP + line + "\n"
+    def writeToServer(self, data, sso=None, log=False):
+
+        payload_size = len(data) if data is not None else 0
+        buffer_size = 13 + payload_size
+
+        buffer = bytearray(buffer_size)
+
+        # Long in java is 8 bytes
+        pack_into('>q', buffer, 0, self._last_message_id)
+        pack_into('c', buffer, 9, sso if sso is not None else bytes([255]))
+
+        if data is not None:
+            pack_into('>i', buffer, 9, payload_size)
+            pack_into('>%ds' % payload_size, buffer, 13, data)
+        else:
+            pack_into('>i', buffer, 9, 0)
+
         try:
-            self.socket.send(msg.encode())
+            self.socket.send(buffer)
             if log:
-                self.writeToFile(msg.strip('\n'))
+                self.writeToFile(buffer)
         except Exception as e:
             logging.exception(e)
             print ("Write " + self.logfilename + " to server [FAILED]")
             traceback.print_exc()
             sys.exit()
 
-    def readLine(self):
-        try:
-            msg = self.recv_end()
-            return msg
-        except Exception as e:
-            logging.exception(e)
-            print ("Read from server [FAILED]")
-            traceback.print_exc()
-            sys.exit()
-    
     def shutDown(self):
         self.socket.shutdown(0)
 
@@ -77,22 +86,21 @@ class IOSocket:
         address = s.getsockname()
         s.close()
         return address
+
+    def readUntil(self, length):
+        buffer = bytearray()
+        while len(buffer) < length:
+            buffer += bytearray(self.socket.recv(self.BUFFER_SIZE))
+
+        return buffer
+
     
-    def recv_end(self):
-        total_data = []
-        data = ''
-        while True:
-            databuffer = self.socket.recv(self.BUFF_SIZE)
-            data = databuffer.decode()
-            if self.END in data:
-                total_data.append(data[:data.find(self.END)])
-                break
-            total_data.append(data)
-            if len(total_data) > 1:
-                last_pair = total_data[-2] + total_data[-1]
-                if self.END in last_pair:
-                    total_data[-2] = last_pair[:last_pair.find(self.END)]
-                    total_data.pop()
-                    break
-        return ''.join(total_data)
+    def readFromServer(self):
+        # Firstly read the header bytes
+        header_buffer = self.readUntil(self.HEADER_SIZE)
+        self._last_message_id, game_state, message_size = unpack_from('>qci', header_buffer, 0)
+        data = None
+        if message_size > 0:
+            data = self.socket.recv(message_size)
+        return game_state, data
 

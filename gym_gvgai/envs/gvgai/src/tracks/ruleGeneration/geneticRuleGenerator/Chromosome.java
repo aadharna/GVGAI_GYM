@@ -1,17 +1,16 @@
 package tracks.ruleGeneration.geneticRuleGenerator;
 import java.util.*;
 
+import core.game.Observation;
 import core.game.SLDescription;
 import core.game.StateObservation;
 import core.game.Event;
 import core.game.GameDescription.SpriteData;
-import core.game.Observation;
 import core.player.AbstractPlayer;
 import ontology.Types;
 import tools.ElapsedCpuTimer;
-import tools.LevelAnalyzer;
 import tools.Vector2d;
-import java.lang.reflect.Constructor;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;

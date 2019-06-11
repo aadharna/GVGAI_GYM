@@ -60,7 +60,7 @@ public class ClientComm {
     /**
      * Type of last required sso
      */
-    private LEARNING_SSO_TYPE lastSsoType = LEARNING_SSO_TYPE.JSON;
+    private LEARNING_SSO_TYPE lastSsoType = LEARNING_SSO_TYPE.DATA;
 
     /**
      * Creates the client.

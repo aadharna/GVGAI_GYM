@@ -1,7 +1,7 @@
 package core.game;
 
+import com.google.gson.Gson;
 import core.competition.CompetitionParameters;
-import tools.com.google.gson.Gson;
 import ontology.Types;
 import tools.ElapsedCpuTimer;
 
@@ -22,10 +22,6 @@ import java.util.HashMap;
  * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
  */
 public class SerializableStateObservation {
-    public enum Phase {
-        START, INIT, ACT, ABORT, END
-    }
-
     // State Observation variables
     public byte[] imageArray;
     public boolean isValidation;
@@ -45,7 +41,6 @@ public class SerializableStateObservation {
     public int avatarMaxHealthPoints;
     public int avatarLimitHealthPoints;
     public boolean isAvatarAlive;
-    public Phase phase;
 
     public ArrayList<Types.ACTIONS> availableActions;
     public HashMap<Integer, Integer> avatarResources;
@@ -77,17 +72,13 @@ public class SerializableStateObservation {
             if (!both) {
                 // Fill in the persistent variables (Score, tick)
                 buildGameData(s);
-                if(phase != Phase.START) {
-                    // Create the image bytearray
-                    imageArray = imageToByteArray();
-                }
+                // Create the image bytearray
+                imageArray = imageToByteArray();
             } else {
                 // Fill in the persistent variables (Score, tick)
                 buildGameData(s);
-                if(phase != Phase.START) {
-                    // Create the image bytearray
-                    imageArray = imageToByteArray();
-                }
+                // Create the image bytearray
+                imageArray = imageToByteArray();
                 // Fill in the simple data variables
                 buildDataVariables(s);
 
@@ -112,7 +103,6 @@ public class SerializableStateObservation {
     }
 
     private void buildGameData(StateObservation s){
-        setPhase(s.getGameState());
         availableActions = s.getAvailableActions();
         gameScore = (float) s.getGameScore();
         gameTick = s.getGameTick();
@@ -154,10 +144,10 @@ public class SerializableStateObservation {
         ArrayList<Observation> row;
 
         /*
-        * The following block is a sequence of iterative attributions
-        * that render the game-information holding array objects
-        * to be sent and interpreted by the agent.
-        */
+         * The following block is a sequence of iterative attributions
+         * that render the game-information holding array objects
+         * to be sent and interpreted by the agent.
+         */
 
         // Observation grid
         if (s.getObservationGrid()!=null) {
@@ -323,20 +313,6 @@ public class SerializableStateObservation {
         return message;
     }
 
-    public void setPhase(Types.GAMESTATES currentGameState) {
-        if (currentGameState.equals(Types.GAMESTATES.INIT_STATE)) {
-            phase = Phase.INIT;
-        } else if (currentGameState.equals(Types.GAMESTATES.ACT_STATE)) {
-            phase = Phase.ACT;
-        } else if (currentGameState.equals(Types.GAMESTATES.ABORT_STATE)) {
-            phase = Phase.ABORT;
-        } else if (currentGameState.equals(Types.GAMESTATES.END_STATE)) {
-            phase = Phase.END;
-        } else {
-            phase = Phase.START;
-        }
-    }
-
     @Override
     public String toString() {
         String observation = "ObservationGrid{\n";
@@ -370,7 +346,6 @@ public class SerializableStateObservation {
                 ", avatarMaxHealthPoints=" + avatarMaxHealthPoints +
                 ", avatarLimitHealthPoints=" + avatarLimitHealthPoints +
                 ", isAvatarAlive=" + isAvatarAlive +
-                ", phase=" + phase +
                 ", availableActions=" + availableActions +
                 ", avatarResources=" + avatarResources +
                 ", observationGrid=" + Arrays.toString(observationGrid) +

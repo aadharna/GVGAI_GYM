@@ -40,7 +40,7 @@ public class Types {
 
     public static enum LEARNING_SSO_TYPE {
         IMAGE,
-        JSON,
-        BOTH
+        DATA,
+        BOTH;
     }
 }

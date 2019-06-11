@@ -3,8 +3,6 @@ package core.game;
 import java.awt.Dimension;
 import java.util.*;
 
-import core.competition.CompetitionParameters;
-import core.logging.Logger;
 import core.vgdl.SpriteGroup;
 import core.vgdl.VGDLSprite;
 import ontology.Types;

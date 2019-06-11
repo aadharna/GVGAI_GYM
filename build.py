@@ -16,6 +16,14 @@ def get_src(path):
 				source.append(os.path.join(root, f))
 	return source
 
+def get_lib(path):
+	libs = []
+	for root, _, files in os.walk(path):
+		for f in files:
+			if(f.endswith('.jar')):
+				libs.append(os.path.join(root, f))
+	return libs
+
 def main(dir):
 	if(shutil.which("javac")):
 		#Verify directory and import local file
@@ -35,8 +43,10 @@ def main(dir):
 
 			#Build Java files
 			src_path = os.path.join(dir, "src")
+			lib_path = os.path.join(dir, "lib")
 			source = get_src(src_path)
-			subprocess.run(["javac", "-d", path] + source, check=True)
+			libs = get_lib(lib_path)
+			subprocess.run(["javac", "-cp", ":".join(libs), "-d", path, *source], check=True)
 
 			#Save hash of build in directory
 			hash = check_build.dirHash(src_path)

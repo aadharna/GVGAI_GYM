@@ -33,7 +33,7 @@ public class Agent extends utils.AbstractPlayer {
      * Perform one-time setup here.
      */
     public Agent(){
-        lastSsoType = Types.LEARNING_SSO_TYPE.JSON;
+        lastSsoType = Types.LEARNING_SSO_TYPE.DATA;
         this.qmap_ = new StateActionQMap();
         this.iter_ = 0;
         this.last_state_ = null;

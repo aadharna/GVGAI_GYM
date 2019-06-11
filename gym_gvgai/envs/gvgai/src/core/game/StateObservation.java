@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeSet;
 
-import core.competition.CompetitionParameters;
-import core.logging.Logger;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Diego

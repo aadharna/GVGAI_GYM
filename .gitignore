@@ -183,6 +183,8 @@ cmake-build-release/
 
 # IntelliJ
 out/
+*.iml
+.idea/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
@@ -204,3 +206,10 @@ fabric.properties
 #####
 
 .DS_Store
+
+
+#misc
+/tmp/
+/logs/
+
+
