@@ -34,7 +34,7 @@ class GVGAI_Env(gym.Env):
         self.version = version
 
         self.actions = self.GVGAI.actions()
-        self.img = self.GVGAI.sso.image
+        self.img = self.GVGAI.image
         self.viewer = None
        
         #Only allow gridphysics games for now

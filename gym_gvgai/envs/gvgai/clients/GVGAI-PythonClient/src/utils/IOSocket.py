@@ -6,9 +6,6 @@ import traceback
 import time
 from struct import pack_into, unpack_from
 
-from CompetitionParameters import CompetitionParameters
-
-
 class IOSocket:
     """
      * Socket for communication

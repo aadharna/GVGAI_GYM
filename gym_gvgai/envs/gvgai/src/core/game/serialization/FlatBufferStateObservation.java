@@ -25,7 +25,7 @@ public class FlatBufferStateObservation {
 
     public FlatBufferStateObservation(StateObservation so, byte[] imageArray) {
 
-        b = new FlatBufferBuilder();
+        b = new FlatBufferBuilder(0);
 
         int imageArrayOffset = imageArray != null ? State.createImageArrayVector(b, imageArray) : -1;
 
@@ -35,16 +35,16 @@ public class FlatBufferStateObservation {
         int worldDimensionOffset = State.createWorldDimensionVector(b, worldDimensionVector);
 
         int availableActions = addAvailableActions(b, so);
-        int avatarResources = addAvatarResources(b, so);
-        int observations = addObservations(b, so);
-        int npcPositions = addNpcPositions(b, so);
-        int immovablePositions = addImmovablePositions(b, so);
-        int movablePositions = addMovablePositions(b, so);
-        int resourcesPositions = addResourcesPositions(b, so);
-        int fromAvatarSpritePositions = addFromAvatarSpritesPositions(b, so);
+//        int avatarResources = addAvatarResources(b, so);
+//        int observations = addObservations(b, so);
+//        int npcPositions = addNpcPositions(b, so);
+//        int immovablePositions = addImmovablePositions(b, so);
+//        int movablePositions = addMovablePositions(b, so);
+//        int resourcesPositions = addResourcesPositions(b, so);
+//        int fromAvatarSpritePositions = addFromAvatarSpritesPositions(b, so);
 
-        int avatarOrientationVectorOffset = convertVector(so.getAvatarOrientation());
         int avatarPositionOffset = convertVector(so.getAvatarPosition());
+        int avatarOrientationVectorOffset = convertVector(so.getAvatarOrientation());
 
         State.startState(b);
 
@@ -72,13 +72,13 @@ public class FlatBufferStateObservation {
         State.addIsAvatarAlive(b, so.isAvatarAlive());
 
         State.addAvailableActions(b, availableActions);
-        State.addAvatarResources(b, avatarResources);
-        State.addObservationGrid(b, observations);
-        State.addNPCPositions(b, npcPositions);
-        State.addImmovablePositions(b, immovablePositions);
-        State.addMovablePositions(b, movablePositions);
-        State.addResourcesPositions(b, resourcesPositions);
-        State.addFromAvatarSpritesPositions(b, fromAvatarSpritePositions);
+//        State.addAvatarResources(b, avatarResources);
+//        State.addObservationGrid(b, observations);
+//        State.addNPCPositions(b, npcPositions);
+//        State.addImmovablePositions(b, immovablePositions);
+//        State.addMovablePositions(b, movablePositions);
+//        State.addResourcesPositions(b, resourcesPositions);
+//        State.addFromAvatarSpritesPositions(b, fromAvatarSpritePositions);
 
 
         State.addAvatarOrientation(b, avatarOrientationVectorOffset);
@@ -220,7 +220,7 @@ public class FlatBufferStateObservation {
      * This method serializes this class into bytes
      */
     public byte[] serialize() {
-        return b.dataBuffer().array();
+        return b.sizedByteArray();
     }
 
 }

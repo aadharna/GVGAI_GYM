@@ -7,10 +7,9 @@ import numpy as np
 import tempfile
 import shutil
 
-from CompetitionParameters import CompetitionParameters
-from ElapsedCpuTimer import ElapsedCpuTimer
 from IOSocket import IOSocket
 from Types import LEARNING_SSO_TYPE, GAME_STATE
+from serialization import State
 
 
 class ClientCommGYM:
@@ -29,7 +28,6 @@ class ClientCommGYM:
         self.global_ect = None
         self.lastSsoType = LEARNING_SSO_TYPE.DATA
         self.terminal = False
-
         self.running = False
 
         baseDir = os.path.join(pathStr, 'gvgai')
@@ -54,14 +52,8 @@ class ClientCommGYM:
         #     print('exit code: {}'.format(e.returncode))
         #     print('stderr: {}'.format(e.stderr.decode(sys.getfilesystemencoding())))
 
-        self.startComm()
-        self.reset(lvl)
-
-    def startComm(self):
         self.io.initBuffers()
-        # Reset currently sends initial commucations (which can't handle levels) and then resets
-        # This should be split into two functions after the competition (July 18, 2018)
-        self.reset(0)
+        self.reset()
 
     """
      * Method that perpetually listens for messages from the server.
@@ -109,36 +101,26 @@ class ClientCommGYM:
         info = {'winner': self.sso.gameWinner, 'actions': self.actions()}
         return self.sso.image, score, self.sso.Terminal, info
 
-    def reset(self, lvl):
+    def reset(self):
         self.lastScore = 0
-
+        self.image = None
         initialising = True
-
-        # If we are already running then either we have overspent our time or the level has ended and we need to set a new level
-        if self.running:
-            if self.terminal:
-                self.io.writeToServer(str(lvl).encode('utf-8'), self.lastSsoType, self.LOG)
-            else:
-                self.io.writeToServer("END_OVERSPENT".encode('utf-8'), log=self.LOG)
-
-                self._game_phase, data = self.io.readFromServer()
-                self.process_data(self._game_phase, data)
-
-                self.io.writeToServer(str(lvl).encode('utf-8'), self.lastSsoType, self.LOG)
 
         # Keep reading from the server until we get the initial state
         while initialising:
 
             self._game_phase, data = self.io.readFromServer()
-            game_state = self.process_data(self._game_phase, data)
+            self.process_data(self._game_phase, data)
 
-            # Not really choosing a level, but using this as a start state
             if self._game_phase == GAME_STATE.CHOOSE_LEVEL:
                 self.start()
 
             elif self._game_phase == GAME_STATE.INIT_STATE:
                 self.init()
                 initialising = False
+
+        if self.image is None:
+            print('No image sent in initial state')
 
         # Currently initial observation is not sent back on reset
         return np.zeros((100, 100, 3))
@@ -149,71 +131,11 @@ class ClientCommGYM:
 
     def actions(self):
         nil = ["ACTION_NIL"]
-        return nil + self.sso.availableActions
+        return nil + self._state.AvailableActionsAsNumpy()
 
     def as_sso(self, d):
         self.sso.__dict__.update(d)
         return self.sso
-
-    # def parse_json(self, input):
-    #     parsed_input = json.loads(input)
-    #     self.sso.__dict__.update(parsed_input)
-    #     if parsed_input.get('observationGrid'):
-    #         self.sso.observationGrid = [[[None for j in range(self.sso.observationGridMaxCol)]
-    #                                      for i in range(self.sso.observationGridMaxRow)]
-    #                                     for k in range(self.sso.observationGridNum)]
-    #         for i in range(self.sso.observationGridNum):
-    #             for j in range(len(parsed_input['observationGrid'][i])):
-    #                 for k in range(len(parsed_input['observationGrid'][i][j])):
-    #                     self.sso.observationGrid[i][j][k] = Observation(parsed_input['observationGrid'][i][j][k])
-    #
-    #     if parsed_input.get('NPCPositions'):
-    #         self.sso.NPCPositions = [[None for j in
-    #                                   range(self.sso.NPCPositionsMaxRow)] for i in
-    #                                  range(self.sso.NPCPositionsNum)]
-    #         for i in range(self.sso.NPCPositionsNum):
-    #             for j in range(len(parsed_input['NPCPositions'][i])):
-    #                 self.sso.NPCPositions[i][j] = Observation(parsed_input['NPCPositions'][i][j])
-    #
-    #     if parsed_input.get('immovablePositions'):
-    #         self.sso.immovablePositions = [[None for j in
-    #                                         range(self.sso.immovablePositionsMaxRow)] for i in
-    #                                        range(self.sso.immovablePositionsNum)]
-    #         for i in range(self.sso.immovablePositionsNum):
-    #             for j in range(len(parsed_input['immovablePositions'][i])):
-    #                 self.sso.immovablePositions[i][j] = Observation(parsed_input['immovablePositions'][i][j])
-    #
-    #     if parsed_input.get('movablePositions'):
-    #         self.sso.movablePositions = [[None for j in
-    #                                       range(self.sso.movablePositionsMaxRow)] for i in
-    #                                      range(self.sso.movablePositionsNum)]
-    #         for i in range(self.sso.movablePositionsNum):
-    #             for j in range(len(parsed_input['movablePositions'][i])):
-    #                 self.sso.movablePositions[i][j] = Observation(parsed_input['movablePositions'][i][j])
-    #
-    #     if parsed_input.get('resourcesPositions'):
-    #         self.sso.resourcesPositions = [[None for j in
-    #                                         range(self.sso.resourcesPositionsMaxRow)] for i in
-    #                                        range(self.sso.resourcesPositionsNum)]
-    #         for i in range(self.sso.resourcesPositionsNum):
-    #             for j in range(len(parsed_input['resourcesPositions'][i])):
-    #                 self.sso.resourcesPositions[i][j] = Observation(parsed_input['resourcesPositions'][i][j])
-    #
-    #     if parsed_input.get('portalsPositions'):
-    #         self.sso.portalsPositions = [[None for j in
-    #                                       range(self.sso.portalsPositionsMaxRow)] for i in
-    #                                      range(self.sso.portalsPositionsNum)]
-    #         for i in range(self.sso.portalsPositionsNum):
-    #             for j in range(len(parsed_input['portalsPositions'][i])):
-    #                 self.sso.portalsPositions[i][j] = Observation(parsed_input['portalsPositions'][i][j])
-    #
-    #     if parsed_input.get('fromAvatarSpritesPositions'):
-    #         self.sso.fromAvatarSpritesPositions = [[None for j in
-    #                                                 range(self.sso.fromAvatarSpritesPositionsMaxRow)] for i in
-    #                                                range(self.sso.fromAvatarSpritesPositionsNum)]
-    #         for i in range(self.sso.fromAvatarSpritesPositionsNum):
-    #             for j in range(len(parsed_input['fromAvatarSpritesPositions'][i])):
-    #                 self.sso.fromAvatarSpritesPositions[i][j] = Observation(parsed_input['fromAvatarSpritesPositions'][i][j])
 
     def process_data(self, game_state, data=None):
 
@@ -221,19 +143,21 @@ class ClientCommGYM:
 
             print('GAME STATE: %s' % GAME_STATE.get_game_state_string(game_state))
 
-            
+            if data is not None:
 
+                state = State.GetRootAsState(data, 0)
 
-            if game_state == GAME_STATE.ACT_STATE:
-                if(self.lastSsoType == LEARNING_SSO_TYPE.IMAGE or self.lastSsoType == LEARNING_SSO_TYPE.BOTH):
-                    if(self.sso.imageArray):
+                image = None
+                if game_state == GAME_STATE.ACT_STATE:
+                    if (self.lastSsoType == LEARNING_SSO_TYPE.IMAGE or self.lastSsoType == LEARNING_SSO_TYPE.BOTH):
+                        if state.ImageArrayLength() != 0:
+                            width = int(state.worldDimension[1])
+                            height = int(state.worldDimension[0])
+                            # self.sso.image = np.zeros((110,300,3))
+                            image = np.reshape(state.ImageArrayAsNumpy(), (width, height, 3))
 
-                        width = int(self.sso.worldDimension[1])
-                        height = int(self.sso.worldDimension[0])
-                        # self.sso.image = np.zeros((110,300,3))
-                        self.sso.image = np.reshape(np.array(self.sso.imageArray, dtype=np.uint8), (width,height,3))
-            self.sso.convertBytesToPng(self.sso.imageArray, self.tempDir.name)
-            self.sso.image = misc.imread(os.path.join(self.tempDir.name, 'gameStateByBytes.png'))
+                self._state = state
+                self._image = image
 
         except Exception as e:
             logging.exception(e)
@@ -241,31 +165,18 @@ class ClientCommGYM:
             # traceback.print_exc()
             sys.exit()
 
+
+
+
     """
      * Manages the start of the communication. It starts the whole process, and sets up the timer for the whole run.
     """
 
     def start(self):
-        self.global_ect = ElapsedCpuTimer()
-        self.global_ect.setMaxTimeMillis(CompetitionParameters.TOTAL_LEARNING_TIME)
-        ect = ElapsedCpuTimer()
-        ect.setMaxTimeMillis(CompetitionParameters.START_TIME)
-        # self.startAgent()
-
-        if ect.exceededMaxTime():
-            self.io.writeToServer("START_FAILED".encode('utf-8'), self.LOG)
-        else:
-            self.io.writeToServer("START_DONE".encode('utf-8'), self.lastSsoType, self.LOG)
+        self.io.writeToServer("START_DONE".encode('utf-8'), self.lastSsoType, self.LOG)
 
     def init(self):
-        ect = ElapsedCpuTimer()
-        ect.setMaxTimeMillis(CompetitionParameters.INITIALIZATION_TIME)
-        self.lastSsoType = LEARNING_SSO_TYPE.IMAGE
-
-        if ect.exceededMaxTime():
-            self.io.writeToServer("INIT_FAILED".encode('utf-8'), self.LOG)
-        else:
-            self.io.writeToServer("INIT_DONE".encode('utf-8'),  self.lastSsoType, self.LOG)
+        self.io.writeToServer("INIT_DONE".encode('utf-8'), self.lastSsoType, self.LOG)
 
     """
      * Manages the action request for an agent. The agent is requested for an action,
@@ -273,25 +184,11 @@ class ClientCommGYM:
     """
 
     def act(self, action):
-        start = time.time()
-        ect = ElapsedCpuTimer()
-        ect.setMaxTimeMillis(CompetitionParameters.ACTION_TIME)
-        # action = str(self.player.act(self.sso, ect.copy()))
         if (not action) or (action == ""):
             action = "ACTION_NIL"
-        # self.lastSsoType = self.player.lastSsoType
-        self.lastSsoType = LEARNING_SSO_TYPE.IMAGE
 
-        if ect.exceededMaxTime():
-            if ect.elapsedNanos() > CompetitionParameters.ACTION_TIME_DISQ * 1000000:
-                self.io.writeToServer("END_OVERSPENT", self.LOG)
-            else:
-                self.io.writeToServer("ACTION_NIL" + "#" + self.lastSsoType, self.LOG)
-        else:
-            self.io.writeToServer(action + "#" + self.lastSsoType, self.LOG)
+        self.io.writeToServer(action.encode('utf-8'), self.lastSsoType, self.LOG)
 
-        end = time.time()
-        print('act: %d' % ((end - start) * 1000))
 
     def addLevel(self, path):
         lvlName = os.path.join(self.tempDir.name, 'game_lvl5.txt')

@@ -22,17 +22,17 @@ class Vector2d(object):
     def X(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Float32Flags, o + self._tab.Pos)
+            return self._tab.Get(flatbuffers.number_types.Float64Flags, o + self._tab.Pos)
         return 0.0
 
     # Vector2d
     def Y(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Float32Flags, o + self._tab.Pos)
+            return self._tab.Get(flatbuffers.number_types.Float64Flags, o + self._tab.Pos)
         return 0.0
 
 def Vector2dStart(builder): builder.StartObject(2)
-def Vector2dAddX(builder, x): builder.PrependFloat32Slot(0, x, 0.0)
-def Vector2dAddY(builder, y): builder.PrependFloat32Slot(1, y, 0.0)
+def Vector2dAddX(builder, x): builder.PrependFloat64Slot(0, x, 0.0)
+def Vector2dAddY(builder, y): builder.PrependFloat64Slot(1, y, 0.0)
 def Vector2dEnd(builder): return builder.EndObject()

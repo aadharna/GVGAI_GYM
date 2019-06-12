@@ -31,9 +31,9 @@ class EggInfoWithJava(egg_info):
         egg_info.run(self)
 
 setup(name='gym_gvgai',
-	version='0.0.3',
+	version='0.1.0',
 	packages= find_packages(),
-	install_requires=['gym>=0.10.5', 'numpy>=1.13.3', 'pillow>=5.3.0'],
+	install_requires=['gym>=0.12.5', 'numpy>=1.16.4', 'flatbuffers>=1.11'],
 	cmdclass = {
 		'install': InstallWithJava,
 		'develop': DevelopWithJava,
