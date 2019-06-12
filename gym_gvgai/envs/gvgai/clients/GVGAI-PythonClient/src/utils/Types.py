@@ -43,6 +43,26 @@ class GAME_STATE:
     def __init__(self):
         pass
 
+    @staticmethod
+    def get_game_state_string(byte):
+        if byte == GAME_STATE.INIT_STATE:
+            return "INIT_STATE"
+
+        if byte == GAME_STATE.ACT_STATE:
+            return "ACT_STATE"
+
+        if byte == GAME_STATE.END_STATE:
+            return "END_STATE"
+
+        if byte == GAME_STATE.ABORT_STATE:
+            return "ABORT_STATE"
+
+        if byte == GAME_STATE.CHOOSE_LEVEL:
+            return "CHOOSE_LEVEL"
+
+        return "ERROR"
+
+
     INIT_STATE = bytes([0])
     ACT_STATE = bytes([1])
     END_STATE = bytes([2])

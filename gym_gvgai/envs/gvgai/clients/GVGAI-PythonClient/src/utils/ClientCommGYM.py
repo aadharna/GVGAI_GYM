@@ -219,26 +219,21 @@ class ClientCommGYM:
 
         try:
 
-            print('GAME STATE: %s' % game_state)
-            # assert game_state == GAME_STATE.ACT_STATE
-            # if game_state == GAME_STATE.INIT_STATE or game_state:
-            # elif game_state == "FINISH":
-            #     self.sso.phase = Phase.FINISH
-            # else:
-            #     js.replace('"', '')
-            #     self.parse_json(js)
-            #     # self.sso = json.loads(js, object_hook=self.as_sso)
-            # if self.sso.phase == "ACT":
-            #     if(self.lastSsoType == LEARNING_SSO_TYPE.IMAGE or self.lastSsoType == "IMAGE" \
-            #             or self.lastSsoType == LEARNING_SSO_TYPE.BOTH or self.lastSsoType == "BOTH"):
-            #         if(self.sso.imageArray):
-            #
-            #             width = int(self.sso.worldDimension[1])
-            #             height = int(self.sso.worldDimension[0])
-            #             # self.sso.image = np.zeros((110,300,3))
-            #             self.sso.image = np.reshape(np.array(self.sso.imageArray, dtype=np.uint8), (width,height,3))
-            # self.sso.convertBytesToPng(self.sso.imageArray, self.tempDir.name)
-            # self.sso.image = misc.imread(os.path.join(self.tempDir.name, 'gameStateByBytes.png'))
+            print('GAME STATE: %s' % GAME_STATE.get_game_state_string(game_state))
+
+            
+
+
+            if game_state == GAME_STATE.ACT_STATE:
+                if(self.lastSsoType == LEARNING_SSO_TYPE.IMAGE or self.lastSsoType == LEARNING_SSO_TYPE.BOTH):
+                    if(self.sso.imageArray):
+
+                        width = int(self.sso.worldDimension[1])
+                        height = int(self.sso.worldDimension[0])
+                        # self.sso.image = np.zeros((110,300,3))
+                        self.sso.image = np.reshape(np.array(self.sso.imageArray, dtype=np.uint8), (width,height,3))
+            self.sso.convertBytesToPng(self.sso.imageArray, self.tempDir.name)
+            self.sso.image = misc.imread(os.path.join(self.tempDir.name, 'gameStateByBytes.png'))
 
         except Exception as e:
             logging.exception(e)

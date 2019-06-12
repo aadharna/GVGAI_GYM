@@ -94,10 +94,6 @@ public class LearningPlayer extends Player {
             // Receive the response and set ACTION_NIL as default action
             String response = new String(comm.commRecv(), StandardCharsets.UTF_8);
 
-            if (response.isEmpty()) {
-                response = Types.ACTIONS.ACTION_NIL.toString();
-            }
-
             if (response.equals("END_OVERSPENT")) {
                 so.currentGameState = Types.GAMESTATES.ABORT_STATE;
                 return Types.ACTIONS.ACTION_ESCAPE;
@@ -109,7 +105,7 @@ public class LearningPlayer extends Player {
                 return Types.ACTIONS.ACTION_ESCAPE;
             }
 
-            return Types.ACTIONS.fromString(response);
+            return Types.ACTIONS.ACTION_NIL;
 
         } catch (IOException e) {
             throw new RuntimeException(e);
