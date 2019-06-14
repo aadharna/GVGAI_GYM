@@ -31,17 +31,17 @@ public class FlatBufferStateObservation {
 
         double[] worldDimensionVector = new double[2];
         worldDimensionVector[0] = so.getWorldDimension().width;
-        worldDimensionVector[0] = so.getWorldDimension().height;
+        worldDimensionVector[1] = so.getWorldDimension().height;
         int worldDimensionOffset = State.createWorldDimensionVector(b, worldDimensionVector);
 
         int availableActions = addAvailableActions(b, so);
-//        int avatarResources = addAvatarResources(b, so);
-//        int observations = addObservations(b, so);
-//        int npcPositions = addNpcPositions(b, so);
-//        int immovablePositions = addImmovablePositions(b, so);
-//        int movablePositions = addMovablePositions(b, so);
-//        int resourcesPositions = addResourcesPositions(b, so);
-//        int fromAvatarSpritePositions = addFromAvatarSpritesPositions(b, so);
+        int avatarResources = addAvatarResources(b, so);
+        int observations = addObservations(b, so);
+        int npcPositions = addNpcPositions(b, so);
+        int immovablePositions = addImmovablePositions(b, so);
+        int movablePositions = addMovablePositions(b, so);
+        int resourcesPositions = addResourcesPositions(b, so);
+        int fromAvatarSpritePositions = addFromAvatarSpritesPositions(b, so);
 
         int avatarPositionOffset = convertVector(so.getAvatarPosition());
         int avatarOrientationVectorOffset = convertVector(so.getAvatarOrientation());
@@ -72,13 +72,13 @@ public class FlatBufferStateObservation {
         State.addIsAvatarAlive(b, so.isAvatarAlive());
 
         State.addAvailableActions(b, availableActions);
-//        State.addAvatarResources(b, avatarResources);
-//        State.addObservationGrid(b, observations);
-//        State.addNPCPositions(b, npcPositions);
-//        State.addImmovablePositions(b, immovablePositions);
-//        State.addMovablePositions(b, movablePositions);
-//        State.addResourcesPositions(b, resourcesPositions);
-//        State.addFromAvatarSpritesPositions(b, fromAvatarSpritePositions);
+        State.addAvatarResources(b, avatarResources);
+        State.addObservationGrid(b, observations);
+        State.addNPCPositions(b, npcPositions);
+        State.addImmovablePositions(b, immovablePositions);
+        State.addMovablePositions(b, movablePositions);
+        State.addResourcesPositions(b, resourcesPositions);
+        State.addFromAvatarSpritesPositions(b, fromAvatarSpritePositions);
 
 
         State.addAvatarOrientation(b, avatarOrientationVectorOffset);

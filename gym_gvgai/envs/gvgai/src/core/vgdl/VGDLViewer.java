@@ -81,10 +81,7 @@ public class VGDLViewer extends JComponent
 
     private void updateObservationForLearningPlayer() {
         LearningPlayer learningPlayer = (LearningPlayer)player;
-        Types.LEARNING_SSO_TYPE ssoType = learningPlayer.getLearningSsoType();
-        if (ssoType == Types.LEARNING_SSO_TYPE.IMAGE ||
-            ssoType == Types.LEARNING_SSO_TYPE.BOTH) {
-
+        if(learningPlayer.isRequiresImage()) {
             paintWithGraphics(graphics);
             learningPlayer.setObservation(image);
         }

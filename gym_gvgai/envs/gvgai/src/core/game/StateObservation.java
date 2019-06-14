@@ -42,7 +42,7 @@ public class StateObservation {
     /**
      * Field to represent the current game's state.
      */
-    public Types.GAMESTATES currentGameState;
+    public Types.GamePhase currentGameState;
 
     /**
      * Returns an exact copy of the state observation object.
@@ -80,9 +80,9 @@ public class StateObservation {
 
     /**
      * Return the current state of the game
-     * @return current state of the game as a GAMESTATES type.
+     * @return current state of the game as a GamePhase type.
      */
-    public Types.GAMESTATES getGameState()
+    public Types.GamePhase getGameState()
     {
         return this.currentGameState;
     }

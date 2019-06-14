@@ -910,16 +910,16 @@ public abstract class Game {
 		// Play until the game is ended
 		while (!isEnded && !wi.windowClosed) {
 			// Determine the time to adjust framerate.
-			long then = System.currentTimeMillis();
+			//long then = System.currentTimeMillis();
 
 			this.gameCycle(); // Execute a game cycle.
 
 			// Get the remaining time to keep fps.
 			long now = System.currentTimeMillis();
-			int remaining = (int) Math.max(0, delay - (now - then));
+			//int remaining = (int) Math.max(0, delay - (now - then));
 
 			// Wait until de next cycle.
-			waitStep(remaining);
+			//waitStep(remaining);
 
 			// Draw all sprites in the panel.
 			view.paint(this.spriteGroups);
@@ -987,17 +987,13 @@ public abstract class Game {
 
 		// Play until the game is ended
 		while (!isEnded && !wi.windowClosed) {
-			// Determine the time to adjust framerate.
-			long then = System.currentTimeMillis();
 
 			this.gameCycle(); // Execute a game cycle.
 
-			// Get the remaining time to keep fps.
-			long now = System.currentTimeMillis();
-			int remaining = (int) Math.max(0, delay - (now - then));
+			//int remaining = 0;
 
 			// Wait until de next cycle.
-			waitStep(remaining);
+			//waitStep(remaining);
 
 			// Draw all sprites in the panel.
 			view.paint(this.spriteGroups);

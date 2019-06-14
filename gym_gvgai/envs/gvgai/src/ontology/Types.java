@@ -1,8 +1,10 @@
 package ontology;
+
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
 import java.util.Random;
+
 import tools.Direction;
 import tools.Vector2d;
 
@@ -47,23 +49,22 @@ public class Types {
     public static final int LEARNING_FINISH_ROUND = -2;
 
     //This is a small method to automatically link and parse vectors to directions.
-    public static Field processField(String value)
-    {
+    public static Field processField(String value) {
         Field cfield = null;
-        try{
+        try {
             cfield = Types.class.getField(value);
             Object objVal = cfield.get(null);
 
-            if(objVal instanceof Vector2d) {
-                value = _v2DirStr((Vector2d)objVal);
+            if (objVal instanceof Vector2d) {
+                value = _v2DirStr((Vector2d) objVal);
                 cfield = Types.class.getField(value);
             }
-        }catch(Exception e) { }
+        } catch (Exception e) {
+        }
         return cfield;
     }
 
-    public static String v2DirStr(Vector2d v)
-    {
+    public static String v2DirStr(Vector2d v) {
         if (v.equals(NIL)) return "NIL";
         if (v.equals(NONE)) return "NONE";
         if (v.equals(UP)) return "UP";
@@ -73,8 +74,7 @@ public class Types {
         return null;
     }
 
-    private static String _v2DirStr(Vector2d v)
-    {
+    private static String _v2DirStr(Vector2d v) {
         if (v.equals(NIL)) return "DNIL";
         if (v.equals(NONE)) return "DNONE";
         if (v.equals(UP)) return "DUP";
@@ -85,10 +85,10 @@ public class Types {
     }
 
     public static int DEFAULT_SINGLE_PLAYER_KEYIDX = 0;
-    public static int[][] ALL_ACTIONS = new int[][]{    {KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_DOWN,
-                                                         KeyEvent.VK_RIGHT, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE},
-                                                        {KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S,
-                                                         KeyEvent.VK_D, KeyEvent.VK_SHIFT, KeyEvent.VK_ESCAPE}};
+    public static int[][] ALL_ACTIONS = new int[][]{{KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_DOWN,
+            KeyEvent.VK_RIGHT, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE},
+            {KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S,
+                    KeyEvent.VK_D, KeyEvent.VK_SHIFT, KeyEvent.VK_ESCAPE}};
 
     public static enum ACTIONS {
         ACTION_NIL(new int[]{0, 0}),
@@ -103,6 +103,27 @@ public class Types {
 
         ACTIONS(int[] numVal) {
             this.key = numVal;
+        }
+
+        public static ACTIONS fromInt(int actionInt) {
+            switch(actionInt) {
+                case 0:
+                    return ACTION_NIL;
+                case 1:
+                    return ACTION_UP;
+                case 2:
+                    return ACTION_LEFT;
+                case 3:
+                    return ACTION_DOWN;
+                case 4:
+                    return ACTION_RIGHT;
+                case 5:
+                    return ACTION_USE;
+                case 6:
+                    return ACTION_ESCAPE;
+                default:
+                    return ACTION_NIL;
+            }
         }
 
         public int[] getKey() {
@@ -120,39 +141,39 @@ public class Types {
         }
 
         public static ACTIONS fromVector(Vector2d move) {
-        	// Probably better to use .equals() instead of == to test for equality,
-        	// but not necessary for the current call hierarchy of this method
+            // Probably better to use .equals() instead of == to test for equality,
+            // but not necessary for the current call hierarchy of this method
             if (move.equals(UP)) return ACTION_UP;
             else if (move.equals(DOWN)) return ACTION_DOWN;
             else if (move.equals(LEFT)) return ACTION_LEFT;
             else if (move.equals(RIGHT)) return ACTION_RIGHT;
             else return ACTION_NIL;
         }
-        
-        public static boolean isMoving(ACTIONS value){
-        	return value == ACTIONS.ACTION_UP || value == ACTIONS.ACTION_DOWN ||
-        			value == ACTIONS.ACTION_LEFT || value == ACTIONS.ACTION_RIGHT;
+
+        public static boolean isMoving(ACTIONS value) {
+            return value == ACTIONS.ACTION_UP || value == ACTIONS.ACTION_DOWN ||
+                    value == ACTIONS.ACTION_LEFT || value == ACTIONS.ACTION_RIGHT;
         }
 
-        public static ACTIONS reverseACTION(ACTIONS value){
-        	if(value == ACTIONS.ACTION_DOWN){
-        		return ACTIONS.ACTION_UP;
-        	}
-        	if(value == ACTIONS.ACTION_UP){
-        		return ACTIONS.ACTION_DOWN;
-        	}
-        	if(value == ACTIONS.ACTION_RIGHT){
-        		return ACTIONS.ACTION_LEFT;
-        	}
-        	if(value == ACTIONS.ACTION_LEFT){
-        		return ACTIONS.ACTION_RIGHT;
-        	}
-        	return ACTIONS.ACTION_NIL;
+        public static ACTIONS reverseACTION(ACTIONS value) {
+            if (value == ACTIONS.ACTION_DOWN) {
+                return ACTIONS.ACTION_UP;
+            }
+            if (value == ACTIONS.ACTION_UP) {
+                return ACTIONS.ACTION_DOWN;
+            }
+            if (value == ACTIONS.ACTION_RIGHT) {
+                return ACTIONS.ACTION_LEFT;
+            }
+            if (value == ACTIONS.ACTION_LEFT) {
+                return ACTIONS.ACTION_RIGHT;
+            }
+            return ACTIONS.ACTION_NIL;
         }
 
         public static ACTIONS fromVector(Direction move) {
-        	// Probably better to use .equals() instead of == to test for equality,
-        	// but not necessary for the current call hierarchy of this method
+            // Probably better to use .equals() instead of == to test for equality,
+            // but not necessary for the current call hierarchy of this method
             if (move.equals(DUP)) return ACTION_UP;
             else if (move.equals(DDOWN)) return ACTION_DOWN;
             else if (move.equals(DLEFT)) return ACTION_LEFT;
@@ -170,16 +191,23 @@ public class Types {
         PLAYER_WINS(1);
 
         private int key;
-        WINNER(int val) {key=val;}
-        public int key() {return key;}
+
+        WINNER(int val) {
+            key = val;
+        }
+
+        public int key() {
+            return key;
+        }
     }
 
     /**
      * This is an enum type that describes the potential states of the game
      */
-    public static enum GAMESTATES {
-        INIT_STATE, ACT_STATE, END_STATE, ABORT_STATE, CHOOSE_LEVEL
+    public static enum GamePhase {
+        START_STATE, CHOOSE_LEVEL_STATE, INIT_STATE, ACT_STATE, END_STATE, ABORT_STATE
     }
+
 
     public static enum MOVEMENT {
         STILL,
@@ -187,10 +215,8 @@ public class Types {
         MOVE
     }
 
-    public static enum LEARNING_SSO_TYPE {
-        IMAGE,
-        DATA,
-        BOTH;
+    public static enum AgentPhase {
+        START_STATE, CHOOSE_LEVEL_STATE, INIT_STATE, ACT_STATE, END_STATE, ABORT_STATE
     }
 
     public static final int SCORE_DISQ = -1000;

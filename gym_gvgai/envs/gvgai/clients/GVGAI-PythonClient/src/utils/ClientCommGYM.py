@@ -1,14 +1,14 @@
-import json
 import logging
 import sys
 import os
-import time
 import numpy as np
 import tempfile
+import subprocess
 import shutil
+from struct import pack_into
 
 from IOSocket import IOSocket
-from Types import LEARNING_SSO_TYPE, GAME_STATE
+from Types import GamePhase, Action, AgentPhase
 from serialization import State
 
 
@@ -17,43 +17,66 @@ class ClientCommGYM:
      * Client communication, set up the socket for a given agent
     """
 
-    def __init__(self, game, version, lvl, pathStr):
+
+    def _get_libs(self, path):
+        libs = []
+        for root, _, files in os.walk(path):
+            for f in files:
+                if(f.endswith('.jar')):
+                    libs.append(os.path.join(root, f))
+        return libs
+
+    def __init__(self, game, version, level, pathStr, request_image=True):
         self.tempDir = tempfile.TemporaryDirectory()
-        self.addLevel('')  # Level template to be loaded into java
 
         self.TOKEN_SEP = '#'
         self.io = IOSocket(self.tempDir.name)
         self.LOG = False
         self.player = None
         self.global_ect = None
-        self.lastSsoType = LEARNING_SSO_TYPE.DATA
         self.terminal = False
-        self.running = False
+        self._running = False
+        self._request_image = request_image
+        self.actions = []
+        self.level = level
+
+
 
         baseDir = os.path.join(pathStr, 'gvgai')
         srcDir = os.path.join(baseDir, 'src')
+        jarDir = self._get_libs(os.path.join(baseDir, 'lib'))
         buildDir = os.path.join(baseDir, 'GVGAI_Build')
         gamesDir = os.path.join(pathStr, 'games', '{}_v{}'.format(game, version))
-        cmd = ["java", "-Dsun.java2d.opengl=true", "-classpath", buildDir, "tracks.singleLearning.utils.JavaServer",
+
+        fullClasspath = ':'.join(jarDir + [buildDir])
+
+        cmd = ["java", "-Dsun.java2d.opengl=true", "-classpath", fullClasspath, "tracks.singleLearning.utils.JavaServer",
                "-game", game, "-gamesDir", gamesDir, "-imgDir", baseDir, "-portNum", str(self.io.port)]
 
-        # Check build version
-        # sys.path.append(baseDir)
-        # import check_build
-        #
-        # if(not os.path.isdir(buildDir)):
-        #     raise Exception("Couldn't find build directory. Please run build.py from the install directory or reinstall with pip.")
-        # elif(not check_build.isCorrectBuild(srcDir, buildDir)):
-        #     raise Exception("Your build is out of date. Please run build.py from the install directory or reinstall with pip.")
-        # else:
-        # try:
-        #     self.java = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, cwd=self.tempDir.name)
-        # except subprocess.CalledProcessError as e:
-        #     print('exit code: {}'.format(e.returncode))
-        #     print('stderr: {}'.format(e.stderr.decode(sys.getfilesystemencoding())))
+        #Check build version
+        sys.path.append(baseDir)
+        import check_build
+
+        if(not os.path.isdir(buildDir)):
+            raise Exception("Couldn't find build directory. Please run build.py from the install directory or reinstall with pip.")
+        elif(not check_build.isCorrectBuild(srcDir, buildDir)):
+            raise Exception("Your build is out of date. Please run build.py from the install directory or reinstall with pip.")
+        else:
+            try:
+                self.java = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, cwd=self.tempDir.name)
+            except subprocess.CalledProcessError as e:
+                print('exit code: {}'.format(e.returncode))
+                print('stderr: {}'.format(e.stderr.decode(sys.getfilesystemencoding())))
 
         self.io.initBuffers()
-        self.reset()
+
+        # Firstly we should receive a choose-level state
+        game_phase, state, image = self._read_and_process_server_response()
+        assert game_phase == GamePhase.START_STATE, "Expecting START_STATE from GVGAI, but received %s" % GamePhase(
+            game_phase)
+        self._start()
+
+        self.reset(level)
 
     """
      * Method that perpetually listens for messages from the server.
@@ -64,100 +87,91 @@ class ClientCommGYM:
 
     def step(self, act):
 
-        start = time.time()
+        if self.terminal:
+            return
 
-        if not self.sso.Terminal:
-            if (act == 0):
-                self.act("")
-            else:
-                action = self.sso.availableActions[act - 1]
-                self.act(action)
-            self._game_phase, data = self.io.recv()
-            self.process_data(self._game_phase, data)
+        game_phase, state, image = self._read_and_process_server_response()
+        self.io.writeToServer(AgentPhase.ACT_STATE, act.to_bytes(4, byteorder='big'), self.LOG)
 
-            score = self.reward()
-            self.lastScore = self.sso.gameScore
-        else:
-            score = 0
+        current_score, reward = self._get_reward(state)
+        self._previous_score = current_score
 
-        if self.sso.isGameOver == True or self.sso.gameWinner == 'PLAYER_WINS' or self.sso.phase == "FINISH" or self.sso.phase == "ABORT" or self.sso.phase == "End":
-            width = int(self.sso.worldDimension[1])
-            height = int(self.sso.worldDimension[0])
-            self.sso.image = np.zeros((width, height, 3))
+        actions = self._get_actions(state)
+
+        if state.IsGameOver() == True or state.GameWinner() == 'PLAYER_WINS' or game_phase == GamePhase.END_STATE or game_phase == GamePhase.END_STATE:
             self.terminal = True
-            # self.lastScore=0
-            # Score = self.lastScore
-            # self.lastScore=self.sso.gameScore
         else:
             self.terminal = False
-            actions = self.actions()
 
-        end = time.time()
-        print('step: %d' % ((end - start) * 1000))
+        info = {'winner': state.GameWinner(), 'actions': actions}
+        return image, reward, self.terminal, info
 
-        if not hasattr(self.sso, 'image'):
-            self.sso.image = np.zeros((100, 100, 3))
-
-        info = {'winner': self.sso.gameWinner, 'actions': self.actions()}
-        return self.sso.image, score, self.sso.Terminal, info
-
-    def reset(self):
-        self.lastScore = 0
+    def reset(self, level):
+        self._previous_score = 0
         self.image = None
-        initialising = True
 
-        # Keep reading from the server until we get the initial state
-        while initialising:
+        # If this is already running then we abort the game
+        if self._running:
+            game_phase, state, image = self._read_and_process_server_response()
+            assert game_phase == GamePhase.ACT_STATE, "Expecting ACT_STATE from GVGAI, but received %s" % GamePhase(game_phase)
+            self._abort_game()
 
-            self._game_phase, data = self.io.readFromServer()
-            self.process_data(self._game_phase, data)
+        # Firstly we should receive a choose-level state
+        game_phase, state, image = self._read_and_process_server_response()
+        assert game_phase == GamePhase.CHOOSE_LEVEL, "Expecting CHOOSE_LEVEL from GVGAI, but received %s" % GamePhase(game_phase)
+        self._choose_level(level)
 
-            if self._game_phase == GAME_STATE.CHOOSE_LEVEL:
-                self.start()
-
-            elif self._game_phase == GAME_STATE.INIT_STATE:
-                self.init()
-                initialising = False
-
-        if self.image is None:
-            print('No image sent in initial state')
+        # Secondly we should receive an init state
+        game_phase, state, image = self._read_and_process_server_response()
+        assert game_phase == GamePhase.INIT_STATE, "Expecting INIT_STATE from GVGAI, but received %s" % GamePhase(game_phase)
+        self._init(state)
+        self._running = True
 
         # Currently initial observation is not sent back on reset
-        return np.zeros((100, 100, 3))
+        if image is None:
+            print('No image sent in initial state')
+            width, height = self._get_dimensions(state)
+            image = np.zeros((height, width, 3))
 
-    def reward(self):
-        scoreDelta = self.sso.gameScore - self.lastScore
-        return scoreDelta
+        return image
 
-    def actions(self):
-        nil = ["ACTION_NIL"]
-        return nil + self._state.AvailableActionsAsNumpy()
+    def _get_dimensions(self, state):
+        dims = state.WorldDimensionAsNumpy().astype(np.int32)
+        return dims[0], dims[1]
 
-    def as_sso(self, d):
-        self.sso.__dict__.update(d)
-        return self.sso
+    def _read_and_process_server_response(self):
+        game_phase_bytes, data_bytes = self.io.readFromServer()
+        game_phase = GamePhase(int.from_bytes(game_phase_bytes, 'big'))
+        state, image = self._process_data(data_bytes)
+        return game_phase, state, image
 
-    def process_data(self, game_state, data=None):
+    def _get_reward(self, state):
+        current_score = state.GameScore()
+        reward = current_score - self._previous_score
+        return current_score, reward
+
+    def _convert_to_actions(self, actions_numpy):
+        return [Action(action) for action in actions_numpy]
+
+    def _get_actions(self, state):
+        availableActions = self._convert_to_actions(state.AvailableActionsAsNumpy())
+        return availableActions + [Action.ACTION_NIL]
+
+    def _process_data(self, data=None):
 
         try:
-
-            print('GAME STATE: %s' % GAME_STATE.get_game_state_string(game_state))
-
             if data is not None:
 
                 state = State.GetRootAsState(data, 0)
 
                 image = None
-                if game_state == GAME_STATE.ACT_STATE:
-                    if (self.lastSsoType == LEARNING_SSO_TYPE.IMAGE or self.lastSsoType == LEARNING_SSO_TYPE.BOTH):
-                        if state.ImageArrayLength() != 0:
-                            width = int(state.worldDimension[1])
-                            height = int(state.worldDimension[0])
-                            # self.sso.image = np.zeros((110,300,3))
-                            image = np.reshape(state.ImageArrayAsNumpy(), (width, height, 3))
+                if state.ImageArrayLength() != 0:
+                    width, height = self._get_dimensions(state)
+                    image = np.reshape(state.ImageArrayAsNumpy(), (height, width, 3))
 
-                self._state = state
-                self._image = image
+                return state, image
+
+            return None, None
 
         except Exception as e:
             logging.exception(e)
@@ -165,30 +179,32 @@ class ClientCommGYM:
             # traceback.print_exc()
             sys.exit()
 
+    def _start(self):
+        self.io.writeToServer(AgentPhase.START_STATE, log=self.LOG)
 
+    def _abort_game(self):
+        self.io.writeToServer(AgentPhase.ABORT_STATE, log=self.LOG)
+        self._end_game()
 
+    def _end_game(self):
+        game_phase, state, image = self._read_and_process_server_response()
+        assert game_phase == GamePhase.END_STATE, "Expecting END_STATE from GVGAI, but received %s" % GamePhase(game_phase)
+        self.io.writeToServer(AgentPhase.END_STATE, log=self.LOG)
 
-    """
-     * Manages the start of the communication. It starts the whole process, and sets up the timer for the whole run.
-    """
+    def _choose_level(self, level):
 
-    def start(self):
-        self.io.writeToServer("START_DONE".encode('utf-8'), self.lastSsoType, self.LOG)
+        requires_image_byte = bytes([1]) if self._request_image else bytes([0])
 
-    def init(self):
-        self.io.writeToServer("INIT_DONE".encode('utf-8'), self.lastSsoType, self.LOG)
+        choose_level_data = bytearray(5)
+        pack_into('>i', choose_level_data, 0, level)
+        pack_into('c', choose_level_data, 4, requires_image_byte)
 
-    """
-     * Manages the action request for an agent. The agent is requested for an action,
-     * which is sent back to the server
-    """
+        self.io.writeToServer(AgentPhase.CHOOSE_LEVEL_STATE, choose_level_data, self.LOG)
 
-    def act(self, action):
-        if (not action) or (action == ""):
-            action = "ACTION_NIL"
-
-        self.io.writeToServer(action.encode('utf-8'), self.lastSsoType, self.LOG)
-
+    def _init(self, state):
+        self.actions = self._get_actions(state)
+        self.world_dimensions = state.WorldDimensionAsNumpy().astype(np.int32)
+        self.io.writeToServer(AgentPhase.INIT_STATE, log=self.LOG)
 
     def addLevel(self, path):
         lvlName = os.path.join(self.tempDir.name, 'game_lvl5.txt')

@@ -4,9 +4,10 @@
 
 class Action(object):
     ACTION_NIL = 0
-    ACTION_LEFT = 1
-    ACTION_DOWN = 2
-    ACTION_RIGHT = 3
-    ACTION_USE = 4
-    ACTION_ESCAPE = 5
+    ACTION_UP = 1
+    ACTION_LEFT = 2
+    ACTION_DOWN = 3
+    ACTION_RIGHT = 4
+    ACTION_USE = 5
+    ACTION_ESCAPE = 6
 

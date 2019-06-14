@@ -30,11 +30,10 @@ class GVGAI_Env(gym.Env):
         #Send the level to play
         self.GVGAI = gvgai.ClientCommGYM(game, version, level, dir)
         self.game = game
-        self.lvl = level
+        self.level = level
         self.version = version
-
-        self.actions = self.GVGAI.actions()
-        self.img = self.GVGAI.image
+        self.actions = self.GVGAI.actions
+        self.world_dimensions = self.GVGAI.world_dimensions
         self.viewer = None
        
         #Only allow gridphysics games for now
@@ -42,7 +41,7 @@ class GVGAI_Env(gym.Env):
         self.action_space = spaces.Discrete(len(self.actions))
 
         # Observation is the remaining time
-        self.observation_space = spaces.Box(low=0, high=255, shape=self.img.shape, dtype=np.uint8)
+        self.observation_space = spaces.Box(low=0, high=255, shape=self.world_dimensions, dtype=np.int32)
         
     def step(self, action):
         """
@@ -75,18 +74,20 @@ class GVGAI_Env(gym.Env):
         -------
         observation (object): the initial observation of the space.
         """
-        self.img =  self.GVGAI.reset(self.lvl)
+        self.img = self.GVGAI.reset(self.level)
         return self.img
 
     def render(self, mode='human'):
-        img = self.img[:,:,:3]
+        if self.img is None:
+            return
+
         if mode == 'rgb_array':
-            return img
+            return self.img
         elif mode == 'human':
             from gym.envs.classic_control import rendering
             if self.viewer is None:
                 self.viewer = rendering.SimpleImageViewer()
-            self.viewer.imshow(img)
+            self.viewer.imshow(self.img)
             return self.viewer.isopen
 
     def close(self):
@@ -98,22 +99,22 @@ class GVGAI_Env(gym.Env):
     def _setLevel(self, level):
         if(type(level) == int):
             if(level < 5):
-                self.lvl = level
+                self.level = level
             else:
                 print("Level doesn't exist, playing level 0")
-                self.lvl = 0
+                self.level = 0
         else:
             newLvl = path.realpath(level)
             ogLvls = [path.realpath(path.join(dir, 'games', '{}_v{}'.format(self.game, self.version), '{}_lvl{}.txt'.format(self.game, i))) for i in range(5)]
             if(newLvl in ogLvls):
                 lvl = ogLvls.index(newLvl)
-                self.lvl = lvl
+                self.level = lvl
             elif(path.exists(newLvl)):
                 self.GVGAI.addLevel(newLvl)
-                self.lvl = 5
+                self.level = 5
             else:
                 print("Level doesn't exist, playing level 0")
-                self.lvl = 0
+                self.level = 0
 
     def get_action_meanings(self):
         return self.actions

@@ -258,7 +258,7 @@ class ClientComm:
     def init(self):
         ect = ElapsedCpuTimer()
         ect.setMaxTimeMillis(CompetitionParameters.INITIALIZATION_TIME)
-        self.player.init(self.sso, ect.copy())
+        self.player._init(self.sso, ect.copy())
         self.lastSsoType = self.player.lastSsoType
         if ect.exceededMaxTime():
             self.io.writeToServer(self.lastMessageId, "INIT_FAILED", self.LOG)

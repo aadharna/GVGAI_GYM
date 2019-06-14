@@ -142,7 +142,6 @@ public class LearningMachine {
         StatSummary[] scores = new StatSummary[toPlay.getNoPlayers()];
         victories[0] = new StatSummary();
         scores[0] = new StatSummary();
-        performance = new StatSummary();
 
         // Player array to hold the single player
         LearningPlayer[] players = new LearningPlayer[]{player};
@@ -153,20 +152,20 @@ public class LearningMachine {
             return;
         }
 
-        if(levelOutcome != Types.LEARNING_FINISH_ROUND) {
-            //We only continue playing if the round is not over.
-            System.out.println("[PHASE] Start training on selected levels.");
-            while (levelOutcome >= 0) {
-                // Play the selected level once
-                System.out.println("Level outcome:" + levelOutcome + ", Size: " + level_files.length);
-                levelOutcome = playOneLevel(game_file, level_files[levelOutcome], 0, false, visual, recordActions,
-                    levelOutcome, players, actionFiles, toPlay, scores, victories);
-            }
+        int level = players[0].chooseLevel();
+
+        //We only continue playing if the round is not over.
+        System.out.println("[PHASE] Start training on selected levels.");
+        while (level >= 0) {
+
+            // Play the selected level once
+            System.out.println("Level:" + level + ", Size: " + level_files.length);
+            playOneLevel(game_file, level_files[level], 0, false, visual, recordActions,
+                    level, players, actionFiles, toPlay, scores, victories);
+
+            level = players[0].chooseLevel();
         }
 
-        if(levelOutcome == Types.LEARNING_RESULT_DISQ)
-            return;
-        
         System.out.println("[PHASE] End Training.");
         String vict = "", sc = "";
         for (int i = 0; i < toPlay.no_players; i++) {
@@ -178,137 +177,10 @@ public class LearningMachine {
             }
         }
 
-
-//        System.out.println("[LOG] Results in game " + game_file + ", " +
-//                vict + " , " + sc);
-
-        //Finally, when the game is over, we need to finish the communication with the client.
         player.finishPlayerCommunication();
     }
 
 
-    /**
-     * Reads and launches a game for a bot to be played. It specifies which levels to play and how many times.
-     * Filenames for saving actions can be specified. Graphics always on.
-     * @param game_file game description file.
-     * @param level_files array of level file names to play.
-     * @param level_times how many times each level has to be played.
-     * @param actionFiles names of the files where the actions of this player, for this game, should be recorded. Accepts
-     *                    null if no recording is desired. If not null, this array must contain as much String objects as
-     *                    level_files.length*level_times.
-     */
-    public static StatSummary performance;
-    public static void runGames(String game_file, String[] level_files, int level_times,
-                                LearningPlayer player, String[] actionFiles, boolean visual) throws IOException {
-        VGDLFactory.GetInstance().init(); //This always first thing to do.
-        VGDLRegistry.GetInstance().init();
-        CompetitionParameters.IS_LEARNING = true;
-        boolean recordActions = false;
-        if (actionFiles != null) {
-            recordActions = true;
-            assert actionFiles.length >= level_files.length * level_times :
-                "runGames (actionFiles.length<level_files.length*level_times): " +
-                    "you must supply an action file for each game instance to be played, or null.";
-        }
-
-        Game toPlay = new VGDLParser().parseGame(game_file);
-        int levelIdx = 0;
-
-        StatSummary[] victories = new StatSummary[toPlay.getNoPlayers()];
-        StatSummary[] scores = new StatSummary[toPlay.getNoPlayers()];
-        victories[0] = new StatSummary();
-        scores[0] = new StatSummary();
-        performance = new StatSummary();
-
-        // Player array to hold the single player
-        LearningPlayer[] players = new LearningPlayer[]{player};
-
-        // Initialize the player
-        boolean initSuccesful = players[0].startPlayerCommunication();
-        if (!initSuccesful) {
-            return;
-        }
-        // Establish the training and validation levels.
-        boolean keepPlaying = true;
-        String[] trainingLevels = new String[Types.NUM_TRAINING_LEVELS];
-        int level_idx = 0;
-        for(; level_idx < trainingLevels.length; level_idx++)
-            trainingLevels[level_idx] = level_files[level_idx];
-
-        String[] validationLevels = new String[Types.NUM_LEARNING_LEVELS - Types.NUM_TRAINING_LEVELS];
-        for(int i = 0; i < validationLevels.length; i++, level_idx++)
-            validationLevels[i] = level_files[level_idx];
-
-        level_idx = 0;
-        int levelOutcome = 0;
-        System.out.println("[PHASE] Starting First Phase of Training in " + Types.NUM_TRAINING_LEVELS + " levels.");
-        while(keepPlaying && level_idx < trainingLevels.length)
-        {
-            String level_file = trainingLevels[level_idx];
-            for (int i = 0; keepPlaying && i < level_times; ++i) {
-                levelOutcome = playOneLevel(game_file,level_file,i,false, visual, recordActions,level_idx,
-                    players,actionFiles,toPlay,scores,victories);
-//                System.err.println("levelOutcome="+levelOutcome);
-                keepPlaying = (levelOutcome>=0);
-            }
-            level_idx++;
-        }
-
-        if(levelOutcome == Types.LEARNING_RESULT_DISQ)
-            return;
-
-        if(levelOutcome != Types.LEARNING_FINISH_ROUND) {
-            //We only continue playing if the round is not over.
-            System.out.println("[PHASE] Starting Second Phase of Training in " + Types.NUM_TRAINING_LEVELS + " levels.");
-            while (levelOutcome >= 0) {
-                // Play the selected level once
-                levelOutcome = playOneLevel(game_file, level_files[levelOutcome], 0, false, visual, recordActions,
-                    levelOutcome, players, actionFiles, toPlay, scores, victories);
-            }
-        }
-
-        if(levelOutcome == Types.LEARNING_RESULT_DISQ)
-            return;
-
-        // Validation time
-        // Establish the level files for level 3 and 4
-        System.out.println("[PHASE] Starting Validation in " + validationLevels.length + " levels.");
-
-        for (int valid_idx=0; valid_idx<CompetitionParameters.validation_times; valid_idx++) {
-            level_idx = 0;
-            levelOutcome = 0;
-            keepPlaying = true;
-//        System.err.println("At beginning, keepPlaying="+keepPlaying + ",level_idx="+level_idx);
-            while (keepPlaying && level_idx < validationLevels.length) {
-                String validation_level = validationLevels[level_idx];
-                for (int i = 0; keepPlaying && i < level_times; ++i) {
-//                System.err.println("validation_level=" + validation_level);
-                    levelOutcome = playOneLevel(game_file, validation_level, i, true, visual, recordActions, level_idx + Types.NUM_TRAINING_LEVELS, players, actionFiles, toPlay, scores, victories);
-                    keepPlaying = (levelOutcome != Types.LEARNING_RESULT_DISQ);
-//                System.err.println("levelOutcome=" + levelOutcome + ", keepPlaying="+keepPlaying);
-                }
-                level_idx++;
-            }
-        }
-        System.out.println("[PHASE] End Validation in " + validationLevels.length + " levels.");
-        String vict = "", sc = "";
-        for (int i = 0; i < toPlay.no_players; i++) {
-            vict += victories[i].mean();
-            sc += scores[i].mean();
-            if (i != toPlay.no_players - 1) {
-                vict += ", ";
-                sc += ", ";
-            }
-        }
-
-
-
-//        System.out.println("[LOG] Results in game " + game_file + ", " +
-//                vict + " , " + sc);
-
-        //Finally, when the game is over, we need to finish the communication with the client.
-        player.finishPlayerCommunication();
-    }
 
     /**
      * Method used to play a single given level. It is also used to request player input in regards
@@ -326,10 +198,8 @@ public class LearningMachine {
      * @param toPlay The game to be played. Must be pre-initialized.
      * @param scores Array of scores to be modified. Is modified at the end of the level.
      * @param victories Array of victories to be modified. Is modified at the end of the level.
-     * @return Next level to be played as chosen by the player, or a random substituent.
-     * @throws IOException
      */
-    public static int playOneLevel(String game_file, String level_file, int level_time, boolean isValidation, boolean isVisual, boolean recordActions,
+    public static void playOneLevel(String game_file, String level_file, int level_time, boolean isValidation, boolean isVisual, boolean recordActions,
                                    int levelIdx, LearningPlayer[] players, String[] actionFiles, Game toPlay, StatSummary[] scores,
                                    StatSummary[] victories) throws IOException{
         if (VERBOSE)
@@ -356,7 +226,7 @@ public class LearningMachine {
             toPlay.getAvatars()[0].disqualify(true);
             toPlay.handleResult();
             toPlay.printLearningResult(levelIdx, isValidation);
-            return -1;
+            return;
         }
         players[0] = learningPlayer;
 
@@ -384,15 +254,11 @@ public class LearningMachine {
         StateObservation so = toPlay.getObservation();
 
         // Sends results to player and retrieve the next level to be played
-        int level = players[0].result(so);
+        players[0].result(so);
 //        System.out.println("LearningMachine required level="+level);
         //reset the game.
         toPlay.reset();
-
-        return level;
     }
-
-
 
     /**
      * Creates a player given its name. This method starts the process that runs this client.

@@ -13,7 +13,7 @@ class IOSocket:
 
     def __init__(self, tmpDir):
         self.HEADER_SIZE = 13
-        self.BUFFER_SIZE = 8192
+        self.BUFFER_SIZE = 8192*10
         self.hostname = "127.0.0.1"
         self.port = 8083
         #self.hostname, self.port = self.getOpenAddress()
@@ -36,10 +36,6 @@ class IOSocket:
                 print ("Client connected to server [OK]")
             except Exception as e:
                 time.sleep(1)
-                # logging.exception(e)
-                # print("Client connected to server [FAILED]")
-                # traceback.print_exc()
-                # sys.exit()
 
     def writeToFile(self, line):
         sys.stdout.write(line + os.linesep)
@@ -47,20 +43,22 @@ class IOSocket:
         sys.stdout.flush()
         self.logfile.flush()
 
-    def writeToServer(self, data, sso=None, log=False):
+    def writeToServer(self, agent_phase, data=None, log=False):
 
         payload_size = len(data) if data is not None else 0
         buffer_size = 13 + payload_size
+
+        agent_phase = bytes([agent_phase.value])
 
         buffer = bytearray(buffer_size)
 
         # Long in java is 8 bytes
         pack_into('>q', buffer, 0, self._last_message_id)
-        pack_into('c', buffer, 9, sso if sso is not None else bytes([255]))
+        pack_into('c', buffer, 8, agent_phase)
 
         if data is not None:
             pack_into('>i', buffer, 9, payload_size)
-            pack_into('>%ds' % payload_size, buffer, 13, data)
+            pack_into('%ds' % payload_size, buffer, 13, data)
         else:
             pack_into('>i', buffer, 9, 0)
 
@@ -84,20 +82,20 @@ class IOSocket:
         s.close()
         return address
 
-    def readUntil(self, length):
+    def _read_until(self, length):
         buffer = bytearray()
         while len(buffer) < length:
-            buffer += bytearray(self.socket.recv(self.BUFFER_SIZE))
-
+            recv_size = min(length-len(buffer), self.BUFFER_SIZE)
+            buffer += bytearray(self.socket.recv(recv_size))
         return buffer
 
     
     def readFromServer(self):
         # Firstly read the header bytes
-        header_buffer = self.readUntil(self.HEADER_SIZE)
-        self._last_message_id, game_state, message_size = unpack_from('>qci', header_buffer, 0)
+        header_buffer = self._read_until(self.HEADER_SIZE)
+        self._last_message_id, game_phase, message_size = unpack_from('>qci', header_buffer, 0)
         data = None
         if message_size > 0:
-            data = self.socket.recv(message_size)
-        return game_state, data
+            data = self._read_until(message_size)
+        return game_phase, data
 
