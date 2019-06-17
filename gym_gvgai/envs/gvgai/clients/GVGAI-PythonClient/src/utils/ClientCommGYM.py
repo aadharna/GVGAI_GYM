@@ -87,8 +87,6 @@ class ClientCommGYM:
 
     def step(self, act):
 
-        if self.terminal:
-            return
 
         game_phase, state, image = self._read_and_process_server_response()
         self.io.writeToServer(AgentPhase.ACT_STATE, act.to_bytes(4, byteorder='big'), self.LOG)
@@ -99,33 +97,38 @@ class ClientCommGYM:
         actions = self._get_actions(state)
 
         if state.IsGameOver() == True or state.GameWinner() == 'PLAYER_WINS' or game_phase == GamePhase.END_STATE or game_phase == GamePhase.END_STATE:
-            self.terminal = True
+            done = True
         else:
-            self.terminal = False
+            done = False
 
         info = {'winner': state.GameWinner(), 'actions': actions}
-        return image, reward, self.terminal, info
+        return image, reward, done, info
 
     def reset(self, level):
         self._previous_score = 0
         self.image = None
 
-        # If this is already running then we abort the game
-        if self._running:
+        reset = False
+
+        while not reset:
+
             game_phase, state, image = self._read_and_process_server_response()
-            assert game_phase == GamePhase.ACT_STATE, "Expecting ACT_STATE from GVGAI, but received %s" % GamePhase(game_phase)
-            self._abort_game()
 
-        # Firstly we should receive a choose-level state
-        game_phase, state, image = self._read_and_process_server_response()
-        assert game_phase == GamePhase.CHOOSE_LEVEL, "Expecting CHOOSE_LEVEL from GVGAI, but received %s" % GamePhase(game_phase)
-        self._choose_level(level)
+            # If we are in the act state then we abort
+            if game_phase == GamePhase.ACT_STATE:
+                print('Aborting current game')
+                self._abort_game()
 
-        # Secondly we should receive an init state
-        game_phase, state, image = self._read_and_process_server_response()
-        assert game_phase == GamePhase.INIT_STATE, "Expecting INIT_STATE from GVGAI, but received %s" % GamePhase(game_phase)
-        self._init(state)
-        self._running = True
+            if game_phase == GamePhase.CHOOSE_LEVEL:
+                print('Choosing level %d' % level)
+                self._choose_level(level)
+
+            if game_phase == GamePhase.INIT_STATE:
+                print('Initial state recieved')
+                self._init(state)
+                self._running = True
+                reset = True
+
 
         # Currently initial observation is not sent back on reset
         if image is None:

@@ -19,7 +19,7 @@ for game in games:
         actions = env.unwrapped.get_action_meanings()
         start = time.time()
         frames = 0
-        for t in range(20000):
+        for t in range(2000):
             # choose action based on trained policy
             action_id = agent.act(stateObs, actions)
             # do action and get new state and its reward
@@ -30,7 +30,7 @@ for game in games:
             frames+=1
             # break loop when terminal state is reached
             if done:
-                break
+                env.reset()
         end = time.time()
 
         total_time = end-start

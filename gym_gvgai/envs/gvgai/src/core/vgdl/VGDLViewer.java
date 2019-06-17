@@ -21,8 +21,7 @@ import java.util.ArrayList;
  * Time: 10:54
  * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
  */
-public class VGDLViewer extends JComponent
-{
+public class VGDLViewer extends JComponent {
     /**
      * Reference to the game to be painted.
      */
@@ -51,17 +50,17 @@ public class VGDLViewer extends JComponent
 
     /**
      * Creates the viewer for the game.
+     *
      * @param game game to be displayed
      */
-    public VGDLViewer(Game game, Player player)
-    {
+    public VGDLViewer(Game game, Player player) {
         this.game = game;
         this.size = game.getScreenSize();
         this.player = player;
 
         if (player instanceof LearningPlayer) {
 
-            BufferedImage bi = new BufferedImage( (int) size.getWidth(), (int) size.getHeight(), BufferedImage.TYPE_INT_RGB);
+            BufferedImage bi = new BufferedImage((int) size.getWidth(), (int) size.getHeight(), BufferedImage.TYPE_INT_RGB);
 
             // obtain the current system graphical settings
             GraphicsConfiguration gfxConfig = GraphicsEnvironment.
@@ -80,8 +79,8 @@ public class VGDLViewer extends JComponent
     }
 
     private void updateObservationForLearningPlayer() {
-        LearningPlayer learningPlayer = (LearningPlayer)player;
-        if(learningPlayer.isRequiresImage()) {
+        LearningPlayer learningPlayer = (LearningPlayer) player;
+        if (learningPlayer.isRequiresImage()) {
             paintWithGraphics(graphics);
             learningPlayer.setObservation(image);
         }
@@ -89,10 +88,10 @@ public class VGDLViewer extends JComponent
 
     /**
      * Main method to paint the game
+     *
      * @param gx Graphics object.
      */
-    public void paintComponent(Graphics gx)
-    {
+    public void paintComponent(Graphics gx) {
         Graphics2D g = (Graphics2D) gx;
         paintWithGraphics(g);
     }
@@ -116,23 +115,22 @@ public class VGDLViewer extends JComponent
 
                 }
             }
-        }catch(Exception e) {}
+        } catch (Exception e) {
+        }
 
         g.setColor(Types.BLACK);
         player.draw(g);
     }
 
 
-
     /**
      * Paints the sprites.
+     *
      * @param spriteGroupsGame sprites to paint.
      */
-    public void paint(SpriteGroup[] spriteGroupsGame)
-    {
+    public void paint(SpriteGroup[] spriteGroupsGame) {
         this.spriteGroups = new SpriteGroup[spriteGroupsGame.length];
-        for(int i = 0; i < this.spriteGroups.length; ++i)
-        {
+        for (int i = 0; i < this.spriteGroups.length; ++i) {
             this.spriteGroups[i] = new SpriteGroup(spriteGroupsGame[i].getItype());
             this.spriteGroups[i].copyAllSprites(spriteGroupsGame[i].getSprites());
         }
@@ -146,25 +144,11 @@ public class VGDLViewer extends JComponent
 
     /**
      * Gets the dimensions of the window.
+     *
      * @return the dimensions of the window.
      */
     public Dimension getPreferredSize() {
         return size;
     }
 
-//    public void saveImage(String fileName)  {
-//        try {
-//            BufferedImage bi = new BufferedImage( (int) size.getWidth(), (int) size.getHeight(), BufferedImage.TYPE_INT_ARGB);
-//            Graphics2D graphics = bi.createGraphics();
-//            paintWithGraphics(graphics);
-//            File file = new File(fileName);
-//            if (justImage) {
-//                graphics.dispose();
-//            }
-//            ImageIO.write(bi, "png", file);
-//        } catch (IOException ie) {
-//            ie.printStackTrace();
-//        }
-//
-//    }
 }
