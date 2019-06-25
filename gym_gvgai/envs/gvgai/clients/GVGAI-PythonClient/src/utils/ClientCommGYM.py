@@ -40,8 +40,6 @@ class ClientCommGYM:
         self.actions = []
         self.level = level
 
-
-
         baseDir = os.path.join(pathStr, 'gvgai')
         srcDir = os.path.join(baseDir, 'src')
         jarDir = self._get_libs(os.path.join(baseDir, 'lib'))

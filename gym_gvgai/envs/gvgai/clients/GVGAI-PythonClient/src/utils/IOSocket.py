@@ -31,6 +31,7 @@ class IOSocket:
             try:
                 self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+                self.socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_QUICKACK, 1)
                 self.socket.connect((self.hostname, self.port))
                 self.connected = True
                 print ("Client connected to server [OK]")

@@ -36,10 +36,11 @@ public class SocketComm extends Comm {
             //Accepting the socket connection.
             while (socket == null) {
                 ServerSocket serverSocket = new ServerSocket(port);
-                serverSocket.setPerformancePreferences(0, 1, 2);
+                serverSocket.setPerformancePreferences(0, 2, 1);
 
                 socket = serverSocket.accept();
                 socket.setTcpNoDelay(true);
+                socket.setSendBufferSize(65536*2);
             }
 
 

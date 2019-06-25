@@ -43,8 +43,6 @@ public class VGDLViewer extends JComponent
      */
     public Player player;
 
-    public boolean justImage = false;
-
     BufferedImage image;
 
     Graphics2D graphics;
@@ -152,19 +150,4 @@ public class VGDLViewer extends JComponent
         return size;
     }
 
-//    public void saveImage(String fileName)  {
-//        try {
-//            BufferedImage bi = new BufferedImage( (int) size.getWidth(), (int) size.getHeight(), BufferedImage.TYPE_INT_ARGB);
-//            Graphics2D graphics = bi.createGraphics();
-//            paintWithGraphics(graphics);
-//            File file = new File(fileName);
-//            if (justImage) {
-//                graphics.dispose();
-//            }
-//            ImageIO.write(bi, "png", file);
-//        } catch (IOException ie) {
-//            ie.printStackTrace();
-//        }
-//
-//    }
 }
