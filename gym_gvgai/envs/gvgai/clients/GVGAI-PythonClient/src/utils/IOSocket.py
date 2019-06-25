@@ -14,9 +14,8 @@ class IOSocket:
     def __init__(self, tmpDir):
         self.HEADER_SIZE = 13
         self.BUFFER_SIZE = 8192*10
-        self.hostname = "127.0.0.1"
-        self.port = 8083
-        #self.hostname, self.port = self.getOpenAddress()
+        # self.port = 8083
+        self.hostname, self.port = self.getOpenAddress()
         self.connected = False
         self.socket = None
         self._last_message_id = 0

@@ -21,8 +21,7 @@ import java.util.ArrayList;
  * Time: 10:54
  * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
  */
-public class VGDLViewer extends JComponent
-{
+public class VGDLViewer extends JComponent {
     /**
      * Reference to the game to be painted.
      */
@@ -49,48 +48,48 @@ public class VGDLViewer extends JComponent
 
     /**
      * Creates the viewer for the game.
+     *
      * @param game game to be displayed
      */
-    public VGDLViewer(Game game, Player player)
-    {
+    public VGDLViewer(Game game, Player player) {
         this.game = game;
         this.size = game.getScreenSize();
         this.player = player;
 
         if (player instanceof LearningPlayer) {
 
-            BufferedImage bi = new BufferedImage( (int) size.getWidth(), (int) size.getHeight(), BufferedImage.TYPE_INT_RGB);
+            if (((LearningPlayer) player).isRequiresImage()) {
+                BufferedImage bi = new BufferedImage((int) size.getWidth(), (int) size.getHeight(), BufferedImage.TYPE_INT_RGB);
 
-            // obtain the current system graphical settings
-            GraphicsConfiguration gfxConfig = GraphicsEnvironment.
-                    getLocalGraphicsEnvironment().getDefaultScreenDevice().
-                    getDefaultConfiguration();
+                // obtain the current system graphical settings
+                GraphicsConfiguration gfxConfig = GraphicsEnvironment.
+                        getLocalGraphicsEnvironment().getDefaultScreenDevice().
+                        getDefaultConfiguration();
 
-            // image is not optimized, so create a new image that is
-            image = gfxConfig.createCompatibleImage(
-                    bi.getWidth(), bi.getHeight(), bi.getTransparency());
+                // image is not optimized, so create a new image that is
+                image = gfxConfig.createCompatibleImage(
+                        bi.getWidth(), bi.getHeight(), bi.getTransparency());
 
-            // get the graphics context of the new image to draw the old image on
-            graphics = image.createGraphics();
+                // get the graphics context of the new image to draw the old image on
+                graphics = image.createGraphics();
 
-            updateObservationForLearningPlayer();
+                updateObservationForLearningPlayer();
+            }
         }
     }
 
     private void updateObservationForLearningPlayer() {
-        LearningPlayer learningPlayer = (LearningPlayer)player;
-        if(learningPlayer.isRequiresImage()) {
-            paintWithGraphics(graphics);
-            learningPlayer.setObservation(image);
-        }
+        LearningPlayer learningPlayer = (LearningPlayer) player;
+        paintWithGraphics(graphics);
+        learningPlayer.setObservation(image);
     }
 
     /**
      * Main method to paint the game
+     *
      * @param gx Graphics object.
      */
-    public void paintComponent(Graphics gx)
-    {
+    public void paintComponent(Graphics gx) {
         Graphics2D g = (Graphics2D) gx;
         paintWithGraphics(g);
     }
@@ -114,28 +113,33 @@ public class VGDLViewer extends JComponent
 
                 }
             }
-        }catch(Exception e) {}
+        } catch (Exception e) {
+        }
 
         g.setColor(Types.BLACK);
         player.draw(g);
     }
 
 
-
     /**
      * Paints the sprites.
+     *
      * @param spriteGroupsGame sprites to paint.
      */
-    public void paint(SpriteGroup[] spriteGroupsGame)
-    {
-        this.spriteGroups = new SpriteGroup[spriteGroupsGame.length];
-        for(int i = 0; i < this.spriteGroups.length; ++i)
-        {
-            this.spriteGroups[i] = new SpriteGroup(spriteGroupsGame[i].getItype());
-            this.spriteGroups[i].copyAllSprites(spriteGroupsGame[i].getSprites());
-        }
+    public void paint(SpriteGroup[] spriteGroupsGame) {
 
         if (player instanceof LearningPlayer) {
+
+            if (!((LearningPlayer) player).isRequiresImage()) {
+                return;
+            }
+
+            this.spriteGroups = new SpriteGroup[spriteGroupsGame.length];
+            for (int i = 0; i < this.spriteGroups.length; ++i) {
+                this.spriteGroups[i] = new SpriteGroup(spriteGroupsGame[i].getItype());
+                this.spriteGroups[i].copyAllSprites(spriteGroupsGame[i].getSprites());
+            }
+
             updateObservationForLearningPlayer();
         } else {
             this.repaint();
@@ -144,6 +148,7 @@ public class VGDLViewer extends JComponent
 
     /**
      * Gets the dimensions of the window.
+     *
      * @return the dimensions of the window.
      */
     public Dimension getPreferredSize() {

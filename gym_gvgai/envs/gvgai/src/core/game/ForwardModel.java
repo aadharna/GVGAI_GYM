@@ -146,22 +146,22 @@ public class ForwardModel extends Game
             if(spriteIt != null) while(spriteIt.hasNext())
             {
                 VGDLSprite sp = spriteIt.next();
-                VGDLSprite spCopy = sp.copy();
+//                VGDLSprite spCopy = sp.copy();
 
-                spriteGroups[i].addSprite(spCopy.spriteID, spCopy);
+                spriteGroups[i].addSprite(sp.spriteID, sp);
 
-                String hidden = "False";
-                if (spCopy.hidden != null) {
-                    String[] split = spCopy.hidden.split(",");
-                    if (playerID > split.length - 1)
-                        hidden = split[split.length - 1];
-                    else
-                        hidden = split[playerID];
-                }
-                if(!Boolean.parseBoolean(hidden)) {
-                    checkSpriteFeatures(spCopy, i);
-                    updateObservation(spCopy);
-                }
+//                boolean hidden = false;
+//                if (sp.hidden != null) {
+//                    String[] split = sp.hidden.split(",");
+//                    if (playerID > split.length - 1)
+//                        hidden = split[split.length - 1];
+//                    else
+//                        hidden = split[playerID];
+//                }
+//                if(!Boolean.parseBoolean(hidden)) {
+                    checkSpriteFeatures(sp, i);
+                    updateObservation(sp);
+//                }
             }
 
             int nSprites = spriteGroups[i].numSprites();
@@ -402,15 +402,15 @@ public class ForwardModel extends Game
         }
         unknownList[itype] = true;
 
-        String hidden = "False";
-        if (sp.hidden != null) {
-            String[] split = sp.hidden.split(",");
-            if (playerID > split.length - 1)
-                hidden = split[split.length - 1];
-            else
-                hidden = split[playerID];
-        }
-        visibleList[playerID][itype] = !Boolean.parseBoolean(hidden);
+//        String hidden = "False";
+//        if (sp.hidden != null) {
+//            String[] split = sp.hidden.split(",");
+//            if (playerID > split.length - 1)
+//                hidden = split[split.length - 1];
+//            else
+//                hidden = split[playerID];
+//        }
+        visibleList[playerID][itype] = true;
     }
 
     private int getSpriteCategory(VGDLSprite sp)

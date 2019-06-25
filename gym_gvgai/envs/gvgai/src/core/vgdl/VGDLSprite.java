@@ -173,7 +173,7 @@ public abstract class VGDLSprite {
     /**
      * If true, this sprite is never present in the observations passed to the controller.
      */
-    public String hidden;
+    public Boolean hidden;
     
     /**
      * Indicates if the tile support autotiling

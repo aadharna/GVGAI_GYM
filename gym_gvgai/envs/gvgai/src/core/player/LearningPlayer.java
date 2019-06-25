@@ -219,6 +219,7 @@ public class LearningPlayer extends Player {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int[] data = imageBufferData.getData();
 
+
         for (int i = 0; i < imageBufferData.getSize(); i++) {
             int d = data[i];
             // ignore the 4th byte

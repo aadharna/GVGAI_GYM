@@ -5,11 +5,14 @@ import core.game.Observation;
 import core.game.StateObservation;
 import ontology.Types;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.zip.GZIPOutputStream;
 
 public class FlatBufferStateObservation {
 
