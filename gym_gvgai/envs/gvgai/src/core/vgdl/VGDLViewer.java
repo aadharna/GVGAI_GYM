@@ -60,30 +60,30 @@ public class VGDLViewer extends JComponent {
 
         if (player instanceof LearningPlayer) {
 
-            BufferedImage bi = new BufferedImage((int) size.getWidth(), (int) size.getHeight(), BufferedImage.TYPE_INT_RGB);
+            if (((LearningPlayer) player).isRequiresImage()) {
+                BufferedImage bi = new BufferedImage((int) size.getWidth(), (int) size.getHeight(), BufferedImage.TYPE_INT_RGB);
 
-            // obtain the current system graphical settings
-            GraphicsConfiguration gfxConfig = GraphicsEnvironment.
-                    getLocalGraphicsEnvironment().getDefaultScreenDevice().
-                    getDefaultConfiguration();
+                // obtain the current system graphical settings
+                GraphicsConfiguration gfxConfig = GraphicsEnvironment.
+                        getLocalGraphicsEnvironment().getDefaultScreenDevice().
+                        getDefaultConfiguration();
 
-            // image is not optimized, so create a new image that is
-            image = gfxConfig.createCompatibleImage(
-                    bi.getWidth(), bi.getHeight(), bi.getTransparency());
+                // image is not optimized, so create a new image that is
+                image = gfxConfig.createCompatibleImage(
+                        bi.getWidth(), bi.getHeight(), bi.getTransparency());
 
-            // get the graphics context of the new image to draw the old image on
-            graphics = image.createGraphics();
+                // get the graphics context of the new image to draw the old image on
+                graphics = image.createGraphics();
 
-            updateObservationForLearningPlayer();
+                updateObservationForLearningPlayer();
+            }
         }
     }
 
     private void updateObservationForLearningPlayer() {
         LearningPlayer learningPlayer = (LearningPlayer) player;
-        if (learningPlayer.isRequiresImage()) {
-            paintWithGraphics(graphics);
-            learningPlayer.setObservation(image);
-        }
+        paintWithGraphics(graphics);
+        learningPlayer.setObservation(image);
     }
 
     /**
@@ -129,13 +129,19 @@ public class VGDLViewer extends JComponent {
      * @param spriteGroupsGame sprites to paint.
      */
     public void paint(SpriteGroup[] spriteGroupsGame) {
-        this.spriteGroups = new SpriteGroup[spriteGroupsGame.length];
-        for (int i = 0; i < this.spriteGroups.length; ++i) {
-            this.spriteGroups[i] = new SpriteGroup(spriteGroupsGame[i].getItype());
-            this.spriteGroups[i].copyAllSprites(spriteGroupsGame[i].getSprites());
-        }
 
         if (player instanceof LearningPlayer) {
+
+            if (!((LearningPlayer) player).isRequiresImage()) {
+                return;
+            }
+
+            this.spriteGroups = new SpriteGroup[spriteGroupsGame.length];
+            for (int i = 0; i < this.spriteGroups.length; ++i) {
+                this.spriteGroups[i] = new SpriteGroup(spriteGroupsGame[i].getItype());
+                this.spriteGroups[i].copyAllSprites(spriteGroupsGame[i].getSprites());
+            }
+
             updateObservationForLearningPlayer();
         } else {
             this.repaint();

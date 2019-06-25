@@ -2125,7 +2125,7 @@ public abstract class Game {
 	 * @return the observation.
 	 */
 	public StateObservation getObservation() {
-		return new StateObservation(fwdModel.copy(), 0);
+		return new StateObservation(fwdModel, 0);
 	}
 
 	/**

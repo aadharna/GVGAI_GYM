@@ -40,6 +40,7 @@ public class SocketComm extends Comm {
 
                 socket = serverSocket.accept();
                 socket.setTcpNoDelay(true);
+                socket.setSendBufferSize(65536);
             }
 
 

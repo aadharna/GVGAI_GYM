@@ -27,6 +27,7 @@ public class JavaServer {
         String gamesDir = ".";
         //Other settings
         boolean visuals = false;
+
         /** Get arguments */
         Map<String, List<String>> params = new HashMap<>();
         List<String> options = null;

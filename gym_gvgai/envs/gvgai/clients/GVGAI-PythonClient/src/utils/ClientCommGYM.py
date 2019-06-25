@@ -3,6 +3,7 @@ import sys
 import os
 import numpy as np
 import tempfile
+import gzip
 import subprocess
 import shutil
 from struct import pack_into
@@ -29,7 +30,6 @@ class ClientCommGYM:
     def __init__(self, game, version, level, pathStr, request_image=True):
         self.tempDir = tempfile.TemporaryDirectory()
 
-        self.TOKEN_SEP = '#'
         self.io = IOSocket(self.tempDir.name)
         self.LOG = False
         self.player = None
@@ -50,7 +50,8 @@ class ClientCommGYM:
 
         fullClasspath = ':'.join(jarDir + [buildDir])
 
-        cmd = ["java", "-Dsun.java2d.opengl=true", "-classpath", fullClasspath, "tracks.singleLearning.utils.JavaServer",
+
+        cmd = ["java", "-classpath", fullClasspath, "tracks.singleLearning.utils.JavaServer",
                "-game", game, "-gamesDir", gamesDir, "-imgDir", baseDir, "-portNum", str(self.io.port)]
 
         #Check build version
@@ -164,7 +165,6 @@ class ClientCommGYM:
 
         try:
             if data is not None:
-
                 state = State.GetRootAsState(data, 0)
 
                 image = None
