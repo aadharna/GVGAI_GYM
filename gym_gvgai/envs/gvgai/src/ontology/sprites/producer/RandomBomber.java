@@ -2,6 +2,7 @@ package ontology.sprites.producer;
 
 import java.awt.Dimension;
 
+import com.badlogic.gdx.graphics.Color;
 import core.vgdl.VGDLSprite;
 import core.content.SpriteContent;
 import core.game.Game;
@@ -36,7 +37,7 @@ public class RandomBomber extends SpawnPoint
     protected void loadDefaults()
     {
         super.loadDefaults();
-        color = Types.ORANGE;
+        color = Color.ORANGE;
         is_static = false;
         is_oriented = true;
         orientation = Types.DRIGHT.copy();

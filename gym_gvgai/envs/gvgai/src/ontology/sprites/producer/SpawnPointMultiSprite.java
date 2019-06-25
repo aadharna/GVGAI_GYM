@@ -1,5 +1,6 @@
 package ontology.sprites.producer;
 
+import com.badlogic.gdx.graphics.Color;
 import core.vgdl.VGDLRegistry;
 import core.vgdl.VGDLSprite;
 import core.content.SpriteContent;
@@ -52,7 +53,7 @@ public class SpawnPointMultiSprite extends SpriteProducer
         prob = 1.0;
         total = 0;
         start = -1;
-        color = Types.BLACK;
+        color = Color.BLACK;
         cooldown = 1;
         is_static = true;
         spawnorientation = Types.DNONE;

@@ -1,5 +1,6 @@
 package core.game;
 
+import com.badlogic.gdx.graphics.Color;
 import core.competition.CompetitionParameters;
 import core.content.Content;
 import core.content.GameContent;

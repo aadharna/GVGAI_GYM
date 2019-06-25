@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.badlogic.gdx.graphics.Texture;
 import core.competition.CompetitionParameters;
 import core.vgdl.VGDLFactory;
 import core.vgdl.VGDLRegistry;
@@ -14,8 +15,6 @@ import core.content.GameContent;
 import tools.IO;
 import tools.Vector2d;
 import tools.pathfinder.PathFinder;
-
-import static tools.Utils.findMaxDivisor;
 
 /**
  * Created with IntelliJ IDEA. User: Diego Date: 16/10/13 Time: 14:00 This is a
@@ -170,15 +169,15 @@ public class BasicGame extends Game {
 						}
 						if (s.autotiling) {
 
-							ArrayList<Image> images = s.images.get("NONE");
-							if(images.size() > 0)
-								s.image = images.get(similarTiles);
+							ArrayList<Texture> textures = s.textures.get("NONE");
+							if(textures.size() > 0)
+								s.texture = textures.get(similarTiles);
 						}
 						if (s.randomtiling >= 0) {
 							Random random = new Random(randomSeed);
-							ArrayList<Image> allImages = s.images.get("NONE");
-							if (random.nextDouble() > s.randomtiling && allImages.size() > 0) {
-								s.image = allImages.get(random.nextInt(allImages.size()));
+							ArrayList<Texture> allTextures = s.textures.get("NONE");
+							if (random.nextDouble() > s.randomtiling && allTextures.size() > 0) {
+								s.texture = allTextures.get(random.nextInt(allTextures.size()));
 							}
 						}
 					}

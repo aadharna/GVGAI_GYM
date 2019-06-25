@@ -2,6 +2,7 @@ package ontology.sprites;
 
 import java.awt.Dimension;
 
+import com.badlogic.gdx.graphics.Color;
 import core.vgdl.VGDLSprite;
 import core.content.SpriteContent;
 import ontology.Types;
@@ -33,7 +34,7 @@ public class Passive extends VGDLSprite
     protected void loadDefaults()
     {
         super.loadDefaults();
-        color = Types.RED;
+        color = Color.RED;
     }
 
     public VGDLSprite copy()

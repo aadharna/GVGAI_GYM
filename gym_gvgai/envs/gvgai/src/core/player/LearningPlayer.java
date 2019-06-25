@@ -33,7 +33,7 @@ public class LearningPlayer extends Player {
     private Comm comm;
 
     /**
-     * Fast way to store and serialize image data for learning agents
+     * Fast way to store and serialize texture data for learning agents
      */
     private byte[] observationBuffer;
 
@@ -213,21 +213,7 @@ public class LearningPlayer extends Player {
      * Fast method for serializing observation data
      * writes a raw bitmap to memory to be sent when data is next serialized to the player
      */
-    public void setObservation(BufferedImage imageBytes) {
-        DataBufferInt imageBufferData = ((DataBufferInt) imageBytes.getData().getDataBuffer());
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int[] data = imageBufferData.getData();
-
-
-        for (int i = 0; i < imageBufferData.getSize(); i++) {
-            int d = data[i];
-            // ignore the 4th byte
-            baos.write((d >> 16) & 0xff);
-            baos.write((d >> 8) & 0xff);
-            baos.write((d) & 0xff);
-        }
-
-        this.observationBuffer = baos.toByteArray();
+    public void setObservation(byte[] imageBytes) {
+        this.observationBuffer = imageBytes;
     }
 }

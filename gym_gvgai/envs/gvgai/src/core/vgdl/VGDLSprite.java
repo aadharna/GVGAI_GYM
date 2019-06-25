@@ -1,12 +1,12 @@
 package core.vgdl;
 
-import java.awt.Color;
+//import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Polygon;
+//import java.awt.Graphics2D;
+//import java.awt.Image;
+//import java.awt.Polygon;
 import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
+//import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,6 +18,10 @@ import java.util.TreeMap;
 
 import javax.imageio.ImageIO;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import core.competition.CompetitionParameters;
 import core.content.SpriteContent;
 import core.game.Game;
@@ -221,20 +225,20 @@ public abstract class VGDLSprite {
     /**
      * All images in case there's orientation changes and/or animations.
      */
-    public HashMap<String,ArrayList<Image>> images;
+    public HashMap<String,ArrayList<Texture>> textures;
 
     /**
-     * Unique and current image of this sprite.
+     * Unique and current texture of this sprite.
      */
-    public Image image;
+    public Texture texture;
 
     /**
-     * String that represents the image in VGDL.
+     * String that represents the texture in VGDL.
      */
     public String img;
 
     /**
-     * String that represents the image in VGDL.
+     * String that represents the texture in VGDL.
      */
     public String orientedImg;
 
@@ -376,7 +380,7 @@ public abstract class VGDLSprite {
         itypes = new ArrayList<Integer>();
         rotation = 0.0;
         max_speed = -1.0;
-        images = new HashMap<String,ArrayList<Image>>();
+        textures = new HashMap<String,ArrayList<Texture>>();
 
         this.size = size;
         determinePhysics(physicstype, size);
@@ -409,9 +413,10 @@ public abstract class VGDLSprite {
      */
     private void setRandomColor() {
         Random colorRnd = new Random();
-        this.color = new Color((Integer) Utils.choice(Types.COLOR_DISC, colorRnd),
-                (Integer) Utils.choice(Types.COLOR_DISC, colorRnd),
-                (Integer) Utils.choice(Types.COLOR_DISC, colorRnd));
+        this.color = new Color(colorRnd.nextFloat(),
+                colorRnd.nextFloat(),
+                colorRnd.nextFloat(),
+                1.0f);
     }
 
 
@@ -491,26 +496,26 @@ public abstract class VGDLSprite {
 
         frameRemaining -= 1;
 
-        if(images.size() > 0) {
+        if(textures.size() > 0) {
 
-            ArrayList<Image> allImages;
+            ArrayList<Texture> allImages;
             boolean isOrientedImg = (orientedImg != null);
             if (!isOrientedImg)
-                allImages = images.get("NONE");
+                allImages = textures.get("NONE");
             else
-                allImages = images.get(Types.v2DirStr(orientation.getVector()));
+                allImages = textures.get(Types.v2DirStr(orientation.getVector()));
 
             if (frameRate > 0 && frameRemaining <= 0) {
 
                 if (allImages.size() > 0) {
                     currentFrame = (currentFrame + 1) % allImages.size();
                     frameRemaining = frameRate;
-                    image = allImages.get(currentFrame);
+                    texture = allImages.get(currentFrame);
                 }
 
             } else if (!autotiling){
 
-                image = allImages.get(0);
+                texture = allImages.get(0);
             }
         }
     }
@@ -674,10 +679,10 @@ public abstract class VGDLSprite {
 
     /**
      * Draws this sprite (both the not oriented and, if appropriate, the oriented part)
-     * @param gphx graphics object to draw in.
+     * @param spriteBatch graphics object to draw in.
      * @param game reference to the game that is being played now.
      */
-    public void draw(Graphics2D gphx, Game game) {
+    public void draw(SpriteBatch spriteBatch, Game game) {
 
         String[] invis = invisible.split(",");
 
@@ -697,7 +702,7 @@ public abstract class VGDLSprite {
 
             if (game.humanPlayer[0] && game.humanPlayer[1] || !game.humanPlayer[0] && !game.humanPlayer[1]) {
                 if (invis0 == invis1) show = !invis0;
-                else if (color == Types.DARKGRAY) show = false;
+                else if (color == Color.DARK_GRAY) show = false;
                 else show = !invis0 || !invis1;
             } else
                 show = displayP1 || displayP2;
@@ -710,32 +715,32 @@ public abstract class VGDLSprite {
 
             if (!is_avatar || !is_oriented)
             {
-	            if(image != null)
-	                _drawImage(gphx, game, r);
+	            if(texture != null)
+	                _drawImage(spriteBatch, game, r);
 	            else
-	                _draw(gphx, game, r);
+	                _draw(spriteBatch, game, r);
 	
 	            if(resources.size() > 0)
 	            {
-	                _drawResources(gphx, game, r);
+	                _drawResources(spriteBatch, game, r);
 	            }
 	
 	            if(healthPoints > 0)
 	            {
-	                _drawHealthBar(gphx, game, r);
+	                _drawHealthBar(spriteBatch, game, r);
 	            }
             }
 
             else{
-                _drawOriented(gphx, r);
+                _drawOriented(spriteBatch, r);
 	            if(resources.size() > 0)
 	            {
-	                _drawResources(gphx, game, r);
+	                _drawResources(spriteBatch, game, r);
 	            }
 	
 	            if(healthPoints > 0)
 	            {
-	                _drawHealthBar(gphx, game, r);
+	                _drawHealthBar(spriteBatch, game, r);
 	            }
             }
         }
@@ -768,84 +773,84 @@ public abstract class VGDLSprite {
 
     /**
      * In case this sprite is oriented and has an arrow to draw, it draws it.
-     * @param g graphics device to draw in.
+     * @param spriteBatch graphics device to draw in.
      */
-    public void _drawOriented(Graphics2D g, Rectangle r)
+    public void _drawOriented(SpriteBatch spriteBatch, Rectangle r)
     {
-        Color arrowColor = new Color(color.getRed(), 255-color.getGreen(), color.getBlue());
-        Polygon p = Utils.triPoints(r, orientation);
-
-        // Rotation information
-
-        if(shrinkfactor != 1)
-        {
-            r.width *= shrinkfactor;
-            r.height *= shrinkfactor;
-            r.x += (rect.width-r.width)/2;
-            r.y += (rect.height-r.height)/2;
-        }
-
-        int w = image.getWidth(null);
-        int h = image.getHeight(null);
-        float scale = (float)r.width/w; //assume all sprites are quadratic.
-
-        AffineTransform trans = new AffineTransform();
-        trans.translate(r.x, r.y);
-        trans.scale(scale,scale);
-        trans.rotate(rotation,w/2.0,h/2.0);
-        // Uncomment this line to have only one sprite
-        //g.drawImage(image, trans, null);
-
-        /* Code added by Carlos*/
-        g.drawImage(image, trans, null);
-        /* End of code added by carlos*/
-
-        // We only draw the arrow if the directional sprites are null
-        if (draw_arrow) {
-            g.setColor(arrowColor);
-            g.drawPolygon(p);
-            g.fillPolygon(p);
-        }
+//        Color arrowColor = new Color(color.r, 255-color.g, color.b);
+//        Polygon p = Utils.triPoints(r, orientation);
+//
+//        // Rotation information
+//
+//        if(shrinkfactor != 1)
+//        {
+//            r.width *= shrinkfactor;
+//            r.height *= shrinkfactor;
+//            r.x += (rect.width-r.width)/2;
+//            r.y += (rect.height-r.height)/2;
+//        }
+//
+//        int w = texture.getWidth();
+//        int h = texture.getHeight();
+//        float scale = (float)r.width/w; //assume all sprites are quadratic.
+//
+//        AffineTransform trans = new AffineTransform();
+//        trans.translate(r.x, r.y);
+//        trans.scale(scale,scale);
+//        trans.rotate(rotation,w/2.0,h/2.0);
+//        // Uncomment this line to have only one sprite
+//        //g.drawImage(texture, trans, null);
+//
+//        /* Code added by Carlos*/
+//        g.drawImage(texture, trans, null);
+//        /* End of code added by carlos*/
+//
+//        // We only draw the arrow if the directional sprites are null
+//        if (draw_arrow) {
+//            g.setColor(arrowColor);
+//            g.drawPolygon(p);
+//            g.fillPolygon(p);
+//        }
 
     }
 
     /**
      * Draws the not-oriented part of the sprite
-     * @param gphx graphics object to draw in.
+     * @param spriteBatch graphics object to draw in.
      * @param game reference to the game that is being played now.
      */
-    public void _draw(Graphics2D gphx, Game game, Rectangle r)
+    public void _draw(SpriteBatch spriteBatch, Game game, Rectangle r)
     {
 
-        if(shrinkfactor != 1)
-        {
-            r.width *= shrinkfactor;
-            r.height *= shrinkfactor;
-            r.x += (rect.width-r.width)/2;
-            r.y += (rect.height-r.height)/2;
-        }
-
-        gphx.setColor(color);
-
-        if(is_avatar)
-        {
-            gphx.fillOval((int) r.getX(), (int) r.getY(), r.width, r.height);
-        }else if(!is_static)
-        {
-            gphx.fillRect(r.x, r.y, r.width, r.height);
-        }else
-        {
-            gphx.fillRect(r.x, r.y, r.width, r.height);
-        }
+//        if(shrinkfactor != 1)
+//        {
+//            r.width *= shrinkfactor;
+//            r.height *= shrinkfactor;
+//            r.x += (rect.width-r.width)/2;
+//            r.y += (rect.height-r.height)/2;
+//        }
+//
+//        spriteBatch.setColor(color);
+//
+//        if(is_avatar)
+//        {
+//            gphx.fillOval((int) r.getX(), (int) r.getY(), r.width, r.height);
+//        }else if(!is_static)
+//        {
+//            gphx.fillRect(r.x, r.y, r.width, r.height);
+//        }else
+//        {
+//            gphx.fillRect(r.x, r.y, r.width, r.height);
+//        }
 
     }
 
     /**
-     * Draws the not-oriented part of the sprite, as an image. this.image must be not null.
-     * @param gphx graphics object to draw in.
+     * Draws the not-oriented part of the sprite, as an texture. this.texture must be not null.
+     * @param batch graphics object to draw in.
      * @param game reference to the game that is being played now.
      */
-    public void _drawImage(Graphics2D gphx, Game game, Rectangle r)
+    public void _drawImage(SpriteBatch batch, Game game, Rectangle r)
     {
         if(shrinkfactor != 1)
         {
@@ -855,12 +860,12 @@ public abstract class VGDLSprite {
             r.y += (rect.height-r.height)/2;
         }
 
-        int w = image.getWidth(null);
-        int h = image.getHeight(null);
+        int w = texture.getWidth();
+        int h = texture.getHeight();
         float scaleX = (float)r.width/w;
         float scaleY = (float)r.height/h;
 
-        gphx.drawImage(image, r.x, r.y, (int) (w*scaleX), (int) (h*scaleY), null);
+        batch.draw(texture, r.x, r.y, w*scaleX, h*scaleY);
 
         //uncomment this to see lots of numbers around
         //gphx.setColor(Color.BLACK);
@@ -872,73 +877,75 @@ public abstract class VGDLSprite {
 
     /**
      * Draws the resources hold by this sprite, as an horizontal bar on top of the sprite.
-     * @param gphx graphics to draw in.
+     * @param spriteBatch graphics to draw in.
      * @param game game being played at the moment.
      */
-    protected void _drawResources(Graphics2D gphx, Game game, Rectangle r)
+    protected void _drawResources(SpriteBatch spriteBatch, Game game, Rectangle r)
     {
-        int numResources = resources.size();
-        double barheight = r.getHeight() / 3.5f / numResources;
-        double offset = r.getMinY() + 2*r.height / 3.0f;
-
-        Set<Map.Entry<Integer, Integer>> entries = resources.entrySet();
-        for(Map.Entry<Integer, Integer> entry : entries)
-        {
-            int resType = entry.getKey();
-            int resValue = entry.getValue();
-
-            if(resType > -1) {
-                double wiggle = r.width / 10.0f;
-                double prop = Math.max(0, Math.min(1, resValue / (double) (game.getResourceLimit(resType))));
-
-                Rectangle filled = new Rectangle((int) (r.x + wiggle / 2), (int) offset, (int) (prop * (r.width - wiggle)), (int) barheight);
-                Rectangle rest = new Rectangle((int) (r.x + wiggle / 2 + prop * (r.width - wiggle)), (int) offset, (int) ((1 - prop) * (r.width - wiggle)), (int) barheight);
-
-                gphx.setColor(game.getResourceColor(resType));
-                gphx.fillRect(filled.x, filled.y, filled.width, filled.height);
-                gphx.setColor(Types.BLACK);
-                gphx.fillRect(rest.x, rest.y, rest.width, rest.height);
-                offset += barheight;
-            }
-        }
+//        int numResources = resources.size();
+//        double barheight = r.getHeight() / 3.5f / numResources;
+//        double offset = r.getMinY() + 2*r.height / 3.0f;
+//
+//        Set<Map.Entry<Integer, Integer>> entries = resources.entrySet();
+//        for(Map.Entry<Integer, Integer> entry : entries)
+//        {
+//            int resType = entry.getKey();
+//            int resValue = entry.getValue();
+//
+//            if(resType > -1) {
+//                double wiggle = r.width / 10.0f;
+//                double prop = Math.max(0, Math.min(1, resValue / (double) (game.getResourceLimit(resType))));
+//
+//                Rectangle filled = new Rectangle((int) (r.x + wiggle / 2), (int) offset, (int) (prop * (r.width - wiggle)), (int) barheight);
+//                Rectangle rest = new Rectangle((int) (r.x + wiggle / 2 + prop * (r.width - wiggle)), (int) offset, (int) ((1 - prop) * (r.width - wiggle)), (int) barheight);
+//
+//                gphx.setColor(game.getResourceColor(resType));
+//                gphx.fillRect(filled.x, filled.y, filled.width, filled.height);
+//                gphx.setColor(Types.BLACK);
+//                gphx.fillRect(rest.x, rest.y, rest.width, rest.height);
+//                offset += barheight;
+//            }
+//        }
 
     }
 
 
     /**
      * Draws the health bar, as a vertical bar on top (and left) of the sprite.
-     * @param gphx graphics to draw in.
+     * @param spriteBatch graphics to draw in.
      * @param game game being played at the moment.
      * @param r rectangle of this sprite.
      */
-    protected void _drawHealthBar(Graphics2D gphx, Game game, Rectangle r)
+    protected void _drawHealthBar(SpriteBatch spriteBatch, Game game, Rectangle r)
     {
-        int maxHP = maxHealthPoints;
-        if(limitHealthPoints != 1000)
-            maxHP = limitHealthPoints;
-
-        double wiggleX = r.width * 0.1f;
-        double wiggleY = r.height * 0.1f;
-        double prop = Math.max(0,Math.min(1, healthPoints / (double) maxHP));
-
-        double barHeight = r.height-wiggleY;
-        int heightHealth = (int) (prop*barHeight);
-        int heightUnhealth = (int) ((1-prop)*barHeight);
-        int startY = (int) (r.getMinY()+wiggleY*0.5f);
-
-        int barWidth = (int) (r.width * 0.1f);
-        int xOffset = (int) (r.x+wiggleX * 0.5f);
-
-        Rectangle filled = new Rectangle(xOffset, startY + heightUnhealth, barWidth, heightHealth);
-        Rectangle rest   = new Rectangle(xOffset, startY, barWidth, heightUnhealth);
-
-        if (game.no_players > 1)
-            gphx.setColor(color);
-        else
-            gphx.setColor(Types.RED);
-        gphx.fillRect(filled.x, filled.y, filled.width, filled.height);
-        gphx.setColor(Types.BLACK);
-        gphx.fillRect(rest.x, rest.y, rest.width, rest.height);
+//        int maxHP = maxHealthPoints;
+//        if(limitHealthPoints != 1000)
+//            maxHP = limitHealthPoints;
+//
+//        double wiggleX = r.width * 0.1f;
+//        double wiggleY = r.height * 0.1f;
+//        double prop = Math.max(0,Math.min(1, healthPoints / (double) maxHP));
+//
+//        double barHeight = r.height-wiggleY;
+//        int heightHealth = (int) (prop*barHeight);
+//        int heightUnhealth = (int) ((1-prop)*barHeight);
+//        int startY = (int) (r.getMinY()+wiggleY*0.5f);
+//
+//        int barWidth = (int) (r.width * 0.1f);
+//        int xOffset = (int) (r.x+wiggleX * 0.5f);
+//
+//        Rectangle filled = new Rectangle(xOffset, startY + heightUnhealth, barWidth, heightHealth);
+//        Rectangle rest   = new Rectangle(xOffset, startY, barWidth, heightUnhealth);
+//
+//        if (game.no_players > 1)
+//            spriteBatch.setColor(color);
+//        else
+//            spriteBatch.setColor(Color.RED);
+//
+//        spriteBatch.
+//        gphx.fillRect(filled.x, filled.y, filled.width, filled.height);
+//        gphx.setColor(Types.BLACK);
+//        gphx.fillRect(rest.x, rest.y, rest.width, rest.height);
     }
 
     /**
@@ -955,7 +962,7 @@ public abstract class VGDLSprite {
      */
     public void postProcess()
     {
-    	loadImage();
+    	loadTexture();
 
         if(!(this.orientation.equals(Types.DNONE)))
         {
@@ -982,19 +989,19 @@ public abstract class VGDLSprite {
 
 
     /**
-     * Loads the image that represents this sprite, using its string name as reference.
+     * Loads the texture that represents this sprite, using its string name as reference.
      */
-    public void loadImage()
+    public void loadTexture()
     {
         String str = (orientedImg != null) ? orientedImg : img;
         boolean isOrientedImg = (orientedImg != null);
         Direction[] directions = new Direction[]{Types.DUP,Types.DDOWN,Types.DLEFT,Types.DRIGHT};
-        if(images == null && orientedImg == null && str == null)
+        if(textures == null && orientedImg == null && str == null)
         {
             return;
         }
 
-        if(images.size() == 0 && str != null)
+        if(textures.size() == 0 && str != null)
         {
             //There is autotiling (disabled now) or animations
             if (this.autotiling || this.randomtiling >= 0 || this.frameRate >= 0){
@@ -1009,11 +1016,11 @@ public abstract class VGDLSprite {
                 {
                     String strDir = Types.v2DirStr(dir.getVector());
                     String imagePath = imagePathBase + strDir + "_";
-                    ArrayList<Image> theImages = getAnimatedImages(imagePath);
-                    images.put(strDir, theImages);
+                    ArrayList<Texture> theImages = getAnimatedImages(imagePath);
+                    textures.put(strDir, theImages);
                 }else{
-                    ArrayList<Image> theImages = getAnimatedImages(imagePathBase);
-                    images.put("NONE", theImages);
+                    ArrayList<Texture> theImages = getAnimatedImages(imagePathBase);
+                    textures.put("NONE", theImages);
                 }
 
             }
@@ -1026,17 +1033,17 @@ public abstract class VGDLSprite {
                         str = str.substring(0, str.length() - 4);
 
                     String base_image_file = CompetitionParameters.IMG_PATH + str;
-                    Image onlyImage;
+                    Texture onlyImage;
 
                     for(Direction dir : directions) {
                         String strDir = Types.v2DirStr(dir.getVector());
-                        ArrayList<Image> theImages = new ArrayList<Image>();
+                        ArrayList<Texture> theImages = new ArrayList<Texture>();
                         String image_file = base_image_file + "_" + strDir + ".png";
-                        onlyImage = getImage(image_file);
+                        onlyImage = getTexture(image_file);
                         theImages.add(onlyImage);
 
-                        images.put(strDir, theImages);
-                        image = theImages.get(0);
+                        textures.put(strDir, theImages);
+                        texture = theImages.get(0);
                     }
                 }else {
 
@@ -1045,8 +1052,8 @@ public abstract class VGDLSprite {
                         str = str + ".png";
                     String base_image_file = CompetitionParameters.IMG_PATH + str;
 
-                    //Only one image. images stays empty.
-                    image = getImage(base_image_file);
+                    //Only one texture. images stays empty.
+                    texture = getTexture(base_image_file);
                 }
 
             }
@@ -1054,27 +1061,19 @@ public abstract class VGDLSprite {
         }
     }
 
-    private Image getImage(String image_file)
+    private Texture getTexture(String image_file)
     {
-        try {
-
-            if((new File(image_file).exists())) {
-                return ImageIO.read(new File(image_file));
-            }
-
-            return ImageIO.read(this.getClass().getResource("/" + image_file));
-        } catch (IOException e) {
-            //e.printStackTrace();
-        } catch (Exception e) {
-            //e.printStackTrace();
+        if((new File(image_file).exists())) {
+            return new Texture(Gdx.files.external(image_file));
         }
-        return null;
+
+        return new Texture(Gdx.files.internal("/" + image_file));
     }
 
 
-    private ArrayList<Image> getAnimatedImages(String imagePath)
+    private ArrayList<Texture> getAnimatedImages(String imagePath)
     {
-        ArrayList<Image> theImages = new ArrayList<>();
+        ArrayList<Texture> theImages = new ArrayList<>();
         try{
             boolean noMoreFiles = false;
             int i = 0;
@@ -1082,14 +1081,14 @@ public abstract class VGDLSprite {
             do{
                 String currentFile = imagePath + i + ".png";
                 if((new File(currentFile).exists())) {
-                    theImages.add(ImageIO.read(new File(currentFile)));
+                    theImages.add(new Texture(Gdx.files.external(currentFile)));
                 }
                 else {
                     noMoreFiles = true;
                 }
                 i += 1;
             }while(!noMoreFiles);
-            image = theImages.get(0); //Default.
+            texture = theImages.get(0); //Default.
         }catch(Exception e) {}
         return theImages;
     }
@@ -1153,8 +1152,8 @@ public abstract class VGDLSprite {
         toSprite.color = this.color;
         toSprite.draw_arrow = this.draw_arrow;
         toSprite.is_npc = this.is_npc;
-        toSprite.image = this.image;
-        toSprite.images = this.images;
+        toSprite.texture = this.texture;
+        toSprite.textures = this.textures;
         toSprite.spriteID = this.spriteID;
         toSprite.is_from_avatar = this.is_from_avatar;
         toSprite.bucket = this.bucket;

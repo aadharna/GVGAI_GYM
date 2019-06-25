@@ -3,6 +3,7 @@ package ontology.avatar;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.Color;
 import core.vgdl.VGDLSprite;
 import core.competition.CompetitionParameters;
 import core.content.SpriteContent;
@@ -58,7 +59,7 @@ public class MovingAvatar extends VGDLSprite {
         actions = new ArrayList<Types.ACTIONS>();
         actionsNIL = new ArrayList<Types.ACTIONS>();
 
-        color = Types.WHITE;
+        color = Color.WHITE;
         speed = 1;
         is_avatar = true;
         is_disqualified = false;

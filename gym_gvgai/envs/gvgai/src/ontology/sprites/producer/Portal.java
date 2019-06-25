@@ -3,6 +3,7 @@ package ontology.sprites.producer;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.Color;
 import core.vgdl.VGDLRegistry;
 import core.vgdl.VGDLSprite;
 import core.content.SpriteContent;
@@ -40,7 +41,7 @@ public class Portal extends SpriteProducer
         super.loadDefaults();
         is_static = true;
         portal = true;
-        color = Types.BLUE;
+        color = Color.BLUE;
     }
 
     public void postProcess()

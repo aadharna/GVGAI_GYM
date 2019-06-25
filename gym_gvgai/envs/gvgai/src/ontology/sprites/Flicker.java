@@ -2,6 +2,7 @@ package ontology.sprites;
 
 import java.awt.Dimension;
 
+import com.badlogic.gdx.graphics.Color;
 import core.vgdl.VGDLSprite;
 import core.content.SpriteContent;
 import core.game.Game;
@@ -40,7 +41,7 @@ public class Flicker extends VGDLSprite
         super.loadDefaults();
         limit = 1;
         age = 0;
-        color = Types.RED;
+        color =  Color.RED;
     }
 
     public void update(Game game)

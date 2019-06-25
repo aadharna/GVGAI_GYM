@@ -1,11 +1,11 @@
 package ontology.sprites;
 
-import java.awt.Dimension;
-
+import com.badlogic.gdx.graphics.Color;
 import core.vgdl.VGDLSprite;
 import core.content.SpriteContent;
-import ontology.Types;
 import tools.Vector2d;
+
+import java.awt.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,7 +39,7 @@ public class Immovable extends VGDLSprite
     protected void loadDefaults()
     {
         super.loadDefaults();
-        color = Types.GRAY;
+        color = Color.GRAY;
         is_static = true;
     }
 

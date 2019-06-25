@@ -133,7 +133,7 @@ class ClientCommGYM:
 
         # Currently initial observation is not sent back on reset
         if image is None:
-            print('No image sent in initial state')
+            print('No texture sent in initial state')
             width, height = self._get_dimensions(state)
             image = np.zeros((height, width, 3))
 

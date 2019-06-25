@@ -72,12 +72,12 @@ public class SerializableStateObservation {
             if (!both) {
                 // Fill in the persistent variables (Score, tick)
                 buildGameData(s);
-                // Create the image bytearray
+                // Create the texture bytearray
                 imageArray = imageToByteArray();
             } else {
                 // Fill in the persistent variables (Score, tick)
                 buildGameData(s);
-                // Create the image bytearray
+                // Create the texture bytearray
                 imageArray = imageToByteArray();
                 // Fill in the simple data variables
                 buildDataVariables(s);
@@ -86,7 +86,7 @@ public class SerializableStateObservation {
                 buildDataArraylists(s);
             }
         }catch(IOException e){
-            System.out.println("Transforming image to byte array failed. Original error: " + e);
+            System.out.println("Transforming texture to byte array failed. Original error: " + e);
         }
     }
 

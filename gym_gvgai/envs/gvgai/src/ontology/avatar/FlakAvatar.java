@@ -3,6 +3,7 @@ package ontology.avatar;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.Color;
 import core.vgdl.VGDLRegistry;
 import core.vgdl.VGDLSprite;
 import core.content.SpriteContent;
@@ -52,7 +53,7 @@ public class FlakAvatar extends HorizontalAvatar
         ammoId = -1;
         minAmmo = -1;
         ammoCost = 1;
-        color = Types.GREEN;
+        color = Color.GREEN;
     }
 
 

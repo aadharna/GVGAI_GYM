@@ -1,12 +1,12 @@
 package ontology.avatar;
 
+import com.badlogic.gdx.graphics.Color;
 import core.vgdl.VGDLSprite;
 import core.content.SpriteContent;
-import core.game.Game;
 import ontology.Types;
 import tools.Vector2d;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.util.ArrayList;
 
 /**
@@ -35,7 +35,7 @@ public class NullAvatar extends HorizontalAvatar
     protected void loadDefaults()
     {
         super.loadDefaults();
-        color = Types.GREEN;
+        color = Color.GREEN;
     }
 
 

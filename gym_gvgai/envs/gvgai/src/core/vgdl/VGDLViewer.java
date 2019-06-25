@@ -1,18 +1,22 @@
 package core.vgdl;
 
-import core.competition.CompetitionParameters;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import core.game.Game;
 import core.player.LearningPlayer;
 import core.player.Player;
 import ontology.Types;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -44,9 +48,19 @@ public class VGDLViewer extends JComponent {
 
     public boolean justImage = false;
 
-    BufferedImage image;
+//    BufferedImage texture;
+//
+//    Graphics2D graphics;
 
-    Graphics2D graphics;
+    // OpenGL Frame buffer
+    private FrameBuffer frameBuffer;
+
+    private static GL20 gl;
+
+    static {
+        gl = Gdx.gl;
+    }
+
 
     /**
      * Creates the viewer for the game.
@@ -61,19 +75,27 @@ public class VGDLViewer extends JComponent {
         if (player instanceof LearningPlayer) {
 
             if (((LearningPlayer) player).isRequiresImage()) {
-                BufferedImage bi = new BufferedImage((int) size.getWidth(), (int) size.getHeight(), BufferedImage.TYPE_INT_RGB);
 
-                // obtain the current system graphical settings
-                GraphicsConfiguration gfxConfig = GraphicsEnvironment.
-                        getLocalGraphicsEnvironment().getDefaultScreenDevice().
-                        getDefaultConfiguration();
 
-                // image is not optimized, so create a new image that is
-                image = gfxConfig.createCompatibleImage(
-                        bi.getWidth(), bi.getHeight(), bi.getTransparency());
 
-                // get the graphics context of the new image to draw the old image on
-                graphics = image.createGraphics();
+                gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+                frameBuffer = new FrameBuffer(Pixmap.Format.RGB888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+
+
+//                BufferedImage bi = new BufferedImage((int) size.getWidth(), (int) size.getHeight(), BufferedImage.TYPE_INT_RGB);
+//
+//                // obtain the current system graphical settings
+//                GraphicsConfiguration gfxConfig = GraphicsEnvironment.
+//                        getLocalGraphicsEnvironment().getDefaultScreenDevice().
+//                        getDefaultConfiguration();
+//
+//                // texture is not optimized, so create a new texture that is
+//                texture = gfxConfig.createCompatibleImage(
+//                        bi.getWidth(), bi.getHeight(), bi.getTransparency());
+//
+//                // get the graphics context of the new texture to draw the old texture on
+//                graphics = texture.createGraphics();
 
                 updateObservationForLearningPlayer();
             }
@@ -82,8 +104,9 @@ public class VGDLViewer extends JComponent {
 
     private void updateObservationForLearningPlayer() {
         LearningPlayer learningPlayer = (LearningPlayer) player;
-        paintWithGraphics(graphics);
-        learningPlayer.setObservation(image);
+        Texture texture = paintFrameBuffer();
+
+        learningPlayer.setObservation(texture.getTextureData().consumePixmap().getPixels().array());
     }
 
     /**
@@ -92,34 +115,43 @@ public class VGDLViewer extends JComponent {
      * @param gx Graphics object.
      */
     public void paintComponent(Graphics gx) {
-        Graphics2D g = (Graphics2D) gx;
-        paintWithGraphics(g);
+        // TODO: WORK OUT HOW TO DO THIS WITH OPENGL
+        //paintWithGraphics(g);
     }
 
-    public void paintWithGraphics(Graphics2D g) {
+    public Texture paintFrameBuffer() {
         //For a better graphics, enable this: (be aware this could bring performance issues depending on your HW & OS).
         //g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
         //g.setColor(Types.LIGHTGRAY);
-        g.setColor(Types.BLACK);
-        g.fillRect(0, size.height, size.width, size.height);
 
-        try {
+        frameBuffer.begin();
+        {
+            gl.glClearColor(1f,0,0,1f);
+            gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+
+            SpriteBatch spriteBatch = new SpriteBatch();
+
+            spriteBatch.begin();
+
             int[] gameSpriteOrder = game.getSpriteOrder();
             if (this.spriteGroups != null) for (Integer spriteTypeInt : gameSpriteOrder) {
                 if (spriteGroups[spriteTypeInt] != null) {
                     ArrayList<VGDLSprite> spritesList = spriteGroups[spriteTypeInt].getSprites();
                     for (VGDLSprite sp : spritesList) {
-                        if (sp != null) sp.draw(g, game);
+                        if (sp != null) sp.draw(spriteBatch, game);
                     }
 
                 }
             }
-        } catch (Exception e) {
-        }
 
-        g.setColor(Types.BLACK);
-        player.draw(g);
+            spriteBatch.end();
+
+//            player.draw(g);
+        }
+        frameBuffer.end();
+
+        return frameBuffer.getColorBufferTexture();
     }
 
 
@@ -136,11 +168,11 @@ public class VGDLViewer extends JComponent {
                 return;
             }
 
-            this.spriteGroups = new SpriteGroup[spriteGroupsGame.length];
-            for (int i = 0; i < this.spriteGroups.length; ++i) {
-                this.spriteGroups[i] = new SpriteGroup(spriteGroupsGame[i].getItype());
-                this.spriteGroups[i].copyAllSprites(spriteGroupsGame[i].getSprites());
-            }
+            this.spriteGroups = spriteGroupsGame;
+//            for (int i = 0; i < this.spriteGroups.length; ++i) {
+//                this.spriteGroups[i] = new SpriteGroup(spriteGroupsGame[i].getItype());
+//                this.spriteGroups[i].copyAllSprites(spriteGroupsGame[i].getSprites());
+//            }
 
             updateObservationForLearningPlayer();
         } else {

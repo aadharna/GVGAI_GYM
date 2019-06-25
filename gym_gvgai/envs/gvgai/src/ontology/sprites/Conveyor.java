@@ -2,6 +2,7 @@ package ontology.sprites;
 
 import java.awt.Dimension;
 
+import com.badlogic.gdx.graphics.Color;
 import core.vgdl.VGDLSprite;
 import core.content.SpriteContent;
 import ontology.Types;
@@ -34,7 +35,7 @@ public class Conveyor extends VGDLSprite
     {
         super.loadDefaults();
         is_static = true;
-        color = Types.BLUE;
+        color = Color.BLUE;
         jump_strength = 1;
         draw_arrow = true;
         is_oriented = true;
