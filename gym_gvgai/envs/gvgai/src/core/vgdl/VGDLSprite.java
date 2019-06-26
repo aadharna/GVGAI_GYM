@@ -20,6 +20,7 @@ import javax.imageio.ImageIO;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import core.competition.CompetitionParameters;
@@ -225,12 +226,12 @@ public abstract class VGDLSprite {
     /**
      * All images in case there's orientation changes and/or animations.
      */
-    public HashMap<String,ArrayList<Texture>> textures;
+    public HashMap<String,ArrayList<Pixmap>> textures;
 
     /**
      * Unique and current texture of this sprite.
      */
-    public Texture texture;
+    public Pixmap texture;
 
     /**
      * String that represents the texture in VGDL.
@@ -380,7 +381,7 @@ public abstract class VGDLSprite {
         itypes = new ArrayList<Integer>();
         rotation = 0.0;
         max_speed = -1.0;
-        textures = new HashMap<String,ArrayList<Texture>>();
+        textures = new HashMap<String,ArrayList<Pixmap>>();
 
         this.size = size;
         determinePhysics(physicstype, size);
@@ -498,7 +499,7 @@ public abstract class VGDLSprite {
 
         if(textures.size() > 0) {
 
-            ArrayList<Texture> allImages;
+            ArrayList<Pixmap> allImages;
             boolean isOrientedImg = (orientedImg != null);
             if (!isOrientedImg)
                 allImages = textures.get("NONE");
@@ -679,10 +680,10 @@ public abstract class VGDLSprite {
 
     /**
      * Draws this sprite (both the not oriented and, if appropriate, the oriented part)
-     * @param spriteBatch graphics object to draw in.
+     * @param pixmap graphics object to draw in.
      * @param game reference to the game that is being played now.
      */
-    public void draw(SpriteBatch spriteBatch, Game game) {
+    public void draw(Pixmap pixmap, Game game) {
 
         String[] invis = invisible.split(",");
 
@@ -716,31 +717,31 @@ public abstract class VGDLSprite {
             if (!is_avatar || !is_oriented)
             {
 	            if(texture != null)
-	                _drawImage(spriteBatch, game, r);
+	                _drawImage(pixmap, game, r);
 	            else
-	                _draw(spriteBatch, game, r);
+	                _draw(pixmap, game, r);
 	
 	            if(resources.size() > 0)
 	            {
-	                _drawResources(spriteBatch, game, r);
+	                _drawResources(pixmap, game, r);
 	            }
 	
 	            if(healthPoints > 0)
 	            {
-	                _drawHealthBar(spriteBatch, game, r);
+	                _drawHealthBar(pixmap, game, r);
 	            }
             }
 
             else{
-                _drawOriented(spriteBatch, r);
+                _drawOriented(pixmap, r);
 	            if(resources.size() > 0)
 	            {
-	                _drawResources(spriteBatch, game, r);
+	                _drawResources(pixmap, game, r);
 	            }
 	
 	            if(healthPoints > 0)
 	            {
-	                _drawHealthBar(spriteBatch, game, r);
+	                _drawHealthBar(pixmap, game, r);
 	            }
             }
         }
@@ -773,9 +774,9 @@ public abstract class VGDLSprite {
 
     /**
      * In case this sprite is oriented and has an arrow to draw, it draws it.
-     * @param spriteBatch graphics device to draw in.
+     * @param pixmap graphics device to draw in.
      */
-    public void _drawOriented(SpriteBatch spriteBatch, Rectangle r)
+    public void _drawOriented(Pixmap pixmap, Rectangle r)
     {
 //        Color arrowColor = new Color(color.r, 255-color.g, color.b);
 //        Polygon p = Utils.triPoints(r, orientation);
@@ -816,10 +817,10 @@ public abstract class VGDLSprite {
 
     /**
      * Draws the not-oriented part of the sprite
-     * @param spriteBatch graphics object to draw in.
+     * @param pixmap graphics object to draw in.
      * @param game reference to the game that is being played now.
      */
-    public void _draw(SpriteBatch spriteBatch, Game game, Rectangle r)
+    public void _draw(Pixmap pixmap, Game game, Rectangle r)
     {
 
 //        if(shrinkfactor != 1)
@@ -847,10 +848,10 @@ public abstract class VGDLSprite {
 
     /**
      * Draws the not-oriented part of the sprite, as an texture. this.texture must be not null.
-     * @param batch graphics object to draw in.
+     * @param pixmap graphics object to draw in.
      * @param game reference to the game that is being played now.
      */
-    public void _drawImage(SpriteBatch batch, Game game, Rectangle r)
+    public void _drawImage(Pixmap pixmap, Game game, Rectangle r)
     {
         if(shrinkfactor != 1)
         {
@@ -865,7 +866,7 @@ public abstract class VGDLSprite {
         float scaleX = (float)r.width/w;
         float scaleY = (float)r.height/h;
 
-        batch.draw(texture, r.x, r.y, w*scaleX, h*scaleY);
+        pixmap.drawPixmap(texture, 0,0, w, h, r.x, r.y, r.width, r.height);
 
         //uncomment this to see lots of numbers around
         //gphx.setColor(Color.BLACK);
@@ -877,10 +878,10 @@ public abstract class VGDLSprite {
 
     /**
      * Draws the resources hold by this sprite, as an horizontal bar on top of the sprite.
-     * @param spriteBatch graphics to draw in.
+     * @param pixmap graphics to draw in.
      * @param game game being played at the moment.
      */
-    protected void _drawResources(SpriteBatch spriteBatch, Game game, Rectangle r)
+    protected void _drawResources(Pixmap pixmap, Game game, Rectangle r)
     {
 //        int numResources = resources.size();
 //        double barheight = r.getHeight() / 3.5f / numResources;
@@ -912,11 +913,11 @@ public abstract class VGDLSprite {
 
     /**
      * Draws the health bar, as a vertical bar on top (and left) of the sprite.
-     * @param spriteBatch graphics to draw in.
+     * @param pixmap graphics to draw in.
      * @param game game being played at the moment.
      * @param r rectangle of this sprite.
      */
-    protected void _drawHealthBar(SpriteBatch spriteBatch, Game game, Rectangle r)
+    protected void _drawHealthBar(Pixmap pixmap, Game game, Rectangle r)
     {
 //        int maxHP = maxHealthPoints;
 //        if(limitHealthPoints != 1000)
@@ -1016,10 +1017,10 @@ public abstract class VGDLSprite {
                 {
                     String strDir = Types.v2DirStr(dir.getVector());
                     String imagePath = imagePathBase + strDir + "_";
-                    ArrayList<Texture> theImages = getAnimatedImages(imagePath);
+                    ArrayList<Pixmap> theImages = getAnimatedImages(imagePath);
                     textures.put(strDir, theImages);
                 }else{
-                    ArrayList<Texture> theImages = getAnimatedImages(imagePathBase);
+                    ArrayList<Pixmap> theImages = getAnimatedImages(imagePathBase);
                     textures.put("NONE", theImages);
                 }
 
@@ -1033,11 +1034,11 @@ public abstract class VGDLSprite {
                         str = str.substring(0, str.length() - 4);
 
                     String base_image_file = CompetitionParameters.IMG_PATH + str;
-                    Texture onlyImage;
+                    Pixmap onlyImage;
 
                     for(Direction dir : directions) {
                         String strDir = Types.v2DirStr(dir.getVector());
-                        ArrayList<Texture> theImages = new ArrayList<Texture>();
+                        ArrayList<Pixmap> theImages = new ArrayList<Pixmap>();
                         String image_file = base_image_file + "_" + strDir + ".png";
                         onlyImage = getTexture(image_file);
                         theImages.add(onlyImage);
@@ -1061,19 +1062,23 @@ public abstract class VGDLSprite {
         }
     }
 
-    private Texture getTexture(String image_file)
+    private Pixmap getTexture(String image_file)
     {
-        if((new File(image_file).exists())) {
-            return new Texture(Gdx.files.external(image_file));
-        }
+        try {
+            if ((new File(image_file).exists())) {
+                return new Pixmap(Gdx.files.local(image_file));
+            }
 
-        return new Texture(Gdx.files.internal("/" + image_file));
+            return new Pixmap(Gdx.files.classpath("/" + image_file));
+        } catch(Exception e) {
+            return null;
+        }
     }
 
 
-    private ArrayList<Texture> getAnimatedImages(String imagePath)
+    private ArrayList<Pixmap> getAnimatedImages(String imagePath)
     {
-        ArrayList<Texture> theImages = new ArrayList<>();
+        ArrayList<Pixmap> theImages = new ArrayList<>();
         try{
             boolean noMoreFiles = false;
             int i = 0;
@@ -1081,7 +1086,7 @@ public abstract class VGDLSprite {
             do{
                 String currentFile = imagePath + i + ".png";
                 if((new File(currentFile).exists())) {
-                    theImages.add(new Texture(Gdx.files.external(currentFile)));
+                    theImages.add(new Pixmap(Gdx.files.external(currentFile)));
                 }
                 else {
                     noMoreFiles = true;

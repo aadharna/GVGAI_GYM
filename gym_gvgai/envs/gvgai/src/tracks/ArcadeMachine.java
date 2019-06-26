@@ -6,6 +6,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import core.vgdl.HeadlessViewer;
 import core.vgdl.VGDLFactory;
 import core.vgdl.VGDLParser;
 import core.vgdl.VGDLRegistry;
@@ -85,6 +90,8 @@ public class ArcadeMachine {
 	    String actionFile, int randomSeed, int playerID) {
 		VGDLFactory.GetInstance().init(); // This always first thing to do.
 		VGDLRegistry.GetInstance().init();
+
+		new HeadlessApplication(new HeadlessViewer());
 
 		if (VERBOSE)
 			System.out.println(" ** Playing game " + game_file + ", level " + level_file + " **");

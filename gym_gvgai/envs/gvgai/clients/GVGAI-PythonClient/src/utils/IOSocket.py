@@ -14,8 +14,8 @@ class IOSocket:
     def __init__(self, tmpDir):
         self.HEADER_SIZE = 13
         self.BUFFER_SIZE = 8192*10
-        # self.port = 8083
         self.hostname, self.port = self.getOpenAddress()
+        self.port = 8083
         self.connected = False
         self.socket = None
         self._last_message_id = 0
@@ -30,6 +30,7 @@ class IOSocket:
             try:
                 self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+                self.socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_QUICKACK, 1)
                 self.socket.connect((self.hostname, self.port))
                 self.connected = True
                 print ("Client connected to server [OK]")

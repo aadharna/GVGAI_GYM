@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import core.competition.CompetitionParameters;
 import core.vgdl.VGDLFactory;
@@ -169,13 +170,13 @@ public class BasicGame extends Game {
 						}
 						if (s.autotiling) {
 
-							ArrayList<Texture> textures = s.textures.get("NONE");
+							ArrayList<Pixmap> textures = s.textures.get("NONE");
 							if(textures.size() > 0)
 								s.texture = textures.get(similarTiles);
 						}
 						if (s.randomtiling >= 0) {
 							Random random = new Random(randomSeed);
-							ArrayList<Texture> allTextures = s.textures.get("NONE");
+							ArrayList<Pixmap> allTextures = s.textures.get("NONE");
 							if (random.nextDouble() > s.randomtiling && allTextures.size() > 0) {
 								s.texture = allTextures.get(random.nextInt(allTextures.size()));
 							}

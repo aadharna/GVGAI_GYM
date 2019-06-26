@@ -923,7 +923,7 @@ public abstract class Game {
 			//waitStep(remaining);
 
 			// Draw all sprites in the panel.
-			view.paint(this.spriteGroups);
+//			view.paint(this.spriteGroups);
 
 			// Update the frame title to reflect current score and tick.
 			this.setTitle(frame);
@@ -973,7 +973,7 @@ public abstract class Game {
 
 		// Create and initialize the panel for the graphics.
 		VGDLViewer view = new VGDLViewer(this, players[humanID]);
-		view.justImage = true;
+//		view.justImage = true;
 		wi.windowClosed = false;
 
 		// Determine the delay for playing with a good fps.

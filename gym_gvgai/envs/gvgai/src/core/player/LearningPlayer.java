@@ -1,5 +1,6 @@
 package core.player;
 
+import com.badlogic.gdx.graphics.Pixmap;
 import core.competition.CompetitionParameters;
 import core.game.SerializableStateObservation;
 import core.game.StateObservation;
@@ -213,7 +214,7 @@ public class LearningPlayer extends Player {
      * Fast method for serializing observation data
      * writes a raw bitmap to memory to be sent when data is next serialized to the player
      */
-    public void setObservation(byte[] imageBytes) {
-        this.observationBuffer = imageBytes;
+    public void setObservation(Pixmap image) {
+        this.observationBuffer = image.getPixels().array();
     }
 }

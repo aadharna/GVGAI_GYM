@@ -1,6 +1,9 @@
 package core.vgdl;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -46,20 +49,18 @@ public class VGDLViewer extends JComponent {
      */
     public Player player;
 
-    public boolean justImage = false;
-
 //    BufferedImage texture;
 //
 //    Graphics2D graphics;
 
     // OpenGL Frame buffer
-    private FrameBuffer frameBuffer;
+    private Pixmap image;
 
-    private static GL20 gl;
-
-    static {
-        gl = Gdx.gl;
-    }
+//    private static GL20 gl;
+//
+//    static {
+//        gl = Gdx.gl;
+//    }
 
 
     /**
@@ -77,10 +78,8 @@ public class VGDLViewer extends JComponent {
             if (((LearningPlayer) player).isRequiresImage()) {
 
 
+                image = new Pixmap((int)size.getWidth(), (int)size.getHeight(), Pixmap.Format.RGB888);
 
-                gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-                frameBuffer = new FrameBuffer(Pixmap.Format.RGB888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
 
 
 //                BufferedImage bi = new BufferedImage((int) size.getWidth(), (int) size.getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -104,9 +103,8 @@ public class VGDLViewer extends JComponent {
 
     private void updateObservationForLearningPlayer() {
         LearningPlayer learningPlayer = (LearningPlayer) player;
-        Texture texture = paintFrameBuffer();
-
-        learningPlayer.setObservation(texture.getTextureData().consumePixmap().getPixels().array());
+        paintFrameBuffer();
+        learningPlayer.setObservation(image);
     }
 
     /**
@@ -119,39 +117,26 @@ public class VGDLViewer extends JComponent {
         //paintWithGraphics(g);
     }
 
-    public Texture paintFrameBuffer() {
+    public void paintFrameBuffer() {
         //For a better graphics, enable this: (be aware this could bring performance issues depending on your HW & OS).
         //g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         //g.setColor(Types.LIGHTGRAY);
 
-        frameBuffer.begin();
-        {
-            gl.glClearColor(1f,0,0,1f);
-            gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-            SpriteBatch spriteBatch = new SpriteBatch();
-
-            spriteBatch.begin();
-
-            int[] gameSpriteOrder = game.getSpriteOrder();
-            if (this.spriteGroups != null) for (Integer spriteTypeInt : gameSpriteOrder) {
-                if (spriteGroups[spriteTypeInt] != null) {
-                    ArrayList<VGDLSprite> spritesList = spriteGroups[spriteTypeInt].getSprites();
-                    for (VGDLSprite sp : spritesList) {
-                        if (sp != null) sp.draw(spriteBatch, game);
-                    }
-
+        int[] gameSpriteOrder = game.getSpriteOrder();
+        if (this.spriteGroups != null) for (Integer spriteTypeInt : gameSpriteOrder) {
+            if (spriteGroups[spriteTypeInt] != null) {
+                ArrayList<VGDLSprite> spritesList = spriteGroups[spriteTypeInt].getSprites();
+                for (VGDLSprite sp : spritesList) {
+                    if (sp != null) sp.draw(image, game);
                 }
-            }
 
-            spriteBatch.end();
+            }
+        }
+
 
 //            player.draw(g);
-        }
-        frameBuffer.end();
 
-        return frameBuffer.getColorBufferTexture();
     }
 
 
