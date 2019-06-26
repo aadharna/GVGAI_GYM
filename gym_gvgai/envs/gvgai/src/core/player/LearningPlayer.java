@@ -42,11 +42,6 @@ public class LearningPlayer extends Player {
         return observationBuffer;
     }
 
-    public void setObservationBuffer(byte[] observationBuffer) {
-        this.observationBuffer = observationBuffer;
-    }
-
-
     public boolean isRequiresImage() {
         return requiresImage;
     }
@@ -56,6 +51,7 @@ public class LearningPlayer extends Player {
     }
 
     private boolean requiresImage;
+    private boolean includeSemanticData = false;
 
     /**
      * Learning Player constructor.
@@ -93,7 +89,7 @@ public class LearningPlayer extends Player {
         // Sending messages.
         try {
 
-            FlatBufferStateObservation fbso = new FlatBufferStateObservation(so, getObservationBuffer());
+            FlatBufferStateObservation fbso = new FlatBufferStateObservation(so, includeSemanticData, getObservationBuffer());
 
             Message message = new Message(Types.GamePhase.ACT_STATE.ordinal(), fbso.serialize());
             comm.commSend(message);
@@ -124,7 +120,7 @@ public class LearningPlayer extends Player {
         try {
             // Set the game state to the appropriate state and the millisecond counter, then send the serialized observation.
             so.currentGameState = Types.GamePhase.INIT_STATE;
-            FlatBufferStateObservation sso = new FlatBufferStateObservation(so, getObservationBuffer());
+            FlatBufferStateObservation sso = new FlatBufferStateObservation(so, includeSemanticData, getObservationBuffer());
             sso.isValidation = isValidation;
 
             Message message = new Message(Types.GamePhase.INIT_STATE.ordinal(), sso.serialize());
@@ -215,6 +211,8 @@ public class LearningPlayer extends Player {
      * writes a raw bitmap to memory to be sent when data is next serialized to the player
      */
     public void setObservation(Pixmap image) {
-        this.observationBuffer = image.getPixels().array();
+        observationBuffer = new byte[image.getHeight()*image.getWidth()*3];
+        image.getPixels().position(0);
+        image.getPixels().get(observationBuffer);
     }
 }

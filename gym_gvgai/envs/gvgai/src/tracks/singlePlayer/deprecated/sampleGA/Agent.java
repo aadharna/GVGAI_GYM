@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
 
+import com.badlogic.gdx.graphics.Pixmap;
 import tracks.singlePlayer.tools.Heuristics.StateHeuristic;
 import tracks.singlePlayer.tools.Heuristics.WinScoreHeuristic;
 import core.game.StateObservation;
@@ -213,7 +214,7 @@ public class Agent extends AbstractPlayer {
 
 
     @Override
-    public void draw(Graphics2D g)
+    public void draw(Pixmap p)
     {
         //g.drawString("Num Simulations: " + numSimulations, 10, 20);
     }

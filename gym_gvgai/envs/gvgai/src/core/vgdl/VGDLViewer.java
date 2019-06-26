@@ -1,23 +1,13 @@
 package core.vgdl;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.headless.HeadlessApplication;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import core.game.Game;
 import core.player.LearningPlayer;
 import core.player.Player;
-import ontology.Types;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 
@@ -49,19 +39,7 @@ public class VGDLViewer extends JComponent {
      */
     public Player player;
 
-//    BufferedImage texture;
-//
-//    Graphics2D graphics;
-
-    // OpenGL Frame buffer
     private Pixmap image;
-
-//    private static GL20 gl;
-//
-//    static {
-//        gl = Gdx.gl;
-//    }
-
 
     /**
      * Creates the viewer for the game.
@@ -77,24 +55,8 @@ public class VGDLViewer extends JComponent {
 
             if (((LearningPlayer) player).isRequiresImage()) {
 
-
                 image = new Pixmap((int)size.getWidth(), (int)size.getHeight(), Pixmap.Format.RGB888);
-
-
-
-//                BufferedImage bi = new BufferedImage((int) size.getWidth(), (int) size.getHeight(), BufferedImage.TYPE_INT_RGB);
-//
-//                // obtain the current system graphical settings
-//                GraphicsConfiguration gfxConfig = GraphicsEnvironment.
-//                        getLocalGraphicsEnvironment().getDefaultScreenDevice().
-//                        getDefaultConfiguration();
-//
-//                // texture is not optimized, so create a new texture that is
-//                texture = gfxConfig.createCompatibleImage(
-//                        bi.getWidth(), bi.getHeight(), bi.getTransparency());
-//
-//                // get the graphics context of the new texture to draw the old texture on
-//                graphics = texture.createGraphics();
+                image.setBlending(Pixmap.Blending.SourceOver);
 
                 updateObservationForLearningPlayer();
             }
@@ -115,6 +77,7 @@ public class VGDLViewer extends JComponent {
     public void paintComponent(Graphics gx) {
         // TODO: WORK OUT HOW TO DO THIS WITH OPENGL
         //paintWithGraphics(g);
+
     }
 
     public void paintFrameBuffer() {
@@ -122,6 +85,8 @@ public class VGDLViewer extends JComponent {
         //g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         //g.setColor(Types.LIGHTGRAY);
 
+        image.setColor(Color.BLACK);
+        image.fill();
 
         int[] gameSpriteOrder = game.getSpriteOrder();
         if (this.spriteGroups != null) for (Integer spriteTypeInt : gameSpriteOrder) {
@@ -135,7 +100,7 @@ public class VGDLViewer extends JComponent {
         }
 
 
-//            player.draw(g);
+        player.draw(image);
 
     }
 

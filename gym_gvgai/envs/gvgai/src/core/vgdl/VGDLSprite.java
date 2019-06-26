@@ -1,11 +1,11 @@
 package core.vgdl;
 
 //import java.awt.Color;
-import java.awt.Dimension;
+
+import java.awt.*;
 //import java.awt.Graphics2D;
 //import java.awt.Image;
 //import java.awt.Polygon;
-import java.awt.Rectangle;
 //import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
@@ -82,7 +82,7 @@ public abstract class VGDLSprite {
      * Scalar speed of this sprite.
      */
     public double speed;
-    
+
     /**
      * identifies whether this sprite should move (if an Avatar)
      */
@@ -103,12 +103,12 @@ public abstract class VGDLSprite {
      * Reference to the physics object this sprite belongs to.
      */
     public Physics physics;
-    
+
     /**
      * The amount of gravity force that pushes down on the sprite
      */
     public double gravity;
-    
+
     /**
      * The amount of friction this sprite has when moving.
      */
@@ -179,27 +179,27 @@ public abstract class VGDLSprite {
      * If true, this sprite is never present in the observations passed to the controller.
      */
     public Boolean hidden;
-    
+
     /**
      * Indicates if the tile support autotiling
      */
     public boolean autotiling;
-    
+
     /**
      * Indicates if the tile picking is random
      */
     public double randomtiling;
-    
+
     /**
      * max frameRate for animating sprites
      */
     public double frameRate;
-    
+
     /**
      * remaining frame speed
      */
     public double frameRemaining;
-    
+
     /**
      * the current frame to be drawn
      */
@@ -226,7 +226,7 @@ public abstract class VGDLSprite {
     /**
      * All images in case there's orientation changes and/or animations.
      */
-    public HashMap<String,ArrayList<Pixmap>> textures;
+    public HashMap<String, ArrayList<Pixmap>> textures;
 
     /**
      * Unique and current texture of this sprite.
@@ -306,7 +306,7 @@ public abstract class VGDLSprite {
      * If ttl > -1, when it gets to 0, the sprite gets killed.
      */
     public int timeToLive = -1;
-    
+
     /**
      * The sprites rotation
      */
@@ -340,8 +340,9 @@ public abstract class VGDLSprite {
 
     /**
      * Initializes the sprite, giving its position and dimensions.
+     *
      * @param position position of the sprite
-     * @param size dimensions of the sprite on the screen.
+     * @param size     dimensions of the sprite on the screen.
      */
     protected void init(Vector2d position, Dimension size) {
         this.setRect(position, size);
@@ -381,22 +382,20 @@ public abstract class VGDLSprite {
         itypes = new ArrayList<Integer>();
         rotation = 0.0;
         max_speed = -1.0;
-        textures = new HashMap<String,ArrayList<Pixmap>>();
+        textures = new HashMap<String, ArrayList<Pixmap>>();
 
         this.size = size;
         determinePhysics(physicstype, size);
         setRandomColor();
     }
 
-    public void setRect(Vector2d position, Dimension size)
-    {
-        Rectangle r = new Rectangle((int) position.x, (int) position.y, (int) (size.width*wMult), (int) (size.height*hMult));
+    public void setRect(Vector2d position, Dimension size) {
+        Rectangle r = new Rectangle((int) position.x, (int) position.y, (int) (size.width * wMult), (int) (size.height * hMult));
         setRect(r);
     }
 
 
-    public void setRect(Rectangle rectangle)
-    {
+    public void setRect(Rectangle rectangle) {
         rect = new Rectangle(rectangle);
         bucket = rect.y / rect.height;
         bucketSharp = (rect.y % rect.height) == 0;
@@ -423,13 +422,14 @@ public abstract class VGDLSprite {
 
     /**
      * Parses parameters for the sprite, received as a SpriteContent object.
+     *
      * @param content
      */
     public void parseParameters(SpriteContent content) {
 
         VGDLFactory factory = VGDLFactory.GetInstance();
-        factory.parseParameters(content,this);
-        
+        factory.parseParameters(content, this);
+
         determinePhysics(physicstype, size);
 
         //post-process. Some sprites may need to do something interesting (i.e. SpawnPoint) once their
@@ -439,8 +439,9 @@ public abstract class VGDLSprite {
 
     /**
      * Determines the physics type of the game, creating the Physics objects that performs the calculations.
+     *
      * @param physicstype identifier of the physics type.
-     * @param size dimensions of the sprite.
+     * @param size        dimensions of the sprite.
      * @return the phyics object.
      */
     private Physics determinePhysics(int physicstype, Dimension size) {
@@ -458,22 +459,24 @@ public abstract class VGDLSprite {
 
     /**
      * Updates this sprite, performing the movements and actions for the next step.
+     *
      * @param game the current game that is being played.
      */
-    public void update(Game game)
-    {
+    public void update(Game game) {
         updatePassive();
         if (timeToLive > -1) {
             if (timeToLive > 0) timeToLive--;
-            else game.killSprite(this,false);
+            else game.killSprite(this, false);
         }
     }
 
-    public void updateAvatar(Game game, boolean request, boolean[] actionMask) {}
+    public void updateAvatar(Game game, boolean request, boolean[] actionMask) {
+    }
 
 
     /**
      * Set the disabled flag of this sprite.
+     *
      * @param is_disabled - disabled state
      */
     public void setDisabled(boolean is_disabled) {
@@ -483,21 +486,23 @@ public abstract class VGDLSprite {
 
     /**
      * Check if this sprite is disabled.
+     *
      * @return true if disabled, false otherwise.
      */
-    public boolean is_disabled() { return disabled; }
+    public boolean is_disabled() {
+        return disabled;
+    }
 
     /**
      * Prepares the sprite for movement.
      */
-    public void preMovement()
-    {
+    public void preMovement() {
         lastrect = new Rectangle(rect);
         lastmove += 1;
 
         frameRemaining -= 1;
 
-        if(textures.size() > 0) {
+        if (textures.size() > 0) {
 
             ArrayList<Pixmap> allImages;
             boolean isOrientedImg = (orientedImg != null);
@@ -514,7 +519,7 @@ public abstract class VGDLSprite {
                     texture = allImages.get(currentFrame);
                 }
 
-            } else if (!autotiling){
+            } else if (!autotiling) {
 
                 texture = allImages.get(0);
             }
@@ -534,59 +539,58 @@ public abstract class VGDLSprite {
 
     /**
      * Updates the orientation of the avatar to match the orientation parameter.
+     *
      * @param orientation final orientation the avatar must have.
      * @return true if orientation could be changed. This returns false in two circumstances:
      * the avatar is not oriented (is_oriented == false) or the previous orientation is the
      * same as the one received by parameter.
      */
-    public boolean _updateOrientation(Direction orientation)
-    {
-        if(!this.is_oriented) return false;
-        if(this.orientation.equals(orientation)) return false;
+    public boolean _updateOrientation(Direction orientation) {
+        if (!this.is_oriented) return false;
+        if (this.orientation.equals(orientation)) return false;
         this.orientation = orientation.copy();
         return true;
     }
 
     /**
      * Updates the position of the sprite, giving its orientation and speed.
+     *
      * @param orientation the orientation of the sprite.
-     * @param speed the speed of the sprite.
+     * @param speed       the speed of the sprite.
      * @return true if the position changed.
      */
     public boolean _updatePos(Direction orientation, int speed) {
         if (speed == 0) {
             speed = (int) this.speed;
-            if(speed == 0) return false;
+            if (speed == 0) return false;
         }
 
         if (cooldown <= lastmove && (Math.abs(orientation.x()) + Math.abs(orientation.y()) != 0)) {
-        	rect.translate((int) (orientation.x() * speed), (int) (orientation.y() * speed));
-        	updateBucket();
+            rect.translate((int) (orientation.x() * speed), (int) (orientation.y() * speed));
+            updateBucket();
             lastmove = 0;
             return true;
         }
         return false;
     }
-    
+
     /**
-     * 
      * @param rot the rotation of the sprite
      * @return true if rotation could be changed
      */
-    public boolean _updateRotation(double rot)
-    {
+    public boolean _updateRotation(double rot) {
         rotation = rot;
         return true;
     }
 
-    public void updateBucket()
-    {
+    public void updateBucket() {
         bucket = rect.y / rect.height;
         bucketSharp = (rect.y % rect.height) == 0;
     }
 
     /**
      * Returns the velocity of the sprite, in a Vector2d object.
+     *
      * @return the velocity of the sprite
      */
     public Vector2d _velocity() {
@@ -599,16 +603,17 @@ public abstract class VGDLSprite {
 
     /**
      * Checks if this sprites intersects with the one received as parameter.
+     *
      * @param sp the other sprite to check collisions with
      * @return true if there's a collision.
      */
-    public boolean intersects (VGDLSprite sp)
-    {
+    public boolean intersects(VGDLSprite sp) {
         return this.rect.intersects(sp.rect);
     }
 
     /**
      * Returns the last direction this sprite is following.
+     *
      * @return the direction.
      */
     public Vector2d lastDirection() {
@@ -618,19 +623,19 @@ public abstract class VGDLSprite {
 
     /**
      * Gets the position of this sprite.
+     *
      * @return the position as a Vector2d.
      */
-    public Vector2d getPosition()
-    {
+    public Vector2d getPosition() {
         return new Vector2d(rect.x, rect.y);
     }
 
     /**
      * Gets the last position of this sprite. Returns null if same as current position.
+     *
      * @return the position as a Vector2d.
      */
-    public Vector2d getLastPosition()
-    {
+    public Vector2d getLastPosition() {
         if (!lastrect.intersects(rect)) {
             return new Vector2d(lastrect.x, lastrect.y);
         }
@@ -639,25 +644,25 @@ public abstract class VGDLSprite {
 
     /**
      * Modifies the amount of resource by a given quantity.
-     * @param resourceId id of the resource whose quantity must be changed.
+     *
+     * @param resourceId   id of the resource whose quantity must be changed.
      * @param amount_delta amount of units the resource has to be modified by.
      */
-    public void modifyResource(int resourceId, int amount_delta)
-    {
+    public void modifyResource(int resourceId, int amount_delta) {
         int prev = getAmountResource(resourceId);
-        int next = Math.max(0,prev + amount_delta);
+        int next = Math.max(0, prev + amount_delta);
         resources.put(resourceId, next);
     }
 
-    public void subtractResource(int resourceId, int amount_delta)
-    {
+    public void subtractResource(int resourceId, int amount_delta) {
         int prev = getAmountResource(resourceId);
-        int next = Math.max(0,prev - amount_delta);
+        int next = Math.max(0, prev - amount_delta);
         resources.put(resourceId, next);
     }
 
     /**
      * Removes all resources collected of the specified type.
+     *
      * @param resourceId - id of the resource whose quantity must be changed.
      */
     public void removeResource(int resourceId) {
@@ -666,13 +671,13 @@ public abstract class VGDLSprite {
 
     /**
      * Returns the amount of resource of a given type this sprite has.
+     *
      * @param resourceId id of the resource to check.
      * @return how much of this resource this sprite has.
      */
-    public int getAmountResource(int resourceId)
-    {
+    public int getAmountResource(int resourceId) {
         int prev = 0;
-        if(resources.containsKey(resourceId))
+        if (resources.containsKey(resourceId))
             prev = resources.get(resourceId);
 
         return prev;
@@ -680,8 +685,9 @@ public abstract class VGDLSprite {
 
     /**
      * Draws this sprite (both the not oriented and, if appropriate, the oriented part)
+     *
      * @param pixmap graphics object to draw in.
-     * @param game reference to the game that is being played now.
+     * @param game   reference to the game that is being played now.
      */
     public void draw(Pixmap pixmap, Game game) {
 
@@ -710,39 +716,31 @@ public abstract class VGDLSprite {
         } else
             show = !invis0;
 
-        if(show && !disabled)
-        {
+        if (show && !disabled) {
             Rectangle r = new Rectangle(rect);
 
-            if (!is_avatar || !is_oriented)
-            {
-	            if(texture != null)
-	                _drawImage(pixmap, game, r);
-	            else
-	                _draw(pixmap, game, r);
-	
-	            if(resources.size() > 0)
-	            {
-	                _drawResources(pixmap, game, r);
-	            }
-	
-	            if(healthPoints > 0)
-	            {
-	                _drawHealthBar(pixmap, game, r);
-	            }
-            }
+            if (!is_avatar || !is_oriented) {
+                if (texture != null)
+                    _drawImage(pixmap, game, r);
+                else
+                    _draw(pixmap, r);
 
-            else{
+                if (resources.size() > 0) {
+                    _drawResources(pixmap, game, r);
+                }
+
+                if (healthPoints > 0) {
+                    _drawHealthBar(pixmap, game, r);
+                }
+            } else {
                 _drawOriented(pixmap, r);
-	            if(resources.size() > 0)
-	            {
-	                _drawResources(pixmap, game, r);
-	            }
-	
-	            if(healthPoints > 0)
-	            {
-	                _drawHealthBar(pixmap, game, r);
-	            }
+                if (resources.size() > 0) {
+                    _drawResources(pixmap, game, r);
+                }
+
+                if (healthPoints > 0) {
+                    _drawHealthBar(pixmap, game, r);
+                }
             }
         }
     }
@@ -750,20 +748,19 @@ public abstract class VGDLSprite {
 
     /**
      * Overwritting intersects to check if we are on ground.
+     *
      * @return true if it directly intersects with sp (as in the normal case), but additionally checks for on_ground condition.
      */
-    public boolean groundIntersects (VGDLSprite sp)
-    {
+    public boolean groundIntersects(VGDLSprite sp) {
         boolean normalIntersect = this.rect.intersects(sp.rect);
 
-        boolean otherHigher = sp.lastrect.getMinY() > (this.lastrect.getMinY()+(this.rect.height/2));
+        boolean otherHigher = sp.lastrect.getMinY() > (this.lastrect.getMinY() + (this.rect.height / 2));
         boolean goingDown = this.rect.getMinY() > this.lastrect.getMinY();
 
-        if(!on_ground && sp.solid)
-        {
+        if (!on_ground && sp.solid) {
             //No need to keep checking. Actually, we shouldn't (we won't intersect with all sprites!).
             Rectangle test_rect = new Rectangle(this.rect);
-            test_rect.setLocation(this.rect.x,this.rect.y+3);
+            test_rect.setLocation(this.rect.x, this.rect.y + 3);
 
             this.on_ground = test_rect.intersects(sp.rect) && otherHigher && goingDown;
         }
@@ -774,115 +771,114 @@ public abstract class VGDLSprite {
 
     /**
      * In case this sprite is oriented and has an arrow to draw, it draws it.
+     *
      * @param pixmap graphics device to draw in.
      */
-    public void _drawOriented(Pixmap pixmap, Rectangle r)
-    {
-//        Color arrowColor = new Color(color.r, 255-color.g, color.b);
-//        Polygon p = Utils.triPoints(r, orientation);
-//
-//        // Rotation information
-//
-//        if(shrinkfactor != 1)
-//        {
-//            r.width *= shrinkfactor;
-//            r.height *= shrinkfactor;
-//            r.x += (rect.width-r.width)/2;
-//            r.y += (rect.height-r.height)/2;
-//        }
-//
-//        int w = texture.getWidth();
-//        int h = texture.getHeight();
-//        float scale = (float)r.width/w; //assume all sprites are quadratic.
-//
-//        AffineTransform trans = new AffineTransform();
-//        trans.translate(r.x, r.y);
-//        trans.scale(scale,scale);
-//        trans.rotate(rotation,w/2.0,h/2.0);
-//        // Uncomment this line to have only one sprite
-//        //g.drawImage(texture, trans, null);
-//
-//        /* Code added by Carlos*/
-//        g.drawImage(texture, trans, null);
-//        /* End of code added by carlos*/
-//
-//        // We only draw the arrow if the directional sprites are null
-//        if (draw_arrow) {
-//            g.setColor(arrowColor);
-//            g.drawPolygon(p);
-//            g.fillPolygon(p);
-//        }
+    public void _drawOriented(Pixmap pixmap, Rectangle r) {
+        Color arrowColor = new Color(color.r, 1.0f - color.g, color.b, 1.0f);
+        Polygon p = Utils.triPoints(r, orientation);
 
+        if (shrinkfactor != 1) {
+            r.width *= shrinkfactor;
+            r.height *= shrinkfactor;
+            r.x += (rect.width - r.width) / 2;
+            r.y += (rect.height - r.height) / 2;
+        }
+
+        int w = texture.getWidth();
+        int h = texture.getHeight();
+
+        Pixmap rotated = rotation != 0 ? rotatePixmap(texture, rotation): texture;
+
+        pixmap.drawPixmap(rotated, 0,0, w, h, r.x, r.y, r.width, r.height);
+
+        // We only draw the arrow if the directional sprites are null
+        if (draw_arrow) {
+            pixmap.setColor(arrowColor);
+            pixmap.fillTriangle(p.xpoints[0], p.ypoints[0], p.xpoints[1], p.ypoints[1], p.xpoints[0], p.ypoints[2]);
+        }
+
+    }
+
+    public static Pixmap rotatePixmap(Pixmap src, double angle) {
+        final int width = src.getWidth();
+        final int height = src.getHeight();
+        Pixmap rotated = new Pixmap(width, height, src.getFormat());
+
+        final double radians = Math.toRadians(angle);
+        final double cos = Math.cos(radians);
+        final double sin = Math.sin(radians);
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                final int centerX = width / 2;
+                final int centerY = height / 2;
+                final int m = x - centerX;
+                final int n = y - centerY;
+                final int j = ((int) (m * cos + n * sin)) + centerX;
+                final int k = ((int) (n * cos - m * sin)) + centerY;
+                if (j >= 0 && j < width && k >= 0 && k < height) {
+                    rotated.drawPixel(x, y, src.getPixel(j, k));
+                }
+            }
+        }
+        return rotated;
     }
 
     /**
      * Draws the not-oriented part of the sprite
+     *
      * @param pixmap graphics object to draw in.
-     * @param game reference to the game that is being played now.
      */
-    public void _draw(Pixmap pixmap, Game game, Rectangle r)
-    {
+    public void _draw(Pixmap pixmap, Rectangle r) {
 
-//        if(shrinkfactor != 1)
-//        {
-//            r.width *= shrinkfactor;
-//            r.height *= shrinkfactor;
-//            r.x += (rect.width-r.width)/2;
-//            r.y += (rect.height-r.height)/2;
-//        }
-//
-//        spriteBatch.setColor(color);
-//
-//        if(is_avatar)
-//        {
-//            gphx.fillOval((int) r.getX(), (int) r.getY(), r.width, r.height);
-//        }else if(!is_static)
-//        {
-//            gphx.fillRect(r.x, r.y, r.width, r.height);
-//        }else
-//        {
-//            gphx.fillRect(r.x, r.y, r.width, r.height);
-//        }
+        if (shrinkfactor != 1) {
+            r.width *= shrinkfactor;
+            r.height *= shrinkfactor;
+            r.x += (rect.width - r.width) / 2;
+            r.y += (rect.height - r.height) / 2;
+        }
+
+        pixmap.setColor(color);
+
+        if (is_avatar) {
+            pixmap.fillCircle((int) r.getX(), (int) r.getY(), r.width);
+        } else if (!is_static) {
+            pixmap.fillRectangle(r.x, r.y, r.width, r.height);
+        } else {
+            pixmap.fillRectangle(r.x, r.y, r.width, r.height);
+        }
 
     }
 
     /**
      * Draws the not-oriented part of the sprite, as an texture. this.texture must be not null.
+     *
      * @param pixmap graphics object to draw in.
-     * @param game reference to the game that is being played now.
+     * @param game   reference to the game that is being played now.
      */
-    public void _drawImage(Pixmap pixmap, Game game, Rectangle r)
-    {
-        if(shrinkfactor != 1)
-        {
+    public void _drawImage(Pixmap pixmap, Game game, Rectangle r) {
+        if (shrinkfactor != 1) {
             r.width *= shrinkfactor;
             r.height *= shrinkfactor;
-            r.x += (rect.width-r.width)/2;
-            r.y += (rect.height-r.height)/2;
+            r.x += (rect.width - r.width) / 2;
+            r.y += (rect.height - r.height) / 2;
         }
 
         int w = texture.getWidth();
         int h = texture.getHeight();
-        float scaleX = (float)r.width/w;
-        float scaleY = (float)r.height/h;
 
-        pixmap.drawPixmap(texture, 0,0, w, h, r.x, r.y, r.width, r.height);
-
-        //uncomment this to see lots of numbers around
-        //gphx.setColor(Color.BLACK);
-        //if(bucketSharp)   gphx.drawString("["+bucket+"]",r.x, r.y);
-        //else              gphx.drawString("{"+bucket+"}",r.x, r.y);
-
+        pixmap.drawPixmap(texture, 0, 0, w, h, r.x, r.y, r.width, r.height);
 
     }
 
     /**
      * Draws the resources hold by this sprite, as an horizontal bar on top of the sprite.
+     *
      * @param pixmap graphics to draw in.
-     * @param game game being played at the moment.
+     * @param game   game being played at the moment.
      */
-    protected void _drawResources(Pixmap pixmap, Game game, Rectangle r)
-    {
+    protected void _drawResources(Pixmap pixmap, Game game, Rectangle r) {
 //        int numResources = resources.size();
 //        double barheight = r.getHeight() / 3.5f / numResources;
 //        double offset = r.getMinY() + 2*r.height / 3.0f;
@@ -913,12 +909,12 @@ public abstract class VGDLSprite {
 
     /**
      * Draws the health bar, as a vertical bar on top (and left) of the sprite.
+     *
      * @param pixmap graphics to draw in.
-     * @param game game being played at the moment.
-     * @param r rectangle of this sprite.
+     * @param game   game being played at the moment.
+     * @param r      rectangle of this sprite.
      */
-    protected void _drawHealthBar(Pixmap pixmap, Game game, Rectangle r)
-    {
+    protected void _drawHealthBar(Pixmap pixmap, Game game, Rectangle r) {
 //        int maxHP = maxHealthPoints;
 //        if(limitHealthPoints != 1000)
 //            maxHP = limitHealthPoints;
@@ -951,40 +947,37 @@ public abstract class VGDLSprite {
 
     /**
      * Gets the unique and precise type of this sprite
+     *
      * @return the type
      */
-    public int getType()
-    {
-        return itypes.get(itypes.size()-1);
+    public int getType() {
+        return itypes.get(itypes.size() - 1);
     }
 
     /**
      * Method to perform post processing when the sprite has received its parameters.
      */
-    public void postProcess()
-    {
-    	loadTexture();
+    public void postProcess() {
+        loadTexture();
 
-        if(!(this.orientation.equals(Types.DNONE)))
-        {
+        if (!(this.orientation.equals(Types.DNONE))) {
             //Any sprite that receives an orientation, is oriented.
             this.is_oriented = true;
         }
 
-        if(maxHealthPoints == 0)
+        if (maxHealthPoints == 0)
             maxHealthPoints = healthPoints;
 
-        if(healthPoints > maxHealthPoints)
+        if (healthPoints > maxHealthPoints)
             healthPoints = maxHealthPoints;
 
 
-        if(rect != null)
-        {
-            this.rect = new Rectangle(rect.x, rect.y, (int)(rect.width*wMult), (int)(rect.height*hMult));
+        if (rect != null) {
+            this.rect = new Rectangle(rect.x, rect.y, (int) (rect.width * wMult), (int) (rect.height * hMult));
         }
 
         //Safety checks:
-        if(cooldown < 1)
+        if (cooldown < 1)
             cooldown = 1; //Minimum possible value.
     }
 
@@ -992,20 +985,17 @@ public abstract class VGDLSprite {
     /**
      * Loads the texture that represents this sprite, using its string name as reference.
      */
-    public void loadTexture()
-    {
+    public void loadTexture() {
         String str = (orientedImg != null) ? orientedImg : img;
         boolean isOrientedImg = (orientedImg != null);
-        Direction[] directions = new Direction[]{Types.DUP,Types.DDOWN,Types.DLEFT,Types.DRIGHT};
-        if(textures == null && orientedImg == null && str == null)
-        {
+        Direction[] directions = new Direction[]{Types.DUP, Types.DDOWN, Types.DLEFT, Types.DRIGHT};
+        if (textures == null && orientedImg == null && str == null) {
             return;
         }
 
-        if(textures.size() == 0 && str != null)
-        {
+        if (textures.size() == 0 && str != null) {
             //There is autotiling (disabled now) or animations
-            if (this.autotiling || this.randomtiling >= 0 || this.frameRate >= 0){
+            if (this.autotiling || this.randomtiling >= 0 || this.frameRate >= 0) {
 
                 if (str.contains(".png"))
                     str = str.substring(0, str.length() - 3);
@@ -1013,22 +1003,21 @@ public abstract class VGDLSprite {
                 String imagePathBase = CompetitionParameters.IMG_PATH + str + "_";
 
                 //Get all the images for each orientation
-                if(isOrientedImg) for(Direction dir : directions)
-                {
+                if (isOrientedImg) for (Direction dir : directions) {
                     String strDir = Types.v2DirStr(dir.getVector());
                     String imagePath = imagePathBase + strDir + "_";
                     ArrayList<Pixmap> theImages = getAnimatedImages(imagePath);
                     textures.put(strDir, theImages);
-                }else{
+                }
+                else {
                     ArrayList<Pixmap> theImages = getAnimatedImages(imagePathBase);
                     textures.put("NONE", theImages);
                 }
 
-            }
-            else{
+            } else {
 
                 //Get all the images for each orientation
-                if(isOrientedImg){
+                if (isOrientedImg) {
 
                     if (str.contains(".png"))
                         str = str.substring(0, str.length() - 4);
@@ -1036,7 +1025,7 @@ public abstract class VGDLSprite {
                     String base_image_file = CompetitionParameters.IMG_PATH + str;
                     Pixmap onlyImage;
 
-                    for(Direction dir : directions) {
+                    for (Direction dir : directions) {
                         String strDir = Types.v2DirStr(dir.getVector());
                         ArrayList<Pixmap> theImages = new ArrayList<Pixmap>();
                         String image_file = base_image_file + "_" + strDir + ".png";
@@ -1046,7 +1035,7 @@ public abstract class VGDLSprite {
                         textures.put(strDir, theImages);
                         texture = theImages.get(0);
                     }
-                }else {
+                } else {
 
 
                     if (!(str.contains(".png")))
@@ -1062,55 +1051,54 @@ public abstract class VGDLSprite {
         }
     }
 
-    private Pixmap getTexture(String image_file)
-    {
+    private Pixmap getTexture(String image_file) {
         try {
             if ((new File(image_file).exists())) {
-                return new Pixmap(Gdx.files.local(image_file));
+                return new Pixmap(Gdx.files.absolute(image_file));
             }
 
             return new Pixmap(Gdx.files.classpath("/" + image_file));
-        } catch(Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }
 
 
-    private ArrayList<Pixmap> getAnimatedImages(String imagePath)
-    {
+    private ArrayList<Pixmap> getAnimatedImages(String imagePath) {
         ArrayList<Pixmap> theImages = new ArrayList<>();
-        try{
+        try {
             boolean noMoreFiles = false;
             int i = 0;
 
-            do{
+            do {
                 String currentFile = imagePath + i + ".png";
-                if((new File(currentFile).exists())) {
+                if ((new File(currentFile).exists())) {
                     theImages.add(new Pixmap(Gdx.files.external(currentFile)));
-                }
-                else {
+                } else {
                     noMoreFiles = true;
                 }
                 i += 1;
-            }while(!noMoreFiles);
+            } while (!noMoreFiles);
             texture = theImages.get(0); //Default.
-        }catch(Exception e) {}
+        } catch (Exception e) {
+        }
         return theImages;
     }
 
 
     /**
      * Used to indicate if this sprite was created by the avatar.
+     *
      * @param fromAvatar true if the avatar created this sprite.
      */
-    public void setFromAvatar(boolean fromAvatar)
-    {
+    public void setFromAvatar(boolean fromAvatar) {
         is_from_avatar = fromAvatar;
     }
 
 
     /**
      * Returns a string representation of this string, including its name and position.
+     *
      * @return the string representation of this sprite.
      */
     public String toString() {
@@ -1119,16 +1107,17 @@ public abstract class VGDLSprite {
 
     /**
      * Creates a copy of this sprite. To be overwritten in each subclass.
-     * @return  a copy of this sprite.
+     *
+     * @return a copy of this sprite.
      */
     public abstract VGDLSprite copy();
 
     /**
      * Copies the attributes of this object to the one passed as parameter.
+     *
      * @param toSprite the sprite to copy to.
      */
-    public void copyTo(VGDLSprite toSprite)
-    {
+    public void copyTo(VGDLSprite toSprite) {
         //this.color, this.draw_arrow don't need to be copied.
         toSprite.name = this.name;
         toSprite.is_static = this.is_static;
@@ -1148,7 +1137,7 @@ public abstract class VGDLSprite {
         toSprite.is_oriented = this.is_oriented;
         toSprite.orientation = new Direction(orientation.x(), orientation.y());
         toSprite.rect = new Rectangle(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
-        toSprite.lastrect =  new Rectangle(this.lastrect.x, this.lastrect.y, this.lastrect.width, this.lastrect.height);
+        toSprite.lastrect = new Rectangle(this.lastrect.x, this.lastrect.y, this.lastrect.width, this.lastrect.height);
         toSprite.lastmove = this.lastmove;
         toSprite.jump_strength = this.jump_strength;
         toSprite.singleton = this.singleton;
@@ -1186,13 +1175,12 @@ public abstract class VGDLSprite {
         toSprite.orientedImg = this.orientedImg;
 
         toSprite.itypes = new ArrayList<Integer>();
-        for(Integer it : this.itypes)
+        for (Integer it : this.itypes)
             toSprite.itypes.add(it);
 
         toSprite.resources = new TreeMap<Integer, Integer>();
         Set<Map.Entry<Integer, Integer>> entries = this.resources.entrySet();
-        for(Map.Entry<Integer, Integer> entry : entries)
-        {
+        for (Map.Entry<Integer, Integer> entry : entries) {
             toSprite.resources.put(entry.getKey(), entry.getValue());
         }
 
@@ -1202,61 +1190,61 @@ public abstract class VGDLSprite {
      * Determines if two the object passed is equal to this.
      * We are NOT overriding EQUALS on purpose (Costly operation for eventHandling).
      */
-    public boolean equiv(Object o)
-    {
-        if(this == o) return true;
-        if(!(o instanceof VGDLSprite)) return false;
-        VGDLSprite other = (VGDLSprite)o;
+    public boolean equiv(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof VGDLSprite)) return false;
+        VGDLSprite other = (VGDLSprite) o;
 
-        if(other.name != this.name) return false;
-        if(other.is_static != this.is_static) return false;
-        if(other.only_active != this.only_active) return false;
-        if(other.disabled != this.disabled) return false;
-        if(other.is_avatar != this.is_avatar) return false;
-        if(other.is_stochastic != this.is_stochastic) return false;
-        if(other.cooldown != this.cooldown) return false;
-        if(other.speed != this.speed) return false;
-        if(other.stationary != this.stationary) return false;
-        if(other.mass != this.mass) return false;
-        if(other.physicstype != this.physicstype) return false;
-        if(other.gravity != this.gravity) return false;		
-        if(other.friction != this.friction) return false;
-        if(other.shrinkfactor != this.shrinkfactor) return false;
-        if(other.is_oriented != this.is_oriented) return false;
-        if(!other.orientation.equals(this.orientation)) return false;
-        if(!other.rect.equals(this.rect)) return false;
-        if(other.lastmove != this.lastmove) return false;
-        if(other.jump_strength != this.jump_strength) return false;
-        if(other.singleton != this.singleton) return false;
-        if(other.is_resource != this.is_resource) return false;
-        if(other.portal != this.portal) return false;
-        if(other.is_npc != this.is_npc) return false;
-        if(other.is_from_avatar != this.is_from_avatar) return false;
-        if(other.invisible != this.invisible) return false;
-        if(other.autotiling != this.autotiling) return false;
-        if(other.randomtiling != this.randomtiling) return false;
-        if(other.frameRate != this.frameRate) return false;
-        if(other.spriteID != this.spriteID) return false;
-        if(other.isFirstTick != this.isFirstTick) return false;
-        if(other.hidden != this.hidden) return false;
-        if(other.healthPoints != this.healthPoints) return false;
-        if(other.maxHealthPoints != this.maxHealthPoints) return false;
-        if(other.limitHealthPoints != this.limitHealthPoints) return false;
+        if (other.name != this.name) return false;
+        if (other.is_static != this.is_static) return false;
+        if (other.only_active != this.only_active) return false;
+        if (other.disabled != this.disabled) return false;
+        if (other.is_avatar != this.is_avatar) return false;
+        if (other.is_stochastic != this.is_stochastic) return false;
+        if (other.cooldown != this.cooldown) return false;
+        if (other.speed != this.speed) return false;
+        if (other.stationary != this.stationary) return false;
+        if (other.mass != this.mass) return false;
+        if (other.physicstype != this.physicstype) return false;
+        if (other.gravity != this.gravity) return false;
+        if (other.friction != this.friction) return false;
+        if (other.shrinkfactor != this.shrinkfactor) return false;
+        if (other.is_oriented != this.is_oriented) return false;
+        if (!other.orientation.equals(this.orientation)) return false;
+        if (!other.rect.equals(this.rect)) return false;
+        if (other.lastmove != this.lastmove) return false;
+        if (other.jump_strength != this.jump_strength) return false;
+        if (other.singleton != this.singleton) return false;
+        if (other.is_resource != this.is_resource) return false;
+        if (other.portal != this.portal) return false;
+        if (other.is_npc != this.is_npc) return false;
+        if (other.is_from_avatar != this.is_from_avatar) return false;
+        if (other.invisible != this.invisible) return false;
+        if (other.autotiling != this.autotiling) return false;
+        if (other.randomtiling != this.randomtiling) return false;
+        if (other.frameRate != this.frameRate) return false;
+        if (other.spriteID != this.spriteID) return false;
+        if (other.isFirstTick != this.isFirstTick) return false;
+        if (other.hidden != this.hidden) return false;
+        if (other.healthPoints != this.healthPoints) return false;
+        if (other.maxHealthPoints != this.maxHealthPoints) return false;
+        if (other.limitHealthPoints != this.limitHealthPoints) return false;
 
         int numTypes = other.itypes.size();
-        if(numTypes != this.itypes.size()) return false;
-        for(int i = 0; i < numTypes; ++i)
-            if(other.itypes.get(i) != this.itypes.get(i)) return false;
+        if (numTypes != this.itypes.size()) return false;
+        for (int i = 0; i < numTypes; ++i)
+            if (other.itypes.get(i) != this.itypes.get(i)) return false;
 
         return true;
     }
 
     /**
      * Get all sprites that affect or being affected by the current sprite
+     *
      * @return a list of all dependent sprites
      */
-    public ArrayList<String> getDependentSprites(){
-    	return new ArrayList<String>();
+    public ArrayList<String> getDependentSprites() {
+        return new ArrayList<String>();
     }
-    
+
 }

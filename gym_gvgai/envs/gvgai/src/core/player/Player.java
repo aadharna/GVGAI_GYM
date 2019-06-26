@@ -1,5 +1,6 @@
 package core.player;
 
+import com.badlogic.gdx.graphics.Pixmap;
 import core.game.Game;
 import core.game.StateObservation;
 import core.game.StateObservationMulti;
@@ -187,7 +188,7 @@ public abstract class Player {
      * It can be used for debug purposes.
      * @param g Graphics device to draw to.
      */
-    public void draw(Graphics2D g)
+    public void draw(Pixmap g)
     {
         //Overwrite this method in your controller to draw on the screen.
         //This method should be left empty in this class.

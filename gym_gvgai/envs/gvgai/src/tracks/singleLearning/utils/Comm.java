@@ -51,7 +51,7 @@ public abstract class Comm {
                 so.currentGameState = Types.GamePhase.END_STATE;
             }
 
-            FlatBufferStateObservation sso = new FlatBufferStateObservation(so, null);
+            FlatBufferStateObservation sso = new FlatBufferStateObservation(so, false, null);
 
             Message message = new Message(Types.GamePhase.END_STATE.ordinal(), sso.serialize());
             commSend(message);

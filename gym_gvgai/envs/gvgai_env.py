@@ -42,8 +42,10 @@ class GVGAI_Env(gym.Env):
         #Get number of moves for a selected game
         self.action_space = spaces.Discrete(len(self.actions))
 
+        observation_space = np.hstack([self.world_dimensions, [3]])
+
         # Observation is the remaining time
-        self.observation_space = spaces.Box(low=0, high=255, shape=self.world_dimensions, dtype=np.int32)
+        self.observation_space = spaces.Box(low=0, high=255, shape=observation_space, dtype=np.int32)
         
     def step(self, action):
         """
@@ -129,7 +131,7 @@ class SimpleImageViewer(object):
         #self.scale = scale
     def imshow(self, arr):
         if self.window is None:
-            height, width, _channels = arr.shape
+            width, height, _channels = arr.shape
             #if width > self.maxwidth:
             scale = self.maxwidth / width
             width = int(scale * width)
@@ -150,8 +152,8 @@ class SimpleImageViewer(object):
                 self.isopen = False
 
         assert len(arr.shape) == 3, "You passed in an image with the wrong number shape"
-        image = pyglet.image.ImageData(arr.shape[1], arr.shape[0],
-                                       'RGB', arr.tobytes(), pitch=arr.shape[1]*-3)
+        image = pyglet.image.ImageData(arr.shape[0], arr.shape[1],
+                                       'RGB', arr.tobytes(), pitch=arr.shape[0]*-3)
         gl.glTexParameteri(gl.GL_TEXTURE_2D,
                            gl.GL_TEXTURE_MAG_FILTER, gl.GL_NEAREST)
         texture = image.get_texture()

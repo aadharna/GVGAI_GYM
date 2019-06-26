@@ -48,24 +48,23 @@ class ClientCommGYM:
 
         fullClasspath = ':'.join(jarDir + [buildDir])
 
-
         cmd = ["java", "-classpath", fullClasspath, "tracks.singleLearning.utils.JavaServer",
                "-game", game, "-gamesDir", gamesDir, "-imgDir", baseDir, "-portNum", str(self.io.port)]
 
         #Check build version
         sys.path.append(baseDir)
-        # import check_build
-        #
-        # if(not os.path.isdir(buildDir)):
-        #     raise Exception("Couldn't find build directory. Please run build.py from the install directory or reinstall with pip.")
-        # elif(not check_build.isCorrectBuild(srcDir, buildDir)):
-        #     raise Exception("Your build is out of date. Please run build.py from the install directory or reinstall with pip.")
-        # else:
-        #     try:
-        #         self.java = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, cwd=self.tempDir.name)
-        #     except subprocess.CalledProcessError as e:
-        #         print('exit code: {}'.format(e.returncode))
-        #         print('stderr: {}'.format(e.stderr.decode(sys.getfilesystemencoding())))
+        import check_build
+
+        if(not os.path.isdir(buildDir)):
+            raise Exception("Couldn't find build directory. Please run build.py from the install directory or reinstall with pip.")
+        elif(not check_build.isCorrectBuild(srcDir, buildDir)):
+            raise Exception("Your build is out of date. Please run build.py from the install directory or reinstall with pip.")
+        else:
+            try:
+                self.java = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, cwd=self.tempDir.name)
+            except subprocess.CalledProcessError as e:
+                print('exit code: {}'.format(e.returncode))
+                print('stderr: {}'.format(e.stderr.decode(sys.getfilesystemencoding())))
 
         self.io.initBuffers()
 
@@ -86,6 +85,8 @@ class ClientCommGYM:
 
     def step(self, act):
 
+        if hasattr(act, 'shape'):
+            act = int(act)
 
         game_phase, state, image = self._read_and_process_server_response()
         self.io.writeToServer(AgentPhase.ACT_STATE, act.to_bytes(4, byteorder='big'), self.LOG)
@@ -100,7 +101,7 @@ class ClientCommGYM:
         else:
             done = False
 
-        info = {'winner': state.GameWinner(), 'actions': actions}
+        info = {'winner': state.GameWinner(), 'actions': [a.value for a in actions]}
         return image, reward, done, info
 
     def reset(self, level):
@@ -168,7 +169,7 @@ class ClientCommGYM:
                 image = None
                 if state.ImageArrayLength() != 0:
                     width, height = self._get_dimensions(state)
-                    image = np.reshape(state.ImageArrayAsNumpy(), (height, width, 3))
+                    image = np.reshape(state.ImageArrayAsNumpy(), (width, height, 3))
 
                 return state, image
 

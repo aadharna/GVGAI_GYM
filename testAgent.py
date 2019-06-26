@@ -28,13 +28,18 @@ for game in games:
             # print("Action " + str(action_id) + " tick " + str(t+1) + " reward " + str(diffScore) + " win " + str(debug["winner"]))
 
             frames += 1
+
+            if t % 1000 == 0:
+                end = time.time()
+                total_time = end - start
+                fps = (frames / total_time)
+                print("frames per second: %d" % int(fps))
+
             # break loop when terminal state is reached
             if done:
                 env.reset()
+
         end = time.time()
-
         total_time = end - start
-
         fps = (frames / total_time)
-
         print("frames per second: %d" % int(fps))

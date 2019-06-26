@@ -26,11 +26,11 @@ public class FlatBufferStateObservation {
         actions = Arrays.asList(Action.names);
     }
 
-    public FlatBufferStateObservation(StateObservation so, byte[] imageArray) {
+    public FlatBufferStateObservation(StateObservation so, boolean includeSemanticData, byte[] imageArray) {
 
         b = new FlatBufferBuilder(0);
 
-        int imageArrayOffset = imageArray != null ? State.createImageArrayVector(b, imageArray) : -1;
+        int imageArrayOffset = imageArray != null ? b.createByteVector(imageArray): -1;
 
         double[] worldDimensionVector = new double[2];
         worldDimensionVector[0] = so.getWorldDimension().width;
@@ -38,16 +38,29 @@ public class FlatBufferStateObservation {
         int worldDimensionOffset = State.createWorldDimensionVector(b, worldDimensionVector);
 
         int availableActions = addAvailableActions(b, so);
-        int avatarResources = addAvatarResources(b, so);
-        int observations = addObservations(b, so);
-        int npcPositions = addNpcPositions(b, so);
-        int immovablePositions = addImmovablePositions(b, so);
-        int movablePositions = addMovablePositions(b, so);
-        int resourcesPositions = addResourcesPositions(b, so);
-        int fromAvatarSpritePositions = addFromAvatarSpritesPositions(b, so);
 
-        int avatarPositionOffset = convertVector(so.getAvatarPosition());
-        int avatarOrientationVectorOffset = convertVector(so.getAvatarOrientation());
+        int avatarResources = 0;
+        int observations = 0;
+        int npcPositions = 0;
+        int immovablePositions = 0;
+        int movablePositions = 0;
+        int resourcesPositions = 0;
+        int fromAvatarSpritePositions = 0;
+        int avatarPositionOffset = 0;
+        int avatarOrientationVectorOffset = 0;
+
+        if(includeSemanticData) {
+            avatarResources = addAvatarResources(b, so);
+            observations = addObservations(b, so);
+            npcPositions = addNpcPositions(b, so);
+            immovablePositions = addImmovablePositions(b, so);
+            movablePositions = addMovablePositions(b, so);
+            resourcesPositions = addResourcesPositions(b, so);
+            fromAvatarSpritePositions = addFromAvatarSpritesPositions(b, so);
+            avatarPositionOffset = convertVector(so.getAvatarPosition());
+            avatarOrientationVectorOffset = convertVector(so.getAvatarOrientation());
+        }
+
 
         State.startState(b);
 
@@ -75,17 +88,18 @@ public class FlatBufferStateObservation {
         State.addIsAvatarAlive(b, so.isAvatarAlive());
 
         State.addAvailableActions(b, availableActions);
-        State.addAvatarResources(b, avatarResources);
-        State.addObservationGrid(b, observations);
-        State.addNPCPositions(b, npcPositions);
-        State.addImmovablePositions(b, immovablePositions);
-        State.addMovablePositions(b, movablePositions);
-        State.addResourcesPositions(b, resourcesPositions);
-        State.addFromAvatarSpritesPositions(b, fromAvatarSpritePositions);
 
-
-        State.addAvatarOrientation(b, avatarOrientationVectorOffset);
-        State.addAvatarPosition(b, avatarPositionOffset);
+        if(includeSemanticData) {
+            State.addAvatarResources(b, avatarResources);
+            State.addObservationGrid(b, observations);
+            State.addNPCPositions(b, npcPositions);
+            State.addImmovablePositions(b, immovablePositions);
+            State.addMovablePositions(b, movablePositions);
+            State.addResourcesPositions(b, resourcesPositions);
+            State.addFromAvatarSpritesPositions(b, fromAvatarSpritePositions);
+            State.addAvatarOrientation(b, avatarOrientationVectorOffset);
+            State.addAvatarPosition(b, avatarPositionOffset);
+        }
 
         int end = State.endState(b);
         b.finish(end);

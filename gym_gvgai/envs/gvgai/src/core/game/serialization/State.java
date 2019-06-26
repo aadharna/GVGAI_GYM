@@ -181,7 +181,7 @@ public final class State extends Table {
 
   public static void startState(FlatBufferBuilder builder) { builder.startTable(42); }
   public static void addImageArray(FlatBufferBuilder builder, int imageArrayOffset) { builder.addOffset(0, imageArrayOffset, 0); }
-  public static int createImageArrayVector(FlatBufferBuilder builder, byte[] data) { builder.startVector(1, data.length, 1); for (int i = data.length - 1; i >= 0; i--) builder.addByte(data[i]); return builder.endVector(); }
+  public static int createImageArrayVector(FlatBufferBuilder builder, byte[] data) { builder.startVector(1, data.length, 1); builder.createByteVector(data); return builder.endVector(); }
   public static void startImageArrayVector(FlatBufferBuilder builder, int numElems) { builder.startVector(1, numElems, 1); }
   public static void addIsValidation(FlatBufferBuilder builder, boolean isValidation) { builder.addBoolean(1, isValidation, false); }
   public static void addGameScore(FlatBufferBuilder builder, double gameScore) { builder.addDouble(2, gameScore, 0.0); }
