@@ -1,28 +1,10 @@
 package core.vgdl;
 
-//import java.awt.Color;
 
-import java.awt.*;
-//import java.awt.Graphics2D;
-//import java.awt.Image;
-//import java.awt.Polygon;
-//import java.awt.geom.AffineTransform;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.TreeMap;
-
-import javax.imageio.ImageIO;
-
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.GdxNativesLoader;
 import core.competition.CompetitionParameters;
 import core.content.SpriteContent;
 import core.game.Game;
@@ -34,6 +16,16 @@ import tools.Direction;
 import tools.Utils;
 import tools.Vector2d;
 
+import java.awt.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeMap;
+
+
 /**
  * Created with IntelliJ IDEA.
  * User: Diego
@@ -42,6 +34,10 @@ import tools.Vector2d;
  * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
  */
 public abstract class VGDLSprite {
+
+    static {
+        GdxNativesLoader.load();
+    }
 
     /**
      * Name of this sprite.
@@ -795,7 +791,7 @@ public abstract class VGDLSprite {
         // We only draw the arrow if the directional sprites are null
         if (draw_arrow) {
             pixmap.setColor(arrowColor);
-            pixmap.fillTriangle(p.xpoints[0], p.ypoints[0], p.xpoints[1], p.ypoints[1], p.xpoints[0], p.ypoints[2]);
+            pixmap.fillTriangle(p.xpoints[0], p.ypoints[0], p.xpoints[1], p.ypoints[1], p.xpoints[2], p.ypoints[2]);
         }
 
     }
@@ -1054,10 +1050,10 @@ public abstract class VGDLSprite {
     private Pixmap getTexture(String image_file) {
         try {
             if ((new File(image_file).exists())) {
-                return new Pixmap(Gdx.files.absolute(image_file));
+                return new Pixmap(new FileHandle(image_file));
             }
 
-            return new Pixmap(Gdx.files.classpath("/" + image_file));
+            return new Pixmap(new FileHandle(new File(getClass().getResource("/" + image_file).getPath())));
         } catch (Exception e) {
             return null;
         }
@@ -1073,7 +1069,7 @@ public abstract class VGDLSprite {
             do {
                 String currentFile = imagePath + i + ".png";
                 if ((new File(currentFile).exists())) {
-                    theImages.add(new Pixmap(Gdx.files.external(currentFile)));
+                    theImages.add(new Pixmap(new FileHandle(currentFile)));
                 } else {
                     noMoreFiles = true;
                 }

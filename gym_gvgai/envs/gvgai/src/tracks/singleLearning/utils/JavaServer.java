@@ -1,8 +1,6 @@
 package tracks.singleLearning.utils;
 
-import com.badlogic.gdx.backends.headless.HeadlessApplication;
-import core.competition.CompetitionParameters;
-import core.vgdl.HeadlessViewer;
+import com.badlogic.gdx.utils.GdxNativesLoader;
 import tools.ElapsedWallTimer;
 import tracks.LearningMachine;
 
@@ -130,8 +128,6 @@ public class JavaServer {
         //     games = new String[]{"artillery", "asteroids", "bird", "bubble", "candy",   //0 - 4
         //         "lander", "mario", "pong", "ptsp", "racing"};                       //5 - 9
         // }
-
-        new HeadlessApplication(new HeadlessViewer());
 
         //Game and level to play
         String game_file = gamesDir + "/" + game + ".txt";

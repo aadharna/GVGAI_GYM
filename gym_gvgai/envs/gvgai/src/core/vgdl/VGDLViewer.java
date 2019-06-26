@@ -2,12 +2,15 @@ package core.vgdl;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.utils.GdxNativesLoader;
 import core.game.Game;
 import core.player.LearningPlayer;
 import core.player.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
 import java.util.ArrayList;
 
 
@@ -57,6 +60,7 @@ public class VGDLViewer extends JComponent {
 
                 image = new Pixmap((int)size.getWidth(), (int)size.getHeight(), Pixmap.Format.RGB888);
                 image.setBlending(Pixmap.Blending.SourceOver);
+                image.setFilter(Pixmap.Filter.BiLinear);
 
                 updateObservationForLearningPlayer();
             }
@@ -75,9 +79,11 @@ public class VGDLViewer extends JComponent {
      * @param gx Graphics object.
      */
     public void paintComponent(Graphics gx) {
-        // TODO: WORK OUT HOW TO DO THIS WITH OPENGL
-        //paintWithGraphics(g);
+        byte[] observationBuffer = new byte[image.getHeight()*image.getWidth()*3];
+        image.getPixels().position(0);
+        image.getPixels().get(observationBuffer);
 
+        gx.drawImage(new ImageIcon(observationBuffer).getImage(), 0,0, null);
     }
 
     public void paintFrameBuffer() {

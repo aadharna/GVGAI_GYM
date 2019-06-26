@@ -1,19 +1,5 @@
 package tracks;
 
-import java.io.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Random;
-
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.backends.headless.HeadlessApplication;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import core.vgdl.HeadlessViewer;
-import core.vgdl.VGDLFactory;
-import core.vgdl.VGDLParser;
-import core.vgdl.VGDLRegistry;
 import core.competition.CompetitionParameters;
 import core.game.Game;
 import core.game.StateObservation;
@@ -21,9 +7,23 @@ import core.game.StateObservationMulti;
 import core.player.AbstractMultiPlayer;
 import core.player.AbstractPlayer;
 import core.player.Player;
+import core.vgdl.VGDLFactory;
+import core.vgdl.VGDLParser;
+import core.vgdl.VGDLRegistry;
 import ontology.Types;
 import tools.ElapsedCpuTimer;
 import tools.StatSummary;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created with IntelliJ IDEA. User: Diego Date: 06/11/13 Time: 11:24 This is a
@@ -90,8 +90,6 @@ public class ArcadeMachine {
 	    String actionFile, int randomSeed, int playerID) {
 		VGDLFactory.GetInstance().init(); // This always first thing to do.
 		VGDLRegistry.GetInstance().init();
-
-		new HeadlessApplication(new HeadlessViewer());
 
 		if (VERBOSE)
 			System.out.println(" ** Playing game " + game_file + ", level " + level_file + " **");
