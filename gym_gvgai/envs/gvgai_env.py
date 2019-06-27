@@ -87,8 +87,10 @@ class GVGAI_Env(gym.Env):
             return self.img
         elif mode == 'human':
             if not self.viewer:
+                global pyglet
                 import pyglet
-                from pyglet.gl import *
+                global gl
+                import pyglet.gl as gl
                 self.viewer = SimpleImageViewer(maxwidth=500)
             self.viewer.imshow(self.img)
             return self.viewer.isopen
