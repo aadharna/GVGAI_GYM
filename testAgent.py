@@ -24,7 +24,7 @@ for game in games:
             # do action and get new state and its reward
             action_id = agent.act(stateObs, actions)
             stateObs, diffScore, done, debug = env.step(action_id)
-            #env.render()
+            env.render()
             # print("Action " + str(action_id) + " tick " + str(t+1) + " reward " + str(diffScore) + " win " + str(debug["winner"]))
 
             frames += 1

@@ -7,8 +7,6 @@ Simulate VGDL Games
 import sys
 from os import path
 import numpy as np
-import pyglet
-from pyglet.gl import *
 
 dir = path.dirname(__file__)
 gvgai_path = path.join(dir, "gvgai", "clients", "GVGAI-PythonClient", "src", "utils")
@@ -89,6 +87,8 @@ class GVGAI_Env(gym.Env):
             return self.img
         elif mode == 'human':
             if not self.viewer:
+                import pyglet
+                from pyglet.gl import *
                 self.viewer = SimpleImageViewer(maxwidth=500)
             self.viewer.imshow(self.img)
             return self.viewer.isopen
