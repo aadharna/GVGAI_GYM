@@ -11,7 +11,7 @@ testLevels = ['lvl2-v0', 'lvl3-v0', 'lvl4-v0']
 
 for game in games:
     for level in trainingLevels:  # testLevels:
-        env = gym_gvgai.make('gvgai-cec1-nopixels-lvl0-v0')
+        env = gym_gvgai.make('gvgai-cec1-pixels-lvl0-v0')
         agent = Agent.Agent()
         print('Starting ' + env.env.game + " with Level " + str(env.env.level))
         # reset environment

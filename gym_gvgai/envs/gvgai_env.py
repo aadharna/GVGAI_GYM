@@ -40,7 +40,9 @@ class GVGAI_Env(gym.Env):
         #Get number of moves for a selected game
         self.action_space = spaces.Discrete(len(self.actions))
 
-        observation_space = np.hstack([self.world_dimensions, [3]])
+        height, width = self.world_dimensions
+
+        observation_space = np.array([width, height, 3])
 
         # Observation is the remaining time
         self.observation_space = spaces.Box(low=0, high=255, shape=observation_space, dtype=np.int32)
