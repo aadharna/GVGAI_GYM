@@ -11,7 +11,7 @@ testLevels = ['lvl2-v0', 'lvl3-v0', 'lvl4-v0']
 
 for game in games:
     for level in trainingLevels:  # testLevels:
-        env = gym_gvgai.make(game + '-pixels-' + level)
+        env = gym_gvgai.make('gvgai-cec1-nopixels-lvl0-v0')
         agent = Agent.Agent()
         print('Starting ' + env.env.game + " with Level " + str(env.env.level))
         # reset environment
@@ -19,12 +19,12 @@ for game in games:
         actions = env.unwrapped.get_action_meanings()
         start = time.time()
         frames = 0
-        for t in range(2000):
+        for t in range(20000):
             # choose action based on trained policy
             # do action and get new state and its reward
             action_id = agent.act(stateObs, actions)
             stateObs, diffScore, done, debug = env.step(action_id)
-            #env.render()
+            env.render()
             # print("Action " + str(action_id) + " tick " + str(t+1) + " reward " + str(diffScore) + " win " + str(debug["winner"]))
 
             frames += 1

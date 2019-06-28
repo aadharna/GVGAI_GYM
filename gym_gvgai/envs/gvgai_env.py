@@ -131,7 +131,7 @@ class SimpleImageViewer(object):
         #self.scale = scale
     def imshow(self, arr):
         if self.window is None:
-            width, height, _channels = arr.shape
+            height, width, _channels = arr.shape
             #if width > self.maxwidth:
             scale = self.maxwidth / width
             width = int(scale * width)
@@ -152,8 +152,8 @@ class SimpleImageViewer(object):
                 self.isopen = False
 
         assert len(arr.shape) == 3, "You passed in an image with the wrong number shape"
-        image = pyglet.image.ImageData(arr.shape[0], arr.shape[1],
-                                       'RGB', arr.tobytes(), pitch=arr.shape[0]*-3)
+        image = pyglet.image.ImageData(arr.shape[1], arr.shape[0],
+                                       'RGB', arr.tobytes(), pitch=arr.shape[1]*-3)
         gl.glTexParameteri(gl.GL_TEXTURE_2D,
                            gl.GL_TEXTURE_MAG_FILTER, gl.GL_NEAREST)
         texture = image.get_texture()
