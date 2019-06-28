@@ -116,15 +116,12 @@ class ClientCommGYM:
 
             # If we are in the act state then we abort
             if game_phase == GamePhase.ACT_STATE:
-                print('Aborting current game')
                 self._abort_game()
 
             if game_phase == GamePhase.CHOOSE_LEVEL:
-                print('Choosing level %d' % level)
                 self._choose_level(level)
 
             if game_phase == GamePhase.INIT_STATE:
-                print('Initial state recieved')
                 self._init(state)
                 self._running = True
                 reset = True
@@ -132,7 +129,6 @@ class ClientCommGYM:
 
         # Currently initial observation is not sent back on reset
         if image is None:
-            print('No texture sent in initial state')
             width, height = self._get_dimensions(state)
             image = np.zeros((height, width, 3))
 
