@@ -165,7 +165,7 @@ class ClientCommGYM:
                 image = None
                 if state.ImageArrayLength() != 0:
                     width, height = self._get_dimensions(state)
-                    image = np.reshape(state.ImageArrayAsNumpy(), (height, width, 3))
+                    image = np.reshape(state.ImageArrayAsNumpy().astype(np.uint8), (height, width, 3))
 
                 return state, image
 
