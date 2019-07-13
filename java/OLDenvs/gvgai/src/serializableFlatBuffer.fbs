@@ -1,0 +1,70 @@
+namespace core.game.serialization;
+
+table Vector2d {
+    x: double;
+    y: double;
+}
+
+table Observation {
+    category: int;
+    itype: int;
+    obsID: int ;
+    position: Vector2d;
+    reference: Vector2d;
+    sqDist: double;
+}
+
+enum Winner : int { PLAYER_DISQ = -100, NO_WINNER = -1, PLAYER_LOSES = 0, PLAYER_WINS = 1 }
+enum Action : int { ACTION_NIL, ACTION_UP, ACTION_LEFT, ACTION_DOWN, ACTION_RIGHT, ACTION_USE, ACTION_ESCAPE }
+
+table IntKeyValuePair {
+    key: int (key);
+    value: int;
+}
+
+table State {
+    // State Observation variables
+    imageArray: [byte];
+    isValidation: bool;
+    gameScore: double;
+    gameTick: int;
+    gameWinner: Winner;
+    isGameOver: bool;
+    worldDimension: [double];
+    blockSize: int;
+    noOfPlayers: int ;
+    avatarSpeed: double;
+    avatarOrientation: [double];
+    avatarPosition: [double];
+    avatarLastAction: Action;
+    avatarType: int;
+    avatarHealthPoints: int;
+    avatarMaxHealthPoints: int ;
+    avatarLimitHealthPoints: int;
+    isAvatarAlive: bool;
+
+    availableActions: [Action];
+    avatarResources: [IntKeyValuePair];
+    observationGrid: [Observation];
+    observationGridNum: int;
+    observationGridMaxRow: int;
+    observationGridMaxCol: int;
+    NPCPositions: [Observation];
+    NPCPositionsNum: int;
+    NPCPositionsMaxRow: int;
+    immovablePositions: [Observation];
+    immovablePositionsNum: int;
+    immovablePositionsMaxRow: int;
+    movablePositions: [Observation];
+    movablePositionsNum: int;
+    movablePositionsMaxRow: int;
+    resourcesPositions: [Observation];
+    resourcesPositionsNum: int;
+    resourcesPositionsMaxRow: int;
+    portalsPositions: [Observation];
+    portalsPositionsNum: int;
+    portalsPositionsMaxRow: int;
+    fromAvatarSpritesPositions: [Observation];
+    fromAvatarSpritesPositionsNum: int;
+    fromAvatarSpritesPositionsMaxRow: int;
+}

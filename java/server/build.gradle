@@ -1,0 +1,8 @@
+
+plugins {
+    id 'application'
+}
+
+dependencies {
+    compile project(':gvgai')
+}
