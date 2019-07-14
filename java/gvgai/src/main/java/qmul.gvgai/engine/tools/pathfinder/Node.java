@@ -1,8 +1,8 @@
-package tools.pathfinder;
+package qmul.gvgai.engine.tools.pathfinder;
 
-import ontology.Types;
-import tools.Direction;
-import tools.Vector2d;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.Direction;
+import qmul.gvgai.engine.tools.Vector2d;
 
 import java.util.ArrayList;
 

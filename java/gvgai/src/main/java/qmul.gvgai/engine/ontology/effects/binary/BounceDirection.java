@@ -1,12 +1,12 @@
-package ontology.effects.binary;
+package qmul.gvgai.engine.ontology.effects.binary;
 
-import core.vgdl.VGDLSprite;
-import core.content.InteractionContent;
-import core.game.Game;
-import core.logging.*;
-import ontology.effects.Effect;
-import tools.Direction;
-import tools.Vector2d;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.core.content.InteractionContent;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.core.logging.*;
+import qmul.gvgai.engine.ontology.effects.Effect;
+import qmul.gvgai.engine.tools.Direction;
+import qmul.gvgai.engine.tools.Vector2d;
 
 import java.awt.*;
 

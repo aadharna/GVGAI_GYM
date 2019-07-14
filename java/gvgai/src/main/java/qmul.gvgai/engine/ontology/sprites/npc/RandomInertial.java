@@ -1,11 +1,11 @@
-package ontology.sprites.npc;
+package qmul.gvgai.engine.ontology.sprites.npc;
 
 import java.awt.Dimension;
 
-import core.vgdl.VGDLSprite;
-import core.content.SpriteContent;
-import ontology.Types;
-import tools.Vector2d;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.core.content.SpriteContent;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.Vector2d;
 
 /**
  * Created with IntelliJ IDEA.

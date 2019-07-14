@@ -1,4 +1,4 @@
-package tools;
+package qmul.gvgai.engine.tools;
 
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -7,7 +7,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
-import ontology.Types;
+import qmul.gvgai.engine.ontology.Types;
 
 /**
  * Created with IntelliJ IDEA.

@@ -2,8 +2,8 @@ package tracks.singlePlayer;
 
 import java.util.Random;
 
-import core.logging.Logger;
-import tools.Utils;
+import qmul.gvgai.engine.core.logging.Logger;
+import qmul.gvgai.engine.tools.Utils;
 import tracks.ArcadeMachine;
 
 /**

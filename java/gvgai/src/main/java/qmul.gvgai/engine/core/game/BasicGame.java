@@ -1,4 +1,4 @@
-package core.game;
+package qmul.gvgai.engine.core.game;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -6,16 +6,16 @@ import java.util.Random;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import core.competition.CompetitionParameters;
-import core.vgdl.VGDLFactory;
-import core.vgdl.VGDLRegistry;
-import core.vgdl.VGDLSprite;
-import core.logging.Logger;
-import core.logging.Message;
-import core.content.GameContent;
-import tools.IO;
-import tools.Vector2d;
-import tools.pathfinder.PathFinder;
+import qmul.gvgai.engine.core.competition.CompetitionParameters;
+import qmul.gvgai.engine.core.vgdl.VGDLFactory;
+import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.core.logging.Logger;
+import qmul.gvgai.engine.core.logging.Message;
+import qmul.gvgai.engine.core.content.GameContent;
+import qmul.gvgai.engine.tools.IO;
+import qmul.gvgai.engine.tools.Vector2d;
+import qmul.gvgai.engine.tools.pathfinder.PathFinder;
 
 /**
  * Created with IntelliJ IDEA. User: Diego Date: 16/10/13 Time: 14:00 This is a

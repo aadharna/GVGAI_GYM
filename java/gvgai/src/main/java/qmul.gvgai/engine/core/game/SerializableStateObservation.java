@@ -1,9 +1,10 @@
-package core.game;
+package qmul.gvgai.engine.core.game;
 
 import com.google.gson.Gson;
-import core.competition.CompetitionParameters;
-import ontology.Types;
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.core.competition.CompetitionParameters;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.core.game.Observation;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
@@ -67,7 +68,7 @@ public class SerializableStateObservation {
     public int fromAvatarSpritesPositionsNum;
     public int fromAvatarSpritesPositionsMaxRow;
 
-    public SerializableStateObservation(StateObservation s, Boolean both){
+    public SerializableStateObservation(core.game.StateObservation s, Boolean both){
         try {
             if (!both) {
                 // Fill in the persistent variables (Score, tick)

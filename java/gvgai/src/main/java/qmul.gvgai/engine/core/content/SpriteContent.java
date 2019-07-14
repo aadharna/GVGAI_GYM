@@ -1,9 +1,9 @@
-package core.content;
+package qmul.gvgai.engine.core.content;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import core.vgdl.VGDLRegistry;
+import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
 
 /**
  * Created with IntelliJ IDEA.

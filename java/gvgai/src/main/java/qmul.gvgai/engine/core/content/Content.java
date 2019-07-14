@@ -1,6 +1,6 @@
-package core.content;
+package qmul.gvgai.engine.core.content;
 
-import tools.Utils;
+import qmul.gvgai.engine.tools.Utils;
 
 import java.util.HashMap;
 

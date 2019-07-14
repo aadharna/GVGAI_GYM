@@ -5,17 +5,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import core.game.Event;
-import core.game.GameDescription.SpriteData;
-import core.game.GameDescription.TerminationData;
-import core.game.StateObservation;
-import core.player.AbstractPlayer;
+import qmul.gvgai.engine.core.game.Event;
+import qmul.gvgai.engine.core.game.GameDescription.SpriteData;
+import qmul.gvgai.engine.core.game.GameDescription.TerminationData;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.player.AbstractPlayer;
 import tracks.levelGeneration.constraints.CombinedConstraints;
-import ontology.Types;
-import ontology.Types.WINNER;
-import tools.ElapsedCpuTimer;
-import tools.LevelMapping;
-import tools.StepController;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.ontology.Types.WINNER;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.tools.LevelMapping;
+import qmul.gvgai.engine.tools.StepController;
 
 public class Chromosome implements Comparable<Chromosome>{
 

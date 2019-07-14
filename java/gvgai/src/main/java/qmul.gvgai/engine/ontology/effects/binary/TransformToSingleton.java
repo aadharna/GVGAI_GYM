@@ -1,4 +1,4 @@
-package ontology.effects.binary;
+package qmul.gvgai.engine.ontology.effects.binary;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -6,17 +6,17 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import core.vgdl.VGDLRegistry;
-import core.vgdl.VGDLSprite;
-import core.content.InteractionContent;
-import core.game.Game;
-import core.logging.Logger;
-import core.logging.Message;
-import core.player.Player;
-import ontology.Types;
-import ontology.avatar.MovingAvatar;
-import ontology.effects.Effect;
-import tools.Direction;
+import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.core.content.InteractionContent;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.core.logging.Logger;
+import qmul.gvgai.engine.core.logging.Message;
+import qmul.gvgai.engine.core.player.Player;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.ontology.avatar.MovingAvatar;
+import qmul.gvgai.engine.ontology.effects.Effect;
+import qmul.gvgai.engine.tools.Direction;
 
 /**
  * Created with IntelliJ IDEA.

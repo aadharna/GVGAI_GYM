@@ -1,4 +1,4 @@
-package core.competition;
+package qmul.gvgai.engine.core.competition;
 
 /**
  * Created with IntelliJ IDEA.

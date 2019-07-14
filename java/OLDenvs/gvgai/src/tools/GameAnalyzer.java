@@ -1,13 +1,13 @@
-package tools;
+package qmul.gvgai.engine.tools;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import core.game.GameDescription;
-import core.game.GameDescription.InteractionData;
-import core.game.GameDescription.SpriteData;
-import core.game.GameDescription.TerminationData;
+import qmul.gvgai.engine.core.game.GameDescription;
+import qmul.gvgai.engine.core.game.GameDescription.InteractionData;
+import qmul.gvgai.engine.core.game.GameDescription.SpriteData;
+import qmul.gvgai.engine.core.game.GameDescription.TerminationData;
 
 public class GameAnalyzer {
 	/**

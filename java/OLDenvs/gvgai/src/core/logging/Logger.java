@@ -1,4 +1,4 @@
-package core.logging;
+package qmul.gvgai.engine.core.logging;
 
 import java.util.ArrayList;
 

@@ -2,10 +2,10 @@ package tracks.singlePlayer.tools.replayer;
 
 import java.util.ArrayList;
 
-import core.game.StateObservation;
-import core.player.AbstractPlayer;
-import ontology.Types;
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.player.AbstractPlayer;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 /**
  * Created with IntelliJ IDEA.

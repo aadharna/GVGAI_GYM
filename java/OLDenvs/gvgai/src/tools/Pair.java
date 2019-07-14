@@ -1,4 +1,4 @@
-package tools;
+package qmul.gvgai.engine.tools;
 
 import java.util.Map;
 

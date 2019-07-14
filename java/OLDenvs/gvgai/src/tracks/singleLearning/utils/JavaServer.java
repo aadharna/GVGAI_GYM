@@ -1,7 +1,7 @@
 package tracks.singleLearning.utils;
 
 import com.badlogic.gdx.utils.GdxNativesLoader;
-import tools.ElapsedWallTimer;
+import qmul.gvgai.engine.tools.ElapsedWallTimer;
 import tracks.LearningMachine;
 
 import java.util.ArrayList;

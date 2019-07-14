@@ -1,9 +1,9 @@
 package tracks.multiPlayer.tools.heuristics;
 
-import core.game.Observation;
-import core.game.StateObservationMulti;
-import ontology.Types;
-import tools.Vector2d;
+import qmul.gvgai.engine.core.game.Observation;
+import qmul.gvgai.engine.core.game.StateObservationMulti;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.Vector2d;
 
 import java.util.ArrayList;
 import java.util.HashMap;

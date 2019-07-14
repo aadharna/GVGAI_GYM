@@ -1,10 +1,10 @@
-package tools;
+package qmul.gvgai.engine.tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import core.game.GameDescription.SpriteData;
-import core.game.SLDescription;
+import qmul.gvgai.engine.core.game.GameDescription.SpriteData;
+import qmul.gvgai.engine.core.game.SLDescription;
 
 /**
  * This class analyze the game sprites with a specific level

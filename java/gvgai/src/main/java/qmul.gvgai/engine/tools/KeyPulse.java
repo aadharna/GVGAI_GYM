@@ -1,7 +1,7 @@
-package tools;
+package qmul.gvgai.engine.tools;
 
 
-import ontology.Types;
+import qmul.gvgai.engine.ontology.Types;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package tracks.gameDesign;
 
-import tools.Utils;
+import qmul.gvgai.engine.tools.Utils;
 import tracks.ArcadeMachine;
 import tracks.DesignMachine;
 

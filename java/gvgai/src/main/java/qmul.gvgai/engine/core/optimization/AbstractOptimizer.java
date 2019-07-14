@@ -1,6 +1,6 @@
-package core.optimization;
+package qmul.gvgai.engine.core.optimization;
 
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 /**
  * Base class for optimization

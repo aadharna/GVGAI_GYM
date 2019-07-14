@@ -1,7 +1,7 @@
 package tracks.levelGeneration.constraints;
 
 import java.util.HashMap;
-import tools.GameAnalyzer;
+import qmul.gvgai.engine.tools.GameAnalyzer;
 
 public class AvatarNumberConstraint extends AbstractConstraint{
 

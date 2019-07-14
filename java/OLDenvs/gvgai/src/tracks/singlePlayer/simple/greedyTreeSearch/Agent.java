@@ -2,10 +2,10 @@ package tracks.singlePlayer.simple.greedyTreeSearch;
 
 import java.util.Random;
 
-import core.game.StateObservation;
-import core.player.AbstractPlayer;
-import ontology.Types.ACTIONS;
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.player.AbstractPlayer;
+import qmul.gvgai.engine.ontology.Types.ACTIONS;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 public class Agent extends AbstractPlayer {
 	

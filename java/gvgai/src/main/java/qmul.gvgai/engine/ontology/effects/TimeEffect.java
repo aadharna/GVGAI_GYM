@@ -1,9 +1,9 @@
-package ontology.effects;
+package qmul.gvgai.engine.ontology.effects;
 
-import core.vgdl.VGDLRegistry;
-import core.vgdl.VGDLSprite;
-import core.content.InteractionContent;
-import core.game.Game;
+import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.core.content.InteractionContent;
+import qmul.gvgai.engine.core.game.Game;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,4 +1,4 @@
-package core.logging;
+package qmul.gvgai.engine.core.logging;
 
 public class Message {
     public static int WARNING = 0;

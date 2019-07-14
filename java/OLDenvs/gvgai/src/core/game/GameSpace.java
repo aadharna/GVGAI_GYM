@@ -1,7 +1,7 @@
-package core.game;
+package qmul.gvgai.engine.core.game;
 
-import core.content.GameContent;
-import core.content.ParameterContent;
+import qmul.gvgai.engine.core.content.GameContent;
+import qmul.gvgai.engine.core.content.ParameterContent;
 
 import java.util.HashMap;
 

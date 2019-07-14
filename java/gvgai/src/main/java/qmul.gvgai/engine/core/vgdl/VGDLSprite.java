@@ -1,20 +1,19 @@
-package core.vgdl;
+package qmul.gvgai.engine.core.vgdl;
 
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.GdxNativesLoader;
-import core.competition.CompetitionParameters;
-import core.content.SpriteContent;
-import core.game.Game;
-import ontology.Types;
-import ontology.physics.ContinuousPhysics;
-import ontology.physics.GridPhysics;
-import ontology.physics.Physics;
-import tools.Direction;
-import tools.Utils;
-import tools.Vector2d;
+import qmul.gvgai.engine.core.competition.CompetitionParameters;
+import qmul.gvgai.engine.core.content.SpriteContent;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.ontology.physics.ContinuousPhysics;
+import qmul.gvgai.engine.ontology.physics.GridPhysics;
+import qmul.gvgai.engine.ontology.physics.Physics;
+import qmul.gvgai.engine.tools.Direction;
+import qmul.gvgai.engine.tools.Utils;
+import qmul.gvgai.engine.tools.Vector2d;
 
 import java.awt.*;
 import java.io.File;

@@ -1,15 +1,15 @@
-package ontology.effects.binary;
+package qmul.gvgai.engine.ontology.effects.binary;
 
 import java.util.Collection;
 
-import core.vgdl.VGDLFactory;
-import core.vgdl.VGDLSprite;
-import core.content.InteractionContent;
-import core.game.Game;
-import core.logging.Logger;
-import core.logging.Message;
-import ontology.effects.Effect;
-import tools.Utils;
+import qmul.gvgai.engine.core.vgdl.VGDLFactory;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.core.content.InteractionContent;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.core.logging.Logger;
+import qmul.gvgai.engine.core.logging.Message;
+import qmul.gvgai.engine.ontology.effects.Effect;
+import qmul.gvgai.engine.tools.Utils;
 
 /**
  * Created with IntelliJ IDEA.

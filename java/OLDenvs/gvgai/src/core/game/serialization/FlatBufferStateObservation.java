@@ -1,9 +1,9 @@
-package core.game.serialization;
+package qmul.gvgai.engine.core.game.serialization;
 
 import com.google.flatbuffers.FlatBufferBuilder;
-import core.game.Observation;
-import core.game.StateObservation;
-import ontology.Types;
+import qmul.gvgai.engine.core.game.Observation;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.ontology.Types;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

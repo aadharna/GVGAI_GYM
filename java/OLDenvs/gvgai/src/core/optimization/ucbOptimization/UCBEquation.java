@@ -1,4 +1,4 @@
-package core.optimization.ucbOptimization;
+package qmul.gvgai.engine.core.optimization.ucbOptimization;
 
 /**
  * Contains information about the current used UCB Equation

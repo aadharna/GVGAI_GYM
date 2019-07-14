@@ -1,4 +1,4 @@
-package core.player;
+package qmul.gvgai.engine.core.player;
 
 import java.awt.Graphics2D;
 import java.io.BufferedWriter;
@@ -7,11 +7,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import core.game.Game;
-import core.game.StateObservation;
-import core.game.StateObservationMulti;
-import ontology.Types;
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.game.StateObservationMulti;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 /**
  * Created with IntelliJ IDEA.

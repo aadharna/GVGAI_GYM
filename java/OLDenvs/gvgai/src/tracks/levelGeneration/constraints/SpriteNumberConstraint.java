@@ -3,7 +3,7 @@ package tracks.levelGeneration.constraints;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import tools.GameAnalyzer;
+import qmul.gvgai.engine.tools.GameAnalyzer;
 
 public class SpriteNumberConstraint extends AbstractConstraint{
 	

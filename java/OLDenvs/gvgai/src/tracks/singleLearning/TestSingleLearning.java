@@ -1,7 +1,7 @@
 package tracks.singleLearning;
 
-import core.competition.CompetitionParameters;
-import tools.ElapsedWallTimer;
+import qmul.gvgai.engine.core.competition.CompetitionParameters;
+import qmul.gvgai.engine.tools.ElapsedWallTimer;
 import tracks.LearningMachine;
 
 import java.util.*;

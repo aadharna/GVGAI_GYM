@@ -1,6 +1,6 @@
 package tracks.singlePlayer.tools.Heuristics;
 
-import core.game.StateObservation;
+import qmul.gvgai.engine.core.game.StateObservation;
 
 /**
  * Created with IntelliJ IDEA.

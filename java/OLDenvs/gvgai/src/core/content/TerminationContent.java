@@ -1,9 +1,9 @@
-package core.content;
+package qmul.gvgai.engine.core.content;
 
 import java.util.HashMap;
 
-import core.logging.Logger;
-import core.logging.Message;
+import qmul.gvgai.engine.core.logging.Logger;
+import qmul.gvgai.engine.core.logging.Message;
 
 /**
  * Created with IntelliJ IDEA.

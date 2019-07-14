@@ -6,14 +6,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 
-import core.game.GameDescription;
-import core.game.GameDescription.SpriteData;
-import core.game.GameDescription.TerminationData;
-import core.generator.AbstractLevelGenerator;
+import qmul.gvgai.engine.core.game.GameDescription;
+import qmul.gvgai.engine.core.game.GameDescription.SpriteData;
+import qmul.gvgai.engine.core.game.GameDescription.TerminationData;
+import qmul.gvgai.engine.core.generator.AbstractLevelGenerator;
 import tracks.levelGeneration.constructiveLevelGenerator.LevelData.Point;
-import tools.ElapsedCpuTimer;
-import tools.GameAnalyzer;
-import tools.Utils;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.tools.GameAnalyzer;
+import qmul.gvgai.engine.tools.Utils;
 
 public class LevelGenerator extends AbstractLevelGenerator{
 

@@ -3,8 +3,8 @@ package tracks.ruleGeneration.geneticRuleGenerator;
 import java.util.ArrayList;
 import java.util.Random;
 
-import core.player.AbstractPlayer;
-import tools.LevelAnalyzer;
+import qmul.gvgai.engine.core.player.AbstractPlayer;
+import qmul.gvgai.engine.tools.LevelAnalyzer;
 
 public class SharedData {
 

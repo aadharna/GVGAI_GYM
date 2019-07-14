@@ -1,33 +1,33 @@
-package core.vgdl;
+package qmul.gvgai.engine.core.vgdl;
 
 import java.awt.Dimension;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
-import core.content.*;
-import core.game.BasicGame;
-import core.game.Game;
-import core.game.GameSpace;
-import core.logging.Logger;
-import core.logging.Message;
-import core.termination.*;
-import ontology.Types;
-import ontology.avatar.*;
-import ontology.avatar.oriented.*;
-import ontology.effects.Effect;
-import ontology.effects.TimeEffect;
-import ontology.effects.binary.*;
-import ontology.effects.unary.*;
-import ontology.sprites.*;
-import ontology.sprites.missile.ErraticMissile;
-import ontology.sprites.missile.Missile;
-import ontology.sprites.missile.RandomMissile;
-import ontology.sprites.npc.Walker;
-import ontology.sprites.npc.WalkerJumper;
-import ontology.sprites.npc.*;
-import ontology.sprites.producer.*;
-import tools.Vector2d;
+import qmul.gvgai.engine.core.content.*;
+import qmul.gvgai.engine.core.game.BasicGame;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.core.game.GameSpace;
+import qmul.gvgai.engine.core.logging.Logger;
+import qmul.gvgai.engine.core.logging.Message;
+import qmul.gvgai.engine.core.termination.*;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.ontology.avatar.*;
+import qmul.gvgai.engine.ontology.avatar.oriented.*;
+import qmul.gvgai.engine.ontology.effects.Effect;
+import qmul.gvgai.engine.ontology.effects.TimeEffect;
+import qmul.gvgai.engine.ontology.effects.binary.*;
+import qmul.gvgai.engine.ontology.effects.unary.*;
+import qmul.gvgai.engine.ontology.sprites.*;
+import qmul.gvgai.engine.ontology.sprites.missile.ErraticMissile;
+import qmul.gvgai.engine.ontology.sprites.missile.Missile;
+import qmul.gvgai.engine.ontology.sprites.missile.RandomMissile;
+import qmul.gvgai.engine.ontology.sprites.npc.Walker;
+import qmul.gvgai.engine.ontology.sprites.npc.WalkerJumper;
+import qmul.gvgai.engine.ontology.sprites.npc.*;
+import qmul.gvgai.engine.ontology.sprites.producer.*;
+import qmul.gvgai.engine.tools.Vector2d;
 
 /**
  * Created with IntelliJ IDEA.

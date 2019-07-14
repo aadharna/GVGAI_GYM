@@ -2,7 +2,7 @@ package testing;
 
 import java.util.Random;
 
-import core.logging.Logger;
+import qmul.gvgai.engine.core.logging.Logger;
 import tracks.ArcadeMachine;
 
 /**

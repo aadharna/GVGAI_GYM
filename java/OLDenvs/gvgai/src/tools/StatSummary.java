@@ -1,4 +1,4 @@
-package tools;
+package qmul.gvgai.engine.tools;
 
 /**
  This class is used to model the statistics

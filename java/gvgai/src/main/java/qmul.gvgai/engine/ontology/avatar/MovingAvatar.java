@@ -1,16 +1,16 @@
-package ontology.avatar;
+package qmul.gvgai.engine.ontology.avatar;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
-import core.vgdl.VGDLSprite;
-import core.competition.CompetitionParameters;
-import core.content.SpriteContent;
-import core.game.Game;
-import core.player.Player;
-import ontology.Types;
-import tools.*;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.core.competition.CompetitionParameters;
+import qmul.gvgai.engine.core.content.SpriteContent;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.core.player.Player;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.*;
 
 /**
  * Created with IntelliJ IDEA.

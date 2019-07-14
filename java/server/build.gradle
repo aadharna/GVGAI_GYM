@@ -5,4 +5,8 @@ plugins {
 
 dependencies {
     compile project(':gvgai')
+    
+    // Command-line parsing
+    compile group: 'info.picocli', name: 'picocli', version: '3.9.6'
+
 }

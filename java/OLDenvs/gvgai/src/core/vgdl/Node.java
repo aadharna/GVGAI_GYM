@@ -1,12 +1,12 @@
-package core.vgdl;
+package qmul.gvgai.engine.core.vgdl;
 
 import java.util.ArrayList;
 
-import core.content.*;
-import core.logging.Logger;
-import core.logging.Message;
-import ontology.Types;
-import tools.Utils;
+import qmul.gvgai.engine.core.content.*;
+import qmul.gvgai.engine.core.logging.Logger;
+import qmul.gvgai.engine.core.logging.Message;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.Utils;
 
 /**
  * Created with IntelliJ IDEA.

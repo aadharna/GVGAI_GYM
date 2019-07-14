@@ -1,21 +1,21 @@
-package core.vgdl;
+package qmul.gvgai.engine.core.vgdl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import core.content.*;
-import core.game.Game;
-import core.game.GameSpace;
-import core.termination.Termination;
-import ontology.Types;
-import ontology.effects.Effect;
-import ontology.effects.TimeEffect;
-import tools.IO;
-import tools.Pair;
-import core.logging.Logger;
-import core.logging.Message;
+import qmul.gvgai.engine.core.content.*;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.core.game.GameSpace;
+import qmul.gvgai.engine.core.termination.Termination;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.ontology.effects.Effect;
+import qmul.gvgai.engine.ontology.effects.TimeEffect;
+import qmul.gvgai.engine.tools.IO;
+import qmul.gvgai.engine.tools.Pair;
+import qmul.gvgai.engine.core.logging.Logger;
+import qmul.gvgai.engine.core.logging.Message;
 
 /**
  * Created with IntelliJ IDEA. User: Diego Date: 04/10/13 Time: 16:52 This is a

@@ -2,8 +2,8 @@ package tracks.levelGeneration.constraints;
 
 import java.util.HashMap;
 
-import core.game.GameDescription;
-import core.game.GameDescription.TerminationData;
+import qmul.gvgai.engine.core.game.GameDescription;
+import qmul.gvgai.engine.core.game.GameDescription.TerminationData;
 
 public class GoalConstraint extends AbstractConstraint{
 

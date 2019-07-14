@@ -2,9 +2,9 @@ package tracks.singlePlayer.tools.ucbOptimizerAgent;
 
 import java.util.ArrayList;
 
-import core.game.Observation;
-import ontology.Types;
-import tools.Vector2d;
+import qmul.gvgai.engine.core.game.Observation;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.Vector2d;
 
 public class Helper {
 	public static int TREE_CHILD_DEPTH = 0;

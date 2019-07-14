@@ -1,14 +1,14 @@
-package core.game;
+package qmul.gvgai.engine.core.game;
 
 import java.awt.Dimension;
 import java.util.*;
 
-import core.vgdl.SpriteGroup;
-import core.vgdl.VGDLSprite;
-import ontology.Types;
-import ontology.avatar.MovingAvatar;
-import ontology.effects.TimeEffect;
-import tools.*;
+import qmul.gvgai.engine.core.vgdl.SpriteGroup;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.ontology.avatar.MovingAvatar;
+import qmul.gvgai.engine.ontology.effects.TimeEffect;
+import qmul.gvgai.engine.core.game.Game;
 
 /**
  * Created with IntelliJ IDEA.

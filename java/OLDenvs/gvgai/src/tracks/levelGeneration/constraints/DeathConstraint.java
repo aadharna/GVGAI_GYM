@@ -1,7 +1,7 @@
 package tracks.levelGeneration.constraints;
 
-import ontology.Types;
-import ontology.Types.WINNER;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.ontology.Types.WINNER;
 
 public class DeathConstraint extends AbstractConstraint{
 

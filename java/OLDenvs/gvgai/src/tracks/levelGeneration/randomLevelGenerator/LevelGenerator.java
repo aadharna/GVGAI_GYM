@@ -5,11 +5,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import core.game.GameDescription;
-import core.game.GameDescription.SpriteData;
-import core.generator.AbstractLevelGenerator;
-import tools.ElapsedCpuTimer;
-import tools.GameAnalyzer;
+import qmul.gvgai.engine.core.game.GameDescription;
+import qmul.gvgai.engine.core.game.GameDescription.SpriteData;
+import qmul.gvgai.engine.core.generator.AbstractLevelGenerator;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.tools.GameAnalyzer;
 
 public class LevelGenerator extends AbstractLevelGenerator{
 

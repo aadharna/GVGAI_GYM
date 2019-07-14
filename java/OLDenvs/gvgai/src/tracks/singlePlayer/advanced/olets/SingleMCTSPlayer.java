@@ -1,12 +1,12 @@
 package tracks.singlePlayer.advanced.olets;
 
-import core.game.StateObservation;
-import ontology.Types;
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 import java.util.Random;
 
-import tools.Vector2d;
+import qmul.gvgai.engine.tools.Vector2d;
 
 /**
  * Code written by Adrien Couetoux, acouetoux@ulg.ac.be.

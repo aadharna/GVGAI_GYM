@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import core.game.SLDescription;
-import core.game.StateObservation;
-import core.generator.AbstractRuleGenerator;
-import core.player.AbstractPlayer;
-import tools.ElapsedCpuTimer;
-import tools.LevelAnalyzer;
+import qmul.gvgai.engine.core.game.SLDescription;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.generator.AbstractRuleGenerator;
+import qmul.gvgai.engine.core.player.AbstractPlayer;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.tools.LevelAnalyzer;
 
 public class RuleGenerator extends AbstractRuleGenerator{
 	/** The best chromosome fitness across generations **/

@@ -1,15 +1,15 @@
 package tracks.ruleGeneration.geneticRuleGenerator;
 import java.util.*;
 
-import core.game.Observation;
-import core.game.SLDescription;
-import core.game.StateObservation;
-import core.game.Event;
-import core.game.GameDescription.SpriteData;
-import core.player.AbstractPlayer;
-import ontology.Types;
-import tools.ElapsedCpuTimer;
-import tools.Vector2d;
+import qmul.gvgai.engine.core.game.Observation;
+import qmul.gvgai.engine.core.game.SLDescription;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.game.Event;
+import qmul.gvgai.engine.core.game.GameDescription.SpriteData;
+import qmul.gvgai.engine.core.player.AbstractPlayer;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.tools.Vector2d;
 
 import java.util.ArrayList;
 import java.util.HashMap;

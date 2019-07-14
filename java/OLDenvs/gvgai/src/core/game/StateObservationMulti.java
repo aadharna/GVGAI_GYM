@@ -1,7 +1,7 @@
-package core.game;
+package qmul.gvgai.engine.core.game;
 
-import ontology.Types;
-import tools.Vector2d;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.Vector2d;
 
 import java.util.*;
 

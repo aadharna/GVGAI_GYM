@@ -1,4 +1,4 @@
-package tools;
+package qmul.gvgai.engine.tools;
 
 /**
  * Created by dperez on 17/04/16.

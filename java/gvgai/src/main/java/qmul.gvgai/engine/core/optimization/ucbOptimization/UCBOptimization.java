@@ -1,9 +1,9 @@
-package core.optimization.ucbOptimization;
+package qmul.gvgai.engine.core.optimization.ucbOptimization;
 
 import java.util.Random;
 import tracks.ArcadeMachine;
 
-import core.optimization.OptimizationObjective;
+import qmul.gvgai.engine.core.optimization.OptimizationObjective;
 
 /**
  * an implementation of optimization objective for any UCBEquation

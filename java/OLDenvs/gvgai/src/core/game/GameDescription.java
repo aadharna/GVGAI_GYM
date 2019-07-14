@@ -1,16 +1,16 @@
-package core.game;
+package qmul.gvgai.engine.core.game;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
 
-import core.logging.Logger;
-import core.logging.Message;
+import qmul.gvgai.engine.core.logging.Logger;
+import qmul.gvgai.engine.core.logging.Message;
 
-import core.vgdl.VGDLRegistry;
-import ontology.Types;
-import ontology.avatar.MovingAvatar;
+import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.ontology.avatar.MovingAvatar;
 
 /**
  * This is an abstract class encapsulating all the data required for generating

@@ -1,13 +1,13 @@
-package ontology.effects.unary;
+package qmul.gvgai.engine.ontology.effects.unary;
 
-import core.content.InteractionContent;
-import core.game.Game;
-import core.logging.Logger;
-import core.logging.Message;
-import core.vgdl.VGDLRegistry;
-import core.vgdl.VGDLSprite;
-import ontology.effects.Effect;
-import tools.Vector2d;
+import qmul.gvgai.engine.core.content.InteractionContent;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.core.logging.Logger;
+import qmul.gvgai.engine.core.logging.Message;
+import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.ontology.effects.Effect;
+import qmul.gvgai.engine.tools.Vector2d;
 
 import java.util.ArrayList;
 

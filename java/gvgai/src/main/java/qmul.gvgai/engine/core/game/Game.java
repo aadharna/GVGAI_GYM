@@ -1,31 +1,54 @@
-package core.game;
+package qmul.gvgai.engine.core.game;
 
 import com.badlogic.gdx.graphics.Color;
-import core.competition.CompetitionParameters;
-import core.content.Content;
-import core.content.GameContent;
-import core.content.ParameterContent;
-import core.content.SpriteContent;
-import core.game.GameDescription.InteractionData;
-import core.game.GameDescription.SpriteData;
-import core.game.GameDescription.TerminationData;
-import core.logging.Logger;
-import core.logging.Message;
-import core.player.Player;
-import core.termination.Termination;
-import core.vgdl.*;
-import ontology.Types;
-import ontology.avatar.MovingAvatar;
-import ontology.effects.Effect;
-import ontology.effects.TimeEffect;
-import ontology.sprites.Resource;
-import tools.*;
-import tools.pathfinder.Node;
-import tools.pathfinder.PathFinder;
+import qmul.gvgai.engine.core.competition.CompetitionParameters;
+import qmul.gvgai.engine.core.content.Content;
+import qmul.gvgai.engine.core.content.GameContent;
+import qmul.gvgai.engine.core.content.ParameterContent;
+import qmul.gvgai.engine.core.content.SpriteContent;
+import qmul.gvgai.engine.core.game.GameDescription.InteractionData;
+import qmul.gvgai.engine.core.game.GameDescription.SpriteData;
+import qmul.gvgai.engine.core.game.GameDescription.TerminationData;
+import qmul.gvgai.engine.core.logging.Logger;
+import qmul.gvgai.engine.core.logging.Message;
+import qmul.gvgai.engine.core.player.Player;
+import qmul.gvgai.engine.core.termination.Termination;
+import qmul.gvgai.engine.core.vgdl.VGDLFactory;
+import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
+import qmul.gvgai.engine.core.vgdl.VGDLViewer;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.ontology.avatar.MovingAvatar;
+import qmul.gvgai.engine.ontology.effects.Effect;
+import qmul.gvgai.engine.ontology.effects.TimeEffect;
+import qmul.gvgai.engine.ontology.sprites.Resource;
+import qmul.gvgai.engine.core.vgdl.SpriteGroup;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.tools.Direction;
+import qmul.gvgai.engine.tools.JEasyFrame;
+import qmul.gvgai.engine.tools.KeyHandler;
+import qmul.gvgai.engine.tools.KeyInput;
+import qmul.gvgai.engine.tools.KeyPulse;
+import qmul.gvgai.engine.tools.Pair;
+import qmul.gvgai.engine.tools.Vector2d;
+import qmul.gvgai.engine.tools.WindowInput;
+import qmul.gvgai.engine.tools.pathfinder.Node;
+import qmul.gvgai.engine.tools.pathfinder.PathFinder;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
+import javax.swing.JOptionPane;
+import java.awt.AWTEvent;
+import java.awt.Dimension;
+import java.awt.Event;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.ConcurrentModificationException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created with IntelliJ IDEA. User: Diego Date: 17/10/13 Time: 13:42 This is a
@@ -847,142 +870,13 @@ public abstract class Game {
 		return acum;
 	}
 
-	/**
-	 * Runs a game, without graphics.
-	 *
-	 * @param players
-	 *            Players that play this game.
-	 * @param randomSeed
-	 *            sampleRandom seed for the whole game.
-	 * @return the score of the game played.
-	 */
-	public double[] runGame(Player[] players, int randomSeed) {
-		// Prepare some structures and references for this game.
-		prepareGame(players, randomSeed, -1);
-
-		// Play until the game is ended
-		while (!isEnded) {
-			this.gameCycle(); // Execute a game cycle.
-		}
-
-		// Update the forward model for the game state sent to the controller.
-		fwdModel.update(this);
-
-		return handleResult();
-	}
-
-	/**
-	 * Plays the game, graphics enabled.
-	 *
-	 * @param players
-	 *            Players that play this game.
-	 * @param randomSeed
-	 *            sampleRandom seed for the whole game.
-	 * @param isHuman
-	 *            indicates if a human is playing the game.
-	 * @param humanID
-	 *            ID of the human player
-	 * @return the score of the game played.
-	 */
-
-	public double[] playGame(Player[] players, int randomSeed, boolean isHuman, int humanID) {
-		// Prepare some structures and references for this game.
-		prepareGame(players, randomSeed, humanID);
-
-		// Create and initialize the panel for the graphics.
-		VGDLViewer view = new VGDLViewer(this, players[humanID]);
-		JEasyFrame frame;
-		frame = new JEasyFrame(view, "Java-VGDL");
-
-		frame.addKeyListener(ki);
-		frame.addWindowListener(wi);
-		wi.windowClosed = false;
-
-		// Determine the delay for playing with a good fps.
-		double delay = CompetitionParameters.LONG_DELAY;
-		for (Player player : players)
-			if (player instanceof tracks.singlePlayer.tools.human.Agent) {
-				delay = 1000.0 / CompetitionParameters.DELAY; // in milliseconds
-				break;
-			}
-
-		boolean firstRun = true;
-
-		// Play until the game is ended
-		while (!isEnded && !wi.windowClosed) {
-			// Determine the time to adjust framerate.
-			//long then = System.currentTimeMillis();
-
-			this.gameCycle(); // Execute a game cycle.
-
-			// Get the remaining time to keep fps.
-			long now = System.currentTimeMillis();
-			//int remaining = (int) Math.max(0, delay - (now - then));
-
-			// Wait until de next cycle.
-			//waitStep(remaining);
-
-			// Draw all sprites in the panel.
-//			view.paint(this.spriteGroups);
-
-			// Update the frame title to reflect current score and tick.
-			this.setTitle(frame);
-
-			if (firstRun && isHuman) {
-				if (CompetitionParameters.dialogBoxOnStartAndEnd) {
-					JOptionPane.showMessageDialog(frame, "Click OK to start.");
-				}
-
-				firstRun = false;
-			}
-		}
-
-		if (isHuman && !wi.windowClosed && CompetitionParameters.killWindowOnEnd) {
-			if (CompetitionParameters.dialogBoxOnStartAndEnd) {
-				if (no_players == 1) {
-					String sb = "GAMEOVER: YOU LOSE.";
-					if (avatars[humanID] != null) {
-						sb = "GAMEOVER: YOU "
-								+ ((avatars[humanID].getWinState() == Types.WINNER.PLAYER_WINS) ? "WIN." : "LOSE.");
-					}
-					JOptionPane.showMessageDialog(frame, sb);
-				} else {
-					String sb = "";
-					for (int i = 0; i < no_players; i++) {
-						if (avatars[i] != null && avatars[i].getWinState() == Types.WINNER.PLAYER_WINS) {
-							sb += "Player " + i + "; ";
-						}
-					}
-					if (sb.equals(""))
-						sb = "NONE";
-					JOptionPane.showMessageDialog(frame, "GAMEOVER - WINNER: " + sb);
-				}
-			}
-			frame.dispose();
-		}
-
-		// Update the forward model for the game state sent to the controller.
-		fwdModel.update(this);
-
-		return handleResult();
-	}
-
 	public double[] playOnlineGame(Player[] players, int randomSeed, boolean isHuman, int humanID) {
 		// Prepare some structures and references for this game.
 		prepareGame(players, randomSeed, humanID);
 
 		// Create and initialize the panel for the graphics.
 		VGDLViewer view = new VGDLViewer(this, players[humanID]);
-//		view.justImage = true;
 		wi.windowClosed = false;
-
-		// Determine the delay for playing with a good fps.
-		double delay = CompetitionParameters.LONG_DELAY;
-		for (Player player : players)
-			if (player instanceof tracks.singlePlayer.tools.human.Agent) {
-				delay = 1000.0 / CompetitionParameters.DELAY; // in milliseconds
-				break;
-			}
 
 		boolean firstRun = true;
 
@@ -990,11 +884,6 @@ public abstract class Game {
 		while (!isEnded && !wi.windowClosed) {
 
 			this.gameCycle(); // Execute a game cycle.
-
-			//int remaining = 0;
-
-			// Wait until de next cycle.
-			//waitStep(remaining);
 
 			// Draw all sprites in the panel.
 			view.paint(this.spriteGroups);
@@ -1324,21 +1213,6 @@ public abstract class Game {
 	}
 
 	/**
-	 * Holds the game for the specified duration milliseconds
-	 *
-	 * @param duration
-	 *            time to wait.
-	 */
-	void waitStep(int duration) {
-
-		try {
-			Thread.sleep(duration);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * Performs one tick for the game: calling update(this) in all sprites. It
 	 * follows the opposite order of the drawing order (inverse spriteOrder[]).
 	 * Avatar is always updated first. Doesn't update disabled sprites.
@@ -1589,19 +1463,19 @@ public abstract class Game {
 	private void addEvent(VGDLSprite s1, VGDLSprite s2) {
 		if (s1.is_avatar)
 			historicEvents.add(
-					new Event(gameTick, false, s1.getType(), s2.getType(), s1.spriteID, s2.spriteID, s1.getPosition()));
+					new AWTEvent(gameTick, false, s1.getType(), s2.getType(), s1.spriteID, s2.spriteID, s1.getPosition()));
 
 		else if (s1.is_from_avatar)
 			historicEvents.add(
-					new Event(gameTick, true, s1.getType(), s2.getType(), s1.spriteID, s2.spriteID, s1.getPosition()));
+					new AWTEvent(gameTick, true, s1.getType(), s2.getType(), s1.spriteID, s2.spriteID, s1.getPosition()));
 
 		else if (s2.is_avatar)
 			historicEvents.add(
-					new Event(gameTick, false, s2.getType(), s1.getType(), s2.spriteID, s1.spriteID, s2.getPosition()));
+					new AWTEvent(gameTick, false, s2.getType(), s1.getType(), s2.spriteID, s1.spriteID, s2.getPosition()));
 
 		else if (s2.is_from_avatar)
 			historicEvents.add(
-					new Event(gameTick, true, s2.getType(), s1.getType(), s2.spriteID, s1.spriteID, s2.getPosition()));
+					new AWTEvent(gameTick, true, s2.getType(), s1.getType(), s2.spriteID, s1.spriteID, s2.getPosition()));
 	}
 
 	/**

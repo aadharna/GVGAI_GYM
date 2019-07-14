@@ -1,10 +1,10 @@
-package core.termination;
+package qmul.gvgai.engine.core.termination;
 
 import java.util.ArrayList;
 
-import core.content.TerminationContent;
-import core.game.Game;
-import core.game.GameDescription.TerminationData;
+import qmul.gvgai.engine.core.content.TerminationContent;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.core.game.GameDescription.TerminationData;
 
 /**
  * Created with IntelliJ IDEA.

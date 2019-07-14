@@ -1,8 +1,8 @@
 package tracks.levelGeneration.constraints;
 
 import tracks.levelGeneration.geneticLevelGenerator.SharedData;
-import ontology.Types;
-import ontology.Types.WINNER;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.ontology.Types.WINNER;
 
 public class WinConstraint extends AbstractConstraint {
 

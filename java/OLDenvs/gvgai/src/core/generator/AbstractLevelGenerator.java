@@ -1,10 +1,10 @@
-package core.generator;
+package qmul.gvgai.engine.core.generator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import core.game.GameDescription;
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.core.game.GameDescription;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 public abstract class AbstractLevelGenerator {
 

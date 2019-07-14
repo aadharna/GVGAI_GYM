@@ -1,7 +1,7 @@
 package tracks.singlePlayer.tools.Heuristics;
 
-import core.game.StateObservation;
-import ontology.Types;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.ontology.Types;
 
 /**
  * Created with IntelliJ IDEA.

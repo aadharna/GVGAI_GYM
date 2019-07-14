@@ -1,10 +1,10 @@
-package core.generator;
+package qmul.gvgai.engine.core.generator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import core.game.SLDescription;
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.core.game.SLDescription;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 public abstract class AbstractRuleGenerator {
     /**

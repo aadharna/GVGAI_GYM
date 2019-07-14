@@ -1,18 +1,18 @@
 package tracks;
 
-import core.competition.CompetitionParameters;
-import core.game.Game;
-import core.game.StateObservation;
-import core.game.StateObservationMulti;
-import core.player.AbstractMultiPlayer;
-import core.player.AbstractPlayer;
-import core.player.Player;
-import core.vgdl.VGDLFactory;
-import core.vgdl.VGDLParser;
-import core.vgdl.VGDLRegistry;
-import ontology.Types;
-import tools.ElapsedCpuTimer;
-import tools.StatSummary;
+import qmul.gvgai.engine.core.competition.CompetitionParameters;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.game.StateObservationMulti;
+import qmul.gvgai.engine.core.player.AbstractMultiPlayer;
+import qmul.gvgai.engine.core.player.AbstractPlayer;
+import qmul.gvgai.engine.core.player.Player;
+import qmul.gvgai.engine.core.vgdl.VGDLFactory;
+import qmul.gvgai.engine.core.vgdl.VGDLParser;
+import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.tools.StatSummary;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

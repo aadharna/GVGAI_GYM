@@ -1,11 +1,11 @@
-package tools;
+package qmul.gvgai.engine.tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import core.game.GameDescription;
-import core.game.GameDescription.SpriteData;
+import qmul.gvgai.engine.core.game.GameDescription;
+import qmul.gvgai.engine.core.game.GameDescription.SpriteData;
 
 /**
  * Helps to construct a HashMap<Character, Array<String>> easily

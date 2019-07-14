@@ -5,8 +5,8 @@ import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
 import java.util.Random;
 
-import tools.Direction;
-import tools.Vector2d;
+import qmul.gvgai.engine.tools.Direction;
+import qmul.gvgai.engine.tools.Vector2d;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,11 +1,11 @@
-package tools;
+package qmul.gvgai.engine.tools;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
 
 import javax.swing.JFrame;
 
-import core.competition.CompetitionParameters;
+import qmul.gvgai.engine.core.competition.CompetitionParameters;
 
 /**
  * Frame for the graphics.

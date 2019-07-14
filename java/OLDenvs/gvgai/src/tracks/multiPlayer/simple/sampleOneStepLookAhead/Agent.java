@@ -2,11 +2,11 @@ package tracks.multiPlayer.simple.sampleOneStepLookAhead;
 
 
 import tracks.multiPlayer.tools.heuristics.SimpleStateHeuristic;
-import core.game.StateObservationMulti;
-import core.player.AbstractMultiPlayer;
-import ontology.Types;
-import tools.ElapsedCpuTimer;
-import tools.Utils;
+import qmul.gvgai.engine.core.game.StateObservationMulti;
+import qmul.gvgai.engine.core.player.AbstractMultiPlayer;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.tools.Utils;
 
 import java.util.ArrayList;
 import java.util.Random;

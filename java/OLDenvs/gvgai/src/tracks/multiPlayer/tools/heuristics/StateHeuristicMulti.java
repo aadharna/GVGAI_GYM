@@ -1,6 +1,6 @@
 package tracks.multiPlayer.tools.heuristics;
 
-import core.game.StateObservationMulti;
+import qmul.gvgai.engine.core.game.StateObservationMulti;
 
 /**
  * Created with IntelliJ IDEA.

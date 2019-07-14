@@ -1,4 +1,4 @@
-package core.optimization;
+package qmul.gvgai.engine.core.optimization;
 
 /**
  * Contains information about the current optimization problem

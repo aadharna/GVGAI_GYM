@@ -1,19 +1,19 @@
-package ontology.effects;
+package qmul.gvgai.engine.ontology.effects;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import core.vgdl.VGDLFactory;
-import core.vgdl.VGDLSprite;
-import core.content.InteractionContent;
-import core.game.Game;
-import core.logging.Logger;
-import core.logging.Message;
-import ontology.Types;
-import tools.Direction;
-import tools.Vector2d;
+import qmul.gvgai.engine.core.vgdl.VGDLFactory;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.core.content.InteractionContent;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.core.logging.Logger;
+import qmul.gvgai.engine.core.logging.Message;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.Direction;
+import qmul.gvgai.engine.tools.Vector2d;
 
 /**
  * Created with IntelliJ IDEA.

@@ -4,7 +4,7 @@ package tracks.singleLearning.utils;
  * Created by Daniel on 05.04.2017.
  */
 
-import core.competition.CompetitionParameters;
+import qmul.gvgai.engine.core.competition.CompetitionParameters;
 
 import java.io.*;
 import java.net.ServerSocket;

@@ -1,17 +1,17 @@
 package tracks.levelGeneration;
 
 import tracks.ArcadeMachine;
-import core.vgdl.VGDLFactory;
-import core.vgdl.VGDLParser;
-import core.vgdl.VGDLRegistry;
-import core.competition.CompetitionParameters;
-import core.game.Game;
-import core.game.GameDescription;
-import core.generator.AbstractLevelGenerator;
-import core.player.AbstractPlayer;
-import tools.ElapsedCpuTimer;
-import tools.IO;
-import tools.StatSummary;
+import qmul.gvgai.engine.core.vgdl.VGDLFactory;
+import qmul.gvgai.engine.core.vgdl.VGDLParser;
+import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
+import qmul.gvgai.engine.core.competition.CompetitionParameters;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.core.game.GameDescription;
+import qmul.gvgai.engine.core.generator.AbstractLevelGenerator;
+import qmul.gvgai.engine.core.player.AbstractPlayer;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.tools.IO;
+import qmul.gvgai.engine.tools.StatSummary;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

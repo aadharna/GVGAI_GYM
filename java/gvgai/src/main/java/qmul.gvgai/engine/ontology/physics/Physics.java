@@ -1,10 +1,10 @@
-package ontology.physics;
+package qmul.gvgai.engine.ontology.physics;
 
 import java.awt.Rectangle;
 
-import core.vgdl.VGDLSprite;
-import ontology.Types;
-import tools.Direction;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.Direction;
 
 /**
  * Created with IntelliJ IDEA.

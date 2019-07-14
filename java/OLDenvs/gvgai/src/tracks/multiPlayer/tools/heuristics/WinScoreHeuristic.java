@@ -1,7 +1,7 @@
 package tracks.multiPlayer.tools.heuristics;
 
-import core.game.StateObservationMulti;
-import ontology.Types;
+import qmul.gvgai.engine.core.game.StateObservationMulti;
+import qmul.gvgai.engine.ontology.Types;
 
 /**
  * Created with IntelliJ IDEA.

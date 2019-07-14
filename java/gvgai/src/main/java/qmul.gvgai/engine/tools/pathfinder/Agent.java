@@ -1,12 +1,12 @@
-package tools.pathfinder;
+package qmul.gvgai.engine.tools.pathfinder;
 
-import core.game.Game;
-import core.game.StateObservation;
-import core.player.AbstractPlayer;
-import ontology.Types;
-import tools.Direction;
-import tools.ElapsedCpuTimer;
-import tools.Utils;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.player.AbstractPlayer;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.Direction;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.tools.Utils;
 
 import java.util.ArrayList;
 

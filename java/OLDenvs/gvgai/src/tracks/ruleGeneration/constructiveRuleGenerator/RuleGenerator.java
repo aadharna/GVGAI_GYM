@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import core.game.GameDescription.SpriteData;
-import core.game.SLDescription;
-import core.generator.AbstractRuleGenerator;
-import tools.ElapsedCpuTimer;
-import tools.LevelAnalyzer;
+import qmul.gvgai.engine.core.game.GameDescription.SpriteData;
+import qmul.gvgai.engine.core.game.SLDescription;
+import qmul.gvgai.engine.core.generator.AbstractRuleGenerator;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.tools.LevelAnalyzer;
 
 /**
  * This is a constructive rule generator it depends 

@@ -1,13 +1,13 @@
-package core.player;
+package qmul.gvgai.engine.core.player;
 
 import com.badlogic.gdx.graphics.Pixmap;
-import core.competition.CompetitionParameters;
-import core.game.SerializableStateObservation;
-import core.game.StateObservation;
-import core.game.StateObservationMulti;
-import core.game.serialization.FlatBufferStateObservation;
-import ontology.Types;
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.core.competition.CompetitionParameters;
+import qmul.gvgai.engine.core.game.SerializableStateObservation;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.game.StateObservationMulti;
+import qmul.gvgai.engine.core.game.serialization.FlatBufferStateObservation;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 import tracks.singleLearning.utils.Comm;
 import tracks.singleLearning.utils.Comm.Message;
 import tracks.singleLearning.utils.PipeComm;

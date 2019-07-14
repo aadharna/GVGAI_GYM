@@ -4,7 +4,7 @@ package tracks.singleLearning.utils;
  * Created by Daniel on 05.04.2017.
  */
 
-import ontology.Types;
+import qmul.gvgai.engine.ontology.Types;
 
 import java.io.*;
 

@@ -1,10 +1,10 @@
-package ontology.sprites.producer;
+package qmul.gvgai.engine.ontology.sprites.producer;
 
 import java.awt.Dimension;
 
-import core.vgdl.VGDLSprite;
-import core.content.SpriteContent;
-import tools.Vector2d;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.core.content.SpriteContent;
+import qmul.gvgai.engine.tools.Vector2d;
 
 /**
  * Created with IntelliJ IDEA.

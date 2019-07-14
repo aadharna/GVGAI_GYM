@@ -2,8 +2,8 @@ package tracks.singlePlayer.tools.ucbOptimizerAgent;
 
 import java.util.Random;
 
-import core.game.StateObservation;
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 /**
  * Created with IntelliJ IDEA.

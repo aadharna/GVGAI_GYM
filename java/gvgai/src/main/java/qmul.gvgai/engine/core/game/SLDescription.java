@@ -1,14 +1,14 @@
-package core.game;
+package qmul.gvgai.engine.core.game;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import core.vgdl.VGDLParser;
-import core.vgdl.VGDLRegistry;
-import core.game.GameDescription.SpriteData;
-import core.logging.Logger;
-import core.logging.Message;
+import qmul.gvgai.engine.core.vgdl.VGDLParser;
+import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
+import qmul.gvgai.engine.core.game.GameDescription.SpriteData;
+import qmul.gvgai.engine.core.logging.Logger;
+import qmul.gvgai.engine.core.logging.Message;
 
 public class SLDescription {
 	/**

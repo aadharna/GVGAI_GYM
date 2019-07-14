@@ -1,16 +1,13 @@
-package core.vgdl;
+package qmul.gvgai.engine.core.vgdl;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.utils.GdxNativesLoader;
-import core.game.Game;
-import core.player.LearningPlayer;
-import core.player.Player;
+import qmul.gvgai.engine.core.player.LearningPlayer;
+import qmul.gvgai.engine.core.player.Player;
+import qmul.gvgai.engine.core.game.Game;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.Raster;
 import java.util.ArrayList;
 
 

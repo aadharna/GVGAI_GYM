@@ -1,14 +1,14 @@
-package ontology.sprites.npc;
+package qmul.gvgai.engine.ontology.sprites.npc;
 
 import java.awt.*;
 import java.util.Random;
 
-import core.vgdl.VGDLSprite;
-import core.content.SpriteContent;
-import core.game.Game;
-import ontology.sprites.missile.Missile;
-import tools.Direction;
-import tools.Vector2d;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.core.content.SpriteContent;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.ontology.sprites.missile.Missile;
+import qmul.gvgai.engine.tools.Direction;
+import qmul.gvgai.engine.tools.Vector2d;
 
 /**
  * Created with IntelliJ IDEA.

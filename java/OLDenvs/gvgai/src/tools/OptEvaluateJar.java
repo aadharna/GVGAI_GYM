@@ -1,4 +1,4 @@
-package tools;
+package qmul.gvgai.engine.tools;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -6,10 +6,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import core.competition.CompetitionParameters;
-import core.optimization.OptimizationObjective;
-import core.optimization.ucbOptimization.UCBEvoEquation;
-import core.optimization.ucbOptimization.UCBOptimization;
+import qmul.gvgai.engine.core.competition.CompetitionParameters;
+import qmul.gvgai.engine.core.optimization.OptimizationObjective;
+import qmul.gvgai.engine.core.optimization.ucbOptimization.UCBEvoEquation;
+import qmul.gvgai.engine.core.optimization.ucbOptimization.UCBOptimization;
 
 public class OptEvaluateJar {
     private static void writeOuputs(String outputPath, int currentRuns, double[] values)

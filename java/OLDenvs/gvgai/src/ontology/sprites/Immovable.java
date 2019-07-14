@@ -1,9 +1,9 @@
-package ontology.sprites;
+package qmul.gvgai.engine.ontology.sprites;
 
 import com.badlogic.gdx.graphics.Color;
-import core.vgdl.VGDLSprite;
-import core.content.SpriteContent;
-import tools.Vector2d;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.core.content.SpriteContent;
+import qmul.gvgai.engine.tools.Vector2d;
 
 import java.awt.*;
 

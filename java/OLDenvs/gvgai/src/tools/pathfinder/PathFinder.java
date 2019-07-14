@@ -1,9 +1,9 @@
-package tools.pathfinder;
+package qmul.gvgai.engine.tools.pathfinder;
 
-import core.game.Observation;
-import core.game.StateObservation;
-import ontology.Types;
-import tools.Vector2d;
+import qmul.gvgai.engine.core.game.Observation;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.Vector2d;
 
 import java.util.ArrayList;
 

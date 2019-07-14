@@ -1,8 +1,8 @@
-package core.termination;
+package qmul.gvgai.engine.core.termination;
 
-import core.vgdl.VGDLRegistry;
-import core.content.TerminationContent;
-import core.game.Game;
+import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
+import qmul.gvgai.engine.core.content.TerminationContent;
+import qmul.gvgai.engine.core.game.Game;
 
 import java.util.ArrayList;
 

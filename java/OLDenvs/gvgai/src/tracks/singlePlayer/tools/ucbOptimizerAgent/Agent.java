@@ -3,13 +3,13 @@ package tracks.singlePlayer.tools.ucbOptimizerAgent;
 import java.util.ArrayList;
 import java.util.Random;
 
-import core.game.Observation;
-import core.game.StateObservation;
-import core.optimization.ucbOptimization.UCBEquation;
-import core.optimization.ucbOptimization.UCBOptimization;
-import core.player.AbstractPlayer;
-import ontology.Types;
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.core.game.Observation;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.optimization.ucbOptimization.UCBEquation;
+import qmul.gvgai.engine.core.optimization.ucbOptimization.UCBOptimization;
+import qmul.gvgai.engine.core.player.AbstractPlayer;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,19 +1,28 @@
 package qmul.gvgai.server;
 
-import tools.ElapsedWallTimer;
-import tracks.LearningMachine;
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.Parameters;
+import qmul.gvgai.engine.tools.ElapsedWallTimer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static core.competition.CompetitionParameters.IMG_PATH;
-
-/**
- * Created by dperez on 01/06/2017.
- */
+@Command(name="gvgai-server")
 public class Application {
+
+    @Option(names={"-p", "--port"}, description="The port number this server will listen on")
+    int port;
+
+    @Parameters
+    String gameDirectory;
+
+    public static void main(String[] args) {
+
+    }
 
     public static void main(String[] args) throws Exception {
         /** Init params */

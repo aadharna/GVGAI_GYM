@@ -1,13 +1,13 @@
-package ontology.sprites.producer;
+package qmul.gvgai.engine.ontology.sprites.producer;
 
 import com.badlogic.gdx.graphics.Color;
-import core.vgdl.VGDLRegistry;
-import core.vgdl.VGDLSprite;
-import core.content.SpriteContent;
-import core.game.Game;
-import ontology.Types;
-import tools.Direction;
-import tools.Vector2d;
+import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.core.content.SpriteContent;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.Direction;
+import qmul.gvgai.engine.tools.Vector2d;
 
 import java.awt.*;
 import java.util.ArrayList;

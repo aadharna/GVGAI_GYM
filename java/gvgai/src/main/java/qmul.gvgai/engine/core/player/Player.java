@@ -1,11 +1,11 @@
-package core.player;
+package qmul.gvgai.engine.core.player;
 
 import com.badlogic.gdx.graphics.Pixmap;
-import core.game.Game;
-import core.game.StateObservation;
-import core.game.StateObservationMulti;
-import ontology.Types;
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.game.StateObservationMulti;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 import java.awt.*;
 import java.io.BufferedWriter;

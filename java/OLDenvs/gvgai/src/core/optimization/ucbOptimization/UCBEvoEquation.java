@@ -1,4 +1,4 @@
-package core.optimization.ucbOptimization;
+package qmul.gvgai.engine.core.optimization.ucbOptimization;
 
 import tracks.singlePlayer.tools.ucbOptimizerAgent.Helper;
 

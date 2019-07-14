@@ -1,6 +1,6 @@
-package core.game;
+package qmul.gvgai.engine.core.game;
 
-import tools.Vector2d;
+import qmul.gvgai.engine.tools.Vector2d;
 
 /**
  * Created by diego on 24/03/14.

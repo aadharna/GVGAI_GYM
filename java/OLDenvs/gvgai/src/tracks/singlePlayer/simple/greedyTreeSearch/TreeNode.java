@@ -1,7 +1,7 @@
 package tracks.singlePlayer.simple.greedyTreeSearch;
 
-import core.game.StateObservation;
-import ontology.Types.WINNER;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.ontology.Types.WINNER;
 
 public class TreeNode {
 	public double HUGE_NUMBER = 1000000.0;

@@ -1,11 +1,11 @@
 package tracks.multiPlayer.deprecated.sampleMCTS;
 
-import core.game.Observation;
-import core.game.StateObservation;
-import core.game.StateObservationMulti;
-import core.player.AbstractMultiPlayer;
-import ontology.Types;
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.core.game.Observation;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.game.StateObservationMulti;
+import qmul.gvgai.engine.core.player.AbstractMultiPlayer;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 import java.util.ArrayList;
 import java.util.Random;

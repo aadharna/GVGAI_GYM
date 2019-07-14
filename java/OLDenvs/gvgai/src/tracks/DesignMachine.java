@@ -1,14 +1,14 @@
 package tracks;
 
-import core.vgdl.VGDLFactory;
-import core.vgdl.VGDLParser;
-import core.vgdl.VGDLRegistry;
-import core.competition.CompetitionParameters;
-import core.content.ParameterContent;
-import core.game.*;
-import core.player.AbstractMultiPlayer;
-import core.player.AbstractPlayer;
-import core.player.Player;
+import qmul.gvgai.engine.core.vgdl.VGDLFactory;
+import qmul.gvgai.engine.core.vgdl.VGDLParser;
+import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
+import qmul.gvgai.engine.core.competition.CompetitionParameters;
+import qmul.gvgai.engine.core.content.ParameterContent;
+import qmul.gvgai.engine.core.game.*;
+import qmul.gvgai.engine.core.player.AbstractMultiPlayer;
+import qmul.gvgai.engine.core.player.AbstractPlayer;
+import qmul.gvgai.engine.core.player.Player;
 
 import java.text.DecimalFormat;
 import java.util.*;

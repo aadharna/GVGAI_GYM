@@ -1,17 +1,17 @@
 package qmul.gvgai.server;
 
-import core.competition.CompetitionParameters;
-import core.game.Game;
-import core.game.StateObservation;
-import core.game.StateObservationMulti;
-import core.player.LearningPlayer;
-import core.player.Player;
-import core.vgdl.VGDLFactory;
-import core.vgdl.VGDLParser;
-import core.vgdl.VGDLRegistry;
-import ontology.Types;
-import tools.ElapsedCpuTimer;
-import tools.StatSummary;
+import qmul.gvgai.engine.core.competition.CompetitionParameters;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.game.StateObservationMulti;
+import qmul.gvgai.engine.core.player.LearningPlayer;
+import qmul.gvgai.engine.core.player.Player;
+import qmul.gvgai.engine.core.vgdl.VGDLFactory;
+import qmul.gvgai.engine.core.vgdl.VGDLParser;
+import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.tools.StatSummary;
 
 import java.io.IOException;
 import java.util.Random;
@@ -121,18 +121,10 @@ public class LearningMachine {
      *                    null if no recording is desired. If not null, this array must contain as much String objects as
      *                    level_files.length*level_times.
      */
-    public static void runGymGames(String game_file, String[] level_files, int level_times,
-                                LearningPlayer player, String[] actionFiles, boolean visual) throws IOException {
+    public static void runGymGames(LearningPlayer player) throws IOException {
         VGDLFactory.GetInstance().init(); //This always first thing to do.
         VGDLRegistry.GetInstance().init();
-        CompetitionParameters.IS_LEARNING = true;
-        boolean recordActions = false;
-        if (actionFiles != null) {
-            recordActions = true;
-            assert actionFiles.length >= level_files.length * level_times :
-                "runGames (actionFiles.length<level_files.length*level_times): " +
-                    "you must supply an action file for each game instance to be played, or null.";
-        }
+
 
         Game toPlay = new VGDLParser().parseGame(game_file);
         int levelOutcome = 0;
@@ -230,14 +222,9 @@ public class LearningMachine {
         }
         players[0] = learningPlayer;
 
-        //Play the game
-        //Get array of scores back.
-        if(isVisual) {
-            score = toPlay.playGame(players, randomSeed, false, 0);
-        } else {
-            score = toPlay.playOnlineGame(players, randomSeed, false, 0);
-//            score = toPlay.runGame(players, randomSeed);
-        }
+
+        score = toPlay.playOnlineGame(players, randomSeed, false, 0);
+//
         toPlay.printLearningResult(levelIdx, isValidation);
 
         //Finally, when the game is over, we need to tear the player down.

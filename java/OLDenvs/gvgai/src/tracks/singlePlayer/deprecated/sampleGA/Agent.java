@@ -9,11 +9,11 @@ import java.util.concurrent.TimeoutException;
 import com.badlogic.gdx.graphics.Pixmap;
 import tracks.singlePlayer.tools.Heuristics.StateHeuristic;
 import tracks.singlePlayer.tools.Heuristics.WinScoreHeuristic;
-import core.game.StateObservation;
-import core.player.AbstractPlayer;
-import ontology.Types;
-import tools.ElapsedCpuTimer;
-import tools.Utils;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.player.AbstractPlayer;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.tools.Utils;
 
 /**
  * Created with IntelliJ IDEA.

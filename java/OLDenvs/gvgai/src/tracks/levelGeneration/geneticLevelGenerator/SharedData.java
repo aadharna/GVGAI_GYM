@@ -2,8 +2,8 @@ package tracks.levelGeneration.geneticLevelGenerator;
 
 import java.util.Random;
 
-import core.game.GameDescription;
-import tools.GameAnalyzer;
+import qmul.gvgai.engine.core.game.GameDescription;
+import qmul.gvgai.engine.tools.GameAnalyzer;
 
 public class SharedData {
 

@@ -1,9 +1,9 @@
 package tracks.multiPlayer.simple.doNothing;
 
-import core.game.StateObservationMulti;
-import core.player.AbstractMultiPlayer;
-import ontology.Types.ACTIONS;
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.core.game.StateObservationMulti;
+import qmul.gvgai.engine.core.player.AbstractMultiPlayer;
+import qmul.gvgai.engine.ontology.Types.ACTIONS;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 public class Agent extends AbstractMultiPlayer {
 

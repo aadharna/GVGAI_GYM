@@ -1,4 +1,4 @@
-package core.vgdl;
+package qmul.gvgai.engine.core.vgdl;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,10 +1,10 @@
-package tools;
+package qmul.gvgai.engine.tools;
 
 /**
  * Created by diego on 26/02/14.
  */
 
-import core.competition.CompetitionParameters;
+import qmul.gvgai.engine.core.competition.CompetitionParameters;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;

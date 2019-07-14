@@ -1,4 +1,4 @@
-package tools.pathfinder;
+package qmul.gvgai.engine.tools.pathfinder;
 
 import java.util.ArrayList;
 import java.util.HashMap;

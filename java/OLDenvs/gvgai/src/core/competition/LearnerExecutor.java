@@ -1,6 +1,6 @@
-package core.competition;
+package qmul.gvgai.engine.core.competition;
 
-import tools.ElapsedWallTimer;
+import qmul.gvgai.engine.tools.ElapsedWallTimer;
 import tracks.LearningMachine;
 
 import java.io.IOException;

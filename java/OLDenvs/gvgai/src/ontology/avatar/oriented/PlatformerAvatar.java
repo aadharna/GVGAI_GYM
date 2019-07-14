@@ -1,15 +1,15 @@
-package ontology.avatar.oriented;
+package qmul.gvgai.engine.ontology.avatar.oriented;
 
 import java.awt.Dimension;
 
-import core.vgdl.VGDLSprite;
-import core.content.SpriteContent;
-import core.game.Game;
-import ontology.Types;
-import ontology.avatar.MovingAvatar;
-import tools.Direction;
-import tools.Utils;
-import tools.Vector2d;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import qmul.gvgai.engine.core.content.SpriteContent;
+import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.ontology.avatar.MovingAvatar;
+import qmul.gvgai.engine.tools.Direction;
+import qmul.gvgai.engine.tools.Utils;
+import qmul.gvgai.engine.tools.Vector2d;
 
 /**
  * Created with IntelliJ IDEA.

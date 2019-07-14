@@ -2,9 +2,9 @@ package tracks.singlePlayer.advanced.sampleMCTS;
 
 import java.util.Random;
 
-import core.game.StateObservation;
-import ontology.Types;
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 /**
  * Created with IntelliJ IDEA.

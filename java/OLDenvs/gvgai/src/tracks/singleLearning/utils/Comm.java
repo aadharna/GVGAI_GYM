@@ -1,8 +1,8 @@
 package tracks.singleLearning.utils;
 
-import core.game.StateObservation;
-import core.game.serialization.FlatBufferStateObservation;
-import ontology.Types;
+import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.game.serialization.FlatBufferStateObservation;
+import qmul.gvgai.engine.ontology.Types;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -175,7 +175,7 @@ public abstract class Comm {
         public byte[] data;
 
         public Message(int phase, byte[] data) {
-            this.phase = (byte)phase;;
+            this.phase = (byte)phase;
             this.data = data;
         }
 

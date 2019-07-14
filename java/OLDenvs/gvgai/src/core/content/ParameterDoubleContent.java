@@ -1,4 +1,4 @@
-package core.content;
+package qmul.gvgai.engine.core.content;
 
 import java.util.Random;
 

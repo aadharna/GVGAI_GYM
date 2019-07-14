@@ -1,4 +1,4 @@
-package tools;
+package qmul.gvgai.engine.tools;
 
 /**
  * This class represents a vector, or a position, in the map.

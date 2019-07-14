@@ -1,9 +1,9 @@
 package tracks.multiPlayer.tools.replayer;
 
-import core.game.StateObservationMulti;
-import core.player.AbstractMultiPlayer;
-import ontology.Types;
-import tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.core.game.StateObservationMulti;
+import qmul.gvgai.engine.core.player.AbstractMultiPlayer;
+import qmul.gvgai.engine.ontology.Types;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 import java.util.ArrayList;
 
