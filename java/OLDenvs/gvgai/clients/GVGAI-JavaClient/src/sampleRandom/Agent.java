@@ -1,8 +1,6 @@
 package sampleRandom;
 
-/**
- * Created by Daniel on 21.05.2017.
- */
+
 
 import serialization.SerializableStateObservation;
 import serialization.Types;

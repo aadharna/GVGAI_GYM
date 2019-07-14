@@ -10,13 +10,7 @@ import qmul.gvgai.engine.tools.Vector2d;
 
 import java.awt.*;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 21/10/13
- * Time: 17:35
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class OngoingShootAvatar extends ShootAvatar
 {
     public OngoingShootAvatar(){}

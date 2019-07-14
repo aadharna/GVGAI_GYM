@@ -1,8 +1,6 @@
 package qmul.gvgai.engine.tools;
 
-/**
- * Created by dperez on 17/04/16.
- */
+
 public class Direction
 {
     private double xDir;

@@ -7,13 +7,7 @@ import qmul.gvgai.engine.core.game.Game;
 import qmul.gvgai.engine.ontology.effects.Effect;
 import qmul.gvgai.engine.ontology.effects.TimeEffect;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 04/11/13
- * Time: 15:56
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class AddTimer extends TimeEffect
 {
     //Name of the effect this TimeEffect inserts in the queue of time effects.

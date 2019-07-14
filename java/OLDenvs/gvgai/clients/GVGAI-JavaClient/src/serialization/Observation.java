@@ -1,8 +1,6 @@
 package serialization;
 
-/**
- * Created by Daniel on 16/03/17.
- */
+
 
 public class Observation {
 

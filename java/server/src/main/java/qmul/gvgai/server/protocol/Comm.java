@@ -1,4 +1,4 @@
-package qmul.gvgai.server;
+package qmul.gvgai.server.protocol;
 
 import qmul.gvgai.engine.core.game.StateObservation;
 import qmul.gvgai.engine.core.game.serialization.FlatBufferStateObservation;
@@ -8,9 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-/**
- * Created by dperez on 01/06/2017.
- */
+
 public abstract class Comm {
 
     /**
@@ -167,21 +165,6 @@ public abstract class Comm {
         }
         outputStream.flush();
         messageId++;
-    }
-
-
-    public static class Message {
-        public byte phase;
-        public byte[] data;
-
-        public Message(int phase, byte[] data) {
-            this.phase = (byte)phase;
-            this.data = data;
-        }
-
-        public Message(int phase) {
-            this.phase = (byte)phase;
-        }
     }
 
 }

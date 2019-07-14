@@ -12,13 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 04/11/13
- * Time: 15:57
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class SubtractHealthPoints extends Effect
 {
     public int value; //healthpoints removed from sprite1

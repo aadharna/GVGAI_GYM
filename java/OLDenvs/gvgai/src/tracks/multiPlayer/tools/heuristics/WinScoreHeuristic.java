@@ -3,13 +3,7 @@ package tracks.multiPlayer.tools.heuristics;
 import qmul.gvgai.engine.core.game.StateObservationMulti;
 import qmul.gvgai.engine.ontology.Types;
 
-/**
- * Created with IntelliJ IDEA.
- * User: ssamot
- * Date: 11/02/14
- * Time: 15:44
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class WinScoreHeuristic extends StateHeuristicMulti {
 
     private static final double HUGE_NEGATIVE = -1000.0;

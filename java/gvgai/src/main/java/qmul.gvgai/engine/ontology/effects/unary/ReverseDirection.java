@@ -7,13 +7,7 @@ import qmul.gvgai.engine.core.logging.Logger;
 import qmul.gvgai.engine.core.logging.Message;
 import qmul.gvgai.engine.ontology.effects.Effect;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 03/12/13
- * Time: 16:17
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class ReverseDirection extends Effect
 {
     public ReverseDirection(InteractionContent cnt)

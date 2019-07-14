@@ -5,9 +5,7 @@ import qmul.gvgai.engine.tools.Vector2d;
 
 import java.util.*;
 
-/**
- * Created by Raluca on 07-Apr-16.
- */
+
 public class StateObservationMulti extends StateObservation {
 
     /**

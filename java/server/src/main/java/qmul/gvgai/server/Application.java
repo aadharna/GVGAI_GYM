@@ -17,7 +17,7 @@ public class Application {
     @Option(names={"-p", "--port"}, description="The port number this server will listen on")
     int port;
 
-    @Parameters
+    @Parameters(description = "The directory the game files are stored")
     String gameDirectory;
 
     public static void main(String[] args) {

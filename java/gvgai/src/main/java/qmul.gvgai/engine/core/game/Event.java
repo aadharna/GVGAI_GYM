@@ -2,9 +2,7 @@ package qmul.gvgai.engine.core.game;
 
 import qmul.gvgai.engine.tools.Vector2d;
 
-/**
- * Created by diego on 24/03/14.
- */
+
 public class Event implements Comparable<Event>
 {
     /**

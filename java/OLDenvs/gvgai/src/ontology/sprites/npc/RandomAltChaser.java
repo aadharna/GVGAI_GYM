@@ -10,9 +10,7 @@ import qmul.gvgai.engine.tools.Direction;
 import qmul.gvgai.engine.tools.Utils;
 import qmul.gvgai.engine.tools.Vector2d;
 
-/**
- * Created by Diego on 24/02/14.
- */
+
 public class RandomAltChaser extends AlternateChaser{
 
     public double epsilon;

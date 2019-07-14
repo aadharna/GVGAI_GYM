@@ -25,10 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Created with IntelliJ IDEA. User: Diego Date: 06/11/13 Time: 11:24 This is a
- * Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class ArcadeMachine {
     public static final boolean VERBOSE = false;
 

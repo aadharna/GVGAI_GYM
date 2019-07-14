@@ -1,10 +1,6 @@
-package qmul.gvgai.server;
+package qmul.gvgai.server.protocol;
 
-/**
- * Created by Daniel on 05.04.2017.
- */
 
-import qmul.gvgai.engine.core.competition.CompetitionParameters;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -13,7 +9,7 @@ import java.net.Socket;
 
 public class SocketComm extends Comm {
 
-    public int port = CompetitionParameters.SOCKET_PORT; //default
+    private int port;
     private Socket socket;
     private boolean end;
     private static int THRESHOLD = 60000;
@@ -21,10 +17,10 @@ public class SocketComm extends Comm {
     /**
      * Public constructor of the player.
      */
-    public SocketComm(String portStr) {
+    public SocketComm(int port) {
         super();
         end = false;
-        port = Integer.parseInt(portStr);
+        this.port = port;
         initBuffers();
     }
 
@@ -41,7 +37,7 @@ public class SocketComm extends Comm {
 
                 socket = serverSocket.accept();
                 socket.setTcpNoDelay(true);
-                socket.setSendBufferSize(65536*2);
+                socket.setSendBufferSize(65536 * 2);
             }
 
 

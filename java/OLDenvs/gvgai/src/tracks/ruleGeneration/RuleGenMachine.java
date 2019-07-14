@@ -29,9 +29,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by dperez on 19/03/2017.
- */
+
 public class RuleGenMachine
 {
 	/**

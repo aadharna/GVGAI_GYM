@@ -22,7 +22,7 @@ public class SpriteGroup
      * unique identifier for the given sprite (in the whole game).
      */
     //private ConcurrentHashMap<Integer, VGDLSprite> sprites;
-    private ArrayList<core.vgdl.VGDLSprite> sprites;
+    private ArrayList<VGDLSprite> sprites;
 
     /**
      * Creates a new SpriteGroup, specifying the type of sprites this will hold.

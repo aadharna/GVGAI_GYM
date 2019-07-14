@@ -6,13 +6,7 @@ import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
 import qmul.gvgai.engine.core.content.TerminationContent;
 import qmul.gvgai.engine.core.game.Game;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 22/10/13
- * Time: 18:54
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class MultiSpriteCounter extends Termination
 {
     //TODO if needed: Theoretically, we could have an array of types here... to be done.

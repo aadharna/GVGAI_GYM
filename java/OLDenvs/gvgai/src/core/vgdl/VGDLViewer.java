@@ -14,13 +14,7 @@ import java.awt.image.Raster;
 import java.util.ArrayList;
 
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 24/10/13
- * Time: 10:54
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class VGDLViewer extends JComponent {
     /**
      * Reference to the game to be painted.

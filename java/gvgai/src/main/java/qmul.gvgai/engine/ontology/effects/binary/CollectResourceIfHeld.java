@@ -9,13 +9,7 @@ import qmul.gvgai.engine.core.logging.Message;
 import qmul.gvgai.engine.ontology.effects.Effect;
 import qmul.gvgai.engine.ontology.sprites.Resource;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 04/11/13
- * Time: 13:25
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class CollectResourceIfHeld extends Effect
 {
     public boolean killResource; //Only if the resource is collected.

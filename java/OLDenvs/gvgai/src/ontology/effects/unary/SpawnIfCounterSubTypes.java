@@ -10,9 +10,7 @@ import qmul.gvgai.engine.ontology.effects.Effect;
 
 import java.util.ArrayList;
 
-/**
- * Created by Diego on 18/02/14.
- */
+
 public class SpawnIfCounterSubTypes extends Effect {
 
     public String stype; //sprite to spawn

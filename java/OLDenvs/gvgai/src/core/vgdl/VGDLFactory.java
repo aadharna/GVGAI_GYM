@@ -29,13 +29,7 @@ import qmul.gvgai.engine.ontology.sprites.npc.*;
 import qmul.gvgai.engine.ontology.sprites.producer.*;
 import qmul.gvgai.engine.tools.Vector2d;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 22/10/13
- * Time: 15:33
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class VGDLFactory
 {
 

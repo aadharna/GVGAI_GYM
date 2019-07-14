@@ -15,13 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 23/10/13
- * Time: 15:23
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class WallBounce extends Effect
 {
     public WallBounce(InteractionContent cnt)

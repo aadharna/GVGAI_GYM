@@ -12,9 +12,7 @@ import java.lang.reflect.Constructor;
  */
 
 
-/**
- * Created by Daniel on 04/03/2017.
- */
+
 public class ClientComm {
 
     /**

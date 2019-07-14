@@ -3,9 +3,7 @@ package utils;
 import serialization.SerializableStateObservation;
 import serialization.Types;
 
-/**
- * Created by dperez on 24/05/2017.
- */
+
 public abstract class AbstractPlayer {
     protected Types.LEARNING_SSO_TYPE lastSsoType = Types.LEARNING_SSO_TYPE.DATA;
 

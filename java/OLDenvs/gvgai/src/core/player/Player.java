@@ -14,9 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- * Created by Raluca on 07-Apr-16.
- */
+
 public abstract class Player {
 
     /**

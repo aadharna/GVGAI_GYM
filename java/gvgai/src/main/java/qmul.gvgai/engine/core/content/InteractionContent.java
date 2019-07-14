@@ -3,13 +3,7 @@ package qmul.gvgai.engine.core.content;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 18/10/13
- * Time: 07:01
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class InteractionContent extends Content
 {
     /**

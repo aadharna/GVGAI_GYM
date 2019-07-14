@@ -14,13 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 13/11/13
- * Time: 15:37
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class SerializableStateObservation {
     // State Observation variables
     public byte[] imageArray;

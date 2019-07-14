@@ -8,13 +8,7 @@ import qmul.gvgai.engine.tools.Vector2d;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created with IntelliJ IDEA.
- * User: ssamot
- * Date: 11/02/14
- * Time: 15:44
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class SimpleStateHeuristic extends StateHeuristicMulti {
 
     double initialNpcCounter = 0;

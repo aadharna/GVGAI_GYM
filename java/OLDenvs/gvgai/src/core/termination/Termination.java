@@ -6,13 +6,7 @@ import qmul.gvgai.engine.core.vgdl.VGDLFactory;
 import qmul.gvgai.engine.core.content.TerminationContent;
 import qmul.gvgai.engine.core.game.Game;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 22/10/13
- * Time: 18:47
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public abstract class Termination {
 
     public String win;

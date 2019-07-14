@@ -10,9 +10,7 @@ import qmul.gvgai.engine.tools.Utils;
 
 import java.util.ArrayList;
 
-/**
- * Created by diego on 06/02/14.
- */
+
 public class Agent extends AbstractPlayer
 {
     protected PathFinder pathf;

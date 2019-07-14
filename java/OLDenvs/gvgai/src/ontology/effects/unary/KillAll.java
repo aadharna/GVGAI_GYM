@@ -9,13 +9,7 @@ import qmul.gvgai.engine.ontology.effects.Effect;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 23/10/13
- * Time: 15:21
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class KillAll extends Effect {
 
     //TODO: Theoretically, we could have an array of types here... to be done.

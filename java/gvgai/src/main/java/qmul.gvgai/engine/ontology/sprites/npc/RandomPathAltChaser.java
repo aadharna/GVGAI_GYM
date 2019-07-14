@@ -10,9 +10,7 @@ import qmul.gvgai.engine.tools.Vector2d;
 
 import java.awt.*;
 
-/**
- * Created by Diego on 24/02/14.
- */
+
 public class RandomPathAltChaser extends PathAltChaser{
 
     public double epsilon;

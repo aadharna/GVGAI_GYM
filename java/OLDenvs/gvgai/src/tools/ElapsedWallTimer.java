@@ -1,8 +1,6 @@
 package qmul.gvgai.engine.tools;
 
-/**
- * Created by diego on 26/02/14.
- */
+
 
 import qmul.gvgai.engine.core.competition.CompetitionParameters;
 

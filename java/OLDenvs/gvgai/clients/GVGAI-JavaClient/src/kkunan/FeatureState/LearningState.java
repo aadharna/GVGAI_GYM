@@ -1,8 +1,6 @@
 package kkunan.FeatureState;
 
-/**
- * Created by SteepMike on 14/07/2017.
- */
+
 public interface LearningState {
 
 

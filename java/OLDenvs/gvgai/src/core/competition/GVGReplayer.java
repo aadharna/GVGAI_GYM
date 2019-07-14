@@ -2,9 +2,7 @@ package qmul.gvgai.engine.core.competition;
 
 import tracks.ArcadeMachine;
 
-/**
- * Created by dperez on 24/05/16.
- */
+
 public class GVGReplayer {
 
     public static String game;

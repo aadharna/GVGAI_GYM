@@ -2,9 +2,7 @@ package tracks.ruleGeneration;
 
 import java.util.Random;
 
-/**
- * Created by dperez on 19/03/2017.
- */
+
 public class TestRuleGeneration {
     public static void main(String[] args) throws Exception {
 	//Available Controllers

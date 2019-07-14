@@ -8,13 +8,7 @@ import qmul.gvgai.engine.core.game.Game;
 import qmul.gvgai.engine.ontology.Types;
 import qmul.gvgai.engine.tools.Vector2d;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 22/10/13
- * Time: 18:07
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class HorizontalAvatar extends MovingAvatar
 {
     public HorizontalAvatar(){}

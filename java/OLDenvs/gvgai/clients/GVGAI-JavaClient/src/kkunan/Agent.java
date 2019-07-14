@@ -1,8 +1,6 @@
 package kkunan;
 
-/**
- * Created by Mike on 10.07.2017.
- */
+
 
 import kkunan.FeatureState.AvatarInfoState;
 import kkunan.FeatureState.LearningState;

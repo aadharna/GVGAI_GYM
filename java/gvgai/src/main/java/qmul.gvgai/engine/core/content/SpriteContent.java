@@ -5,13 +5,7 @@ import java.util.HashMap;
 
 import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 18/10/13
- * Time: 07:01
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class SpriteContent extends Content
 {
 

@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
- * Created by dperez on 01/06/2017.
- */
+
 public abstract class IO extends Thread{
 
     /**

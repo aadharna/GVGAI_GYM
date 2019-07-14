@@ -7,13 +7,7 @@ import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
 import java.util.ArrayList;
 
-/**
- * Created with IntelliJ IDEA.
- * User: ssamot
- * Date: 14/11/13
- * Time: 21:45
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class Agent extends AbstractMultiPlayer {
 
     /**

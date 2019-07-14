@@ -9,13 +9,7 @@ import qmul.gvgai.engine.ontology.effects.Effect;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 03/12/13
- * Time: 16:17
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class SetSpeedForAll extends Effect
 {
     public String stype; // sets the speed to value for all sprites of type stype

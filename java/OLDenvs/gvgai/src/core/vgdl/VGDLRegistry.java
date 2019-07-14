@@ -4,13 +4,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 27/10/13
- * Time: 12:22
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class VGDLRegistry
 {
     /**

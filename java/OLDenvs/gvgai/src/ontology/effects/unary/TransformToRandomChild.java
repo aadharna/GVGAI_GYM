@@ -10,13 +10,7 @@ import qmul.gvgai.engine.tools.Utils;
 
 import java.util.ArrayList;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 23/10/13
- * Time: 15:21
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class TransformToRandomChild extends TransformTo {
 
     public TransformToRandomChild(InteractionContent cnt) throws Exception

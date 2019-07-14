@@ -1,24 +1,22 @@
 package qmul.gvgai.engine.ontology.avatar;
 
-import java.awt.Dimension;
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.Color;
-import qmul.gvgai.engine.core.vgdl.VGDLSprite;
-import qmul.gvgai.engine.core.competition.CompetitionParameters;
 import qmul.gvgai.engine.core.content.SpriteContent;
 import qmul.gvgai.engine.core.game.Game;
 import qmul.gvgai.engine.core.player.Player;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
 import qmul.gvgai.engine.ontology.Types;
-import qmul.gvgai.engine.tools.*;
+import qmul.gvgai.engine.tools.Direction;
+import qmul.gvgai.engine.tools.ElapsedCpuTimer;
+import qmul.gvgai.engine.tools.KeyHandler;
+import qmul.gvgai.engine.tools.KeyInput;
+import qmul.gvgai.engine.tools.Utils;
+import qmul.gvgai.engine.tools.Vector2d;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 22/10/13
- * Time: 18:04
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+import java.awt.Dimension;
+import java.util.ArrayList;
+
+
 public class MovingAvatar extends VGDLSprite {
 
     public ArrayList<Types.ACTIONS> actions;
@@ -68,8 +66,7 @@ public class MovingAvatar extends VGDLSprite {
     public void postProcess() {
 
         //Define actions here first.
-        if(actions.size()==0)
-        {
+        if (actions.size() == 0) {
             actions.add(Types.ACTIONS.ACTION_LEFT);
             actions.add(Types.ACTIONS.ACTION_RIGHT);
             actions.add(Types.ACTIONS.ACTION_DOWN);
@@ -79,8 +76,7 @@ public class MovingAvatar extends VGDLSprite {
         super.postProcess();
 
         //A separate array with the same actions, plus NIL.
-        for(Types.ACTIONS act : actions)
-        {
+        for (Types.ACTIONS act : actions) {
             actionsNIL.add(act);
         }
         actionsNIL.add(Types.ACTIONS.ACTION_NIL);
@@ -88,6 +84,7 @@ public class MovingAvatar extends VGDLSprite {
 
     /**
      * This update call is for the game tick() loop.
+     *
      * @param game current state of the game.
      */
     public void updateAvatar(Game game, boolean requestInput, boolean[] actionMask) {
@@ -112,21 +109,21 @@ public class MovingAvatar extends VGDLSprite {
         applyMovement(game, action);
     }
 
-    public void applyMovement(Game game, Direction action)
-    {
-    	//this.physics.passiveMovement(this);
+    public void applyMovement(Game game, Direction action) {
+        //this.physics.passiveMovement(this);
         if (physicstype != Types.GRID)
-    		super.updatePassive();
+            super.updatePassive();
         lastMovementType = this.physics.activeMovement(this, action, speed);
     }
 
     /**
      * Requests the controller's input, setting the game.ki.action mask with the processed data.
+     *
      * @param game
      */
     protected void requestPlayerInput(Game game) {
         ElapsedCpuTimer ect = new ElapsedCpuTimer();
-        ect.setMaxTimeMillis(CompetitionParameters.ACTION_TIME);
+        //ect.setMaxTimeMillis(CompetitionParameters.ACTION_TIME);
 
         Types.ACTIONS action;
         if (game.no_players > 1) {
@@ -135,19 +132,19 @@ public class MovingAvatar extends VGDLSprite {
             action = this.player.act(game.getObservation(), ect.copy());
         }
 
-        if (CompetitionParameters.TIME_CONSTRAINED && ect.exceededMaxTime()) {
-            long exceeded = -ect.remainingTimeMillis();
-
-            if (ect.elapsedMillis() > CompetitionParameters.ACTION_TIME_DISQ) {
-                //The agent took too long to replay. The game is over and the agent is disqualified
-                System.out.println("Too long: " + playerID + "(exceeding " + (exceeded) + "ms): controller disqualified.");
-                game.disqualify(playerID);
-            } else {
-                System.out.println("Overspent: " + playerID + "(exceeding " + (exceeded) + "ms): applying ACTION_NIL.");
-            }
-
-            action = Types.ACTIONS.ACTION_NIL;
-        }
+//        if (CompetitionParameters.TIME_CONSTRAINED && ect.exceededMaxTime()) {
+//            long exceeded = -ect.remainingTimeMillis();
+//
+//            if (ect.elapsedMillis() > CompetitionParameters.ACTION_TIME_DISQ) {
+//                //The agent took too long to replay. The game is over and the agent is disqualified
+//                System.out.println("Too long: " + playerID + "(exceeding " + (exceeded) + "ms): controller disqualified.");
+//                game.disqualify(playerID);
+//            } else {
+//                System.out.println("Overspent: " + playerID + "(exceeding " + (exceeded) + "ms): applying ACTION_NIL.");
+//            }
+//
+//            action = Types.ACTIONS.ACTION_NIL;
+//        }
 
         if (action.equals(Types.ACTIONS.ACTION_ESCAPE)) {
             game.abort();
@@ -162,19 +159,22 @@ public class MovingAvatar extends VGDLSprite {
     }
 
 
-    public void updateUse(Game game)
-    {
+    public void updateUse(Game game) {
         //Nothing to do by default.
     }
 
     /**
      * Gets the key handler of this avatar.
+     *
      * @return - KeyHandler object.
      */
-    public KeyHandler getKeyHandler() { return ki; }
+    public KeyHandler getKeyHandler() {
+        return ki;
+    }
 
     /**
      * Sets the key handler of this avatar.
+     *
      * @param k - new KeyHandler object.
      */
     public void setKeyHandler(KeyHandler k) {
@@ -185,6 +185,7 @@ public class MovingAvatar extends VGDLSprite {
 
     /**
      * Checks whether this player is disqualified.
+     *
      * @return true if disqualified, false otherwise.
      */
     public boolean is_disqualified() {
@@ -194,41 +195,59 @@ public class MovingAvatar extends VGDLSprite {
     /**
      * Sets the disqualified flag.
      */
-    public void disqualify(boolean is_disqualified) { this.is_disqualified = is_disqualified; }
+    public void disqualify(boolean is_disqualified) {
+        this.is_disqualified = is_disqualified;
+    }
 
     /**
      * Gets the score of this player.
+     *
      * @return score.
      */
-    public double getScore() { return score; }
+    public double getScore() {
+        return score;
+    }
 
     /**
      * Sets the score of this player to a new value.
+     *
      * @param s - new score.
      */
-    public void setScore(double s) { score = s; }
+    public void setScore(double s) {
+        score = s;
+    }
 
     /**
      * Adds a value to the current score of this player.
+     *
      * @param s - value to add to the score.
      */
-    public void addScore (double s) { score += s; }
+    public void addScore(double s) {
+        score += s;
+    }
 
     /**
      * Gets the win state of this player.
+     *
      * @return - win state, value of Types.WINNER
      */
-    public Types.WINNER getWinState() { return winState; }
+    public Types.WINNER getWinState() {
+        return winState;
+    }
 
     /**
      * Sets the win state of this player.
+     *
      * @param w - new win state.
      */
-    public void setWinState(Types.WINNER w) { winState = w; }
+    public void setWinState(Types.WINNER w) {
+        winState = w;
+    }
 
 
     /**
      * Get this player's ID.
+     *
      * @return player ID.
      */
     public int getPlayerID() {
@@ -237,6 +256,7 @@ public class MovingAvatar extends VGDLSprite {
 
     /**
      * Set this player's ID to a new value.
+     *
      * @param id - new player ID.
      */
     public void setPlayerID(int id) {
@@ -250,7 +270,9 @@ public class MovingAvatar extends VGDLSprite {
         //copy player
         try {
             newSprite.player = player;
-        } catch (Exception e) {e.printStackTrace();}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         return newSprite;
@@ -266,10 +288,10 @@ public class MovingAvatar extends VGDLSprite {
 
         //copy key handler
         targetSprite.setKeyHandler(this.getKeyHandler());
-        
+
         // need to copy orientation here already because MovingAvatar.postProcess() requires the orientation
-        targetSprite.orientation = this.orientation.copy();	
-        
+        targetSprite.orientation = this.orientation.copy();
+
         targetSprite.postProcess();
         super.copyTo(targetSprite);
     }

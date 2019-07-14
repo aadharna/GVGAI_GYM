@@ -10,9 +10,7 @@ import qmul.gvgai.engine.core.logging.Logger;
 import qmul.gvgai.engine.core.logging.Message;
 import qmul.gvgai.engine.ontology.effects.Effect;
 
-/**
- * Created by Diego on 18/02/14.
- */
+
 public class SpawnIfHasMore  extends Effect {
 
     public int spend;

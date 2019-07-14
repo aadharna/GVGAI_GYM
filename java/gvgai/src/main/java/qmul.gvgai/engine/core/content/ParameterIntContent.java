@@ -2,9 +2,7 @@ package qmul.gvgai.engine.core.content;
 
 import java.util.Random;
 
-/**
- * Created by dperez on 21/02/2017.
- */
+
 public class ParameterIntContent extends ParameterContent {
 
 

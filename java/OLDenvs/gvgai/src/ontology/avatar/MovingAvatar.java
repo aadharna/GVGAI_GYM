@@ -12,13 +12,7 @@ import qmul.gvgai.engine.core.player.Player;
 import qmul.gvgai.engine.ontology.Types;
 import qmul.gvgai.engine.tools.*;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 22/10/13
- * Time: 18:04
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class MovingAvatar extends VGDLSprite {
 
     public ArrayList<Types.ACTIONS> actions;

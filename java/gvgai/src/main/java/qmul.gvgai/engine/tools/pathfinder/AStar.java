@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
-/**
- * Created by dperez on 13/01/16.
- */
+
 public class AStar
 {
     public static PriorityQueue<Node> closedList, openList;

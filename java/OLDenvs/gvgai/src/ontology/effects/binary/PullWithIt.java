@@ -15,13 +15,7 @@ import qmul.gvgai.engine.ontology.physics.GridPhysics;
 import qmul.gvgai.engine.tools.Direction;
 import qmul.gvgai.engine.tools.Vector2d;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 04/11/13
- * Time: 15:56
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class PullWithIt extends Effect
 {
     private int lastGameTime;

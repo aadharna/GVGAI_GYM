@@ -1,10 +1,8 @@
 package qmul.gvgai.server;
 
-import qmul.gvgai.engine.core.competition.CompetitionParameters;
 import qmul.gvgai.engine.core.game.Game;
 import qmul.gvgai.engine.core.game.StateObservation;
 import qmul.gvgai.engine.core.game.StateObservationMulti;
-import qmul.gvgai.engine.core.player.LearningPlayer;
 import qmul.gvgai.engine.core.player.Player;
 import qmul.gvgai.engine.core.vgdl.VGDLFactory;
 import qmul.gvgai.engine.core.vgdl.VGDLParser;
@@ -16,11 +14,8 @@ import qmul.gvgai.engine.tools.StatSummary;
 import java.io.IOException;
 import java.util.Random;
 
-/**
- * Created by Daniel on 07.03.2017.
- */
+
 public class LearningMachine {
-    public static final boolean VERBOSE = false;
 
     /**
      * Reads and launches a game for an agent to be played. Graphics can be on or off.
@@ -36,7 +31,6 @@ public class LearningMachine {
                                       String[] cmd, String actionFile, int randomSeed) throws IOException {
         VGDLFactory.GetInstance().init(); //This always first thing to do.
         VGDLRegistry.GetInstance().init();
-        CompetitionParameters.IS_LEARNING = true;
 
         System.out.println(" ** Playing game " + game_file + ", level " + level_file + " **");
 
@@ -62,7 +56,6 @@ public class LearningMachine {
                                         String cmd[], String[] actionFiles, boolean visuals) throws IOException {
         VGDLFactory.GetInstance().init(); //This always first thing to do.
         VGDLRegistry.GetInstance().init();
-        CompetitionParameters.IS_LEARNING = true;
         //Create the player.
         LearningPlayer player = LearningMachine.createPlayer(cmd);
 

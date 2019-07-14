@@ -2,13 +2,7 @@ package qmul.gvgai.engine.tools;
 
 import java.util.Map;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 20/10/13
- * Time: 17:07
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class Pair<T,U> implements Map.Entry<T, U>, Comparable{
 
     public T first;

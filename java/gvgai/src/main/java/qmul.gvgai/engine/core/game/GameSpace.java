@@ -5,9 +5,7 @@ import qmul.gvgai.engine.core.content.ParameterContent;
 
 import java.util.HashMap;
 
-/**
- * Created by dperez on 21/01/2017.
- */
+
 public class GameSpace extends BasicGame {
 
     /**

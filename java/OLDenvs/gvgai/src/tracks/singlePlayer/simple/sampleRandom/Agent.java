@@ -10,13 +10,7 @@ import qmul.gvgai.engine.core.player.AbstractPlayer;
 import qmul.gvgai.engine.ontology.Types;
 import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 
-/**
- * Created with IntelliJ IDEA.
- * User: ssamot
- * Date: 14/11/13
- * Time: 21:45
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class Agent extends AbstractPlayer {
 
     /**

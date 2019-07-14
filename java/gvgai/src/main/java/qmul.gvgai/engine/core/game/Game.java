@@ -1,7 +1,6 @@
 package qmul.gvgai.engine.core.game;
 
 import com.badlogic.gdx.graphics.Color;
-import qmul.gvgai.engine.core.competition.CompetitionParameters;
 import qmul.gvgai.engine.core.content.Content;
 import qmul.gvgai.engine.core.content.GameContent;
 import qmul.gvgai.engine.core.content.ParameterContent;
@@ -24,20 +23,14 @@ import qmul.gvgai.engine.ontology.sprites.Resource;
 import qmul.gvgai.engine.core.vgdl.SpriteGroup;
 import qmul.gvgai.engine.core.vgdl.VGDLSprite;
 import qmul.gvgai.engine.tools.Direction;
-import qmul.gvgai.engine.tools.JEasyFrame;
 import qmul.gvgai.engine.tools.KeyHandler;
-import qmul.gvgai.engine.tools.KeyInput;
-import qmul.gvgai.engine.tools.KeyPulse;
-import qmul.gvgai.engine.tools.Pair;
+import qmul.gvgai.engine.tools.Pair;O
 import qmul.gvgai.engine.tools.Vector2d;
 import qmul.gvgai.engine.tools.WindowInput;
 import qmul.gvgai.engine.tools.pathfinder.Node;
 import qmul.gvgai.engine.tools.pathfinder.PathFinder;
 
-import javax.swing.JOptionPane;
-import java.awt.AWTEvent;
 import java.awt.Dimension;
-import java.awt.Event;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,10 +43,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * Created with IntelliJ IDEA. User: Diego Date: 17/10/13 Time: 13:42 This is a
- * Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public abstract class Game {
 
 	/**
@@ -801,12 +791,12 @@ public abstract class Game {
 		factory.parseParameters(content, this);
 
 		// taking care of the key handler parameter:
-
-		if (key_handler != null && key_handler.equalsIgnoreCase("Pulse"))
-			CompetitionParameters.KEY_HANDLER = CompetitionParameters.KEY_PULSE;
-
-		ki = CompetitionParameters.KEY_HANDLER == CompetitionParameters.KEY_INPUT ? new KeyInput()
-				: new KeyPulse(no_players);
+//
+//		if (key_handler != null && key_handler.equalsIgnoreCase("Pulse"))
+//			CompetitionParameters.KEY_HANDLER = CompetitionParameters.KEY_PULSE;
+//
+//		ki = CompetitionParameters.KEY_HANDLER == CompetitionParameters.KEY_INPUT ? new KeyInput()
+//				: new KeyPulse(no_players);
 	}
 
 	/**
@@ -901,42 +891,6 @@ public abstract class Game {
 	}
 
 	/**
-	 * Sets the title of the game screen, depending on the game ending state.
-	 *
-	 * @param frame
-	 *            The frame whose title needs to be set.
-	 */
-	private void setTitle(JEasyFrame frame) {
-		String sb = "";
-		sb += "Java-VGDL: ";
-		for (int i = 0; i < no_players; i++) {
-			if (avatars[i] != null) {
-				sb += "Player" + i + "-Score:" + avatars[i].getScore() + ". ";
-			}
-		}
-		sb += "Tick:" + this.getGameTick();
-
-		// sb += " --Counter:";
-		// for (int i = 0; i < no_counters; i++) {
-		// sb += counter[i] + ", ";
-		// }
-
-		if (!isEnded)
-			frame.setTitle(sb);
-		else {
-			for (int i = 0; i < no_players; i++) {
-				if (avatars[i] != null && avatars[i].getWinState() == Types.WINNER.PLAYER_WINS)
-					sb += " [Player " + i + " WINS!]";
-				else
-					sb += " [Player " + i + " LOSES!]";
-			}
-		}
-
-		frame.setTitle(sb);
-
-	}
-
-	/**
 	 * Initializes some variables for the game to be played, such as the game
 	 * tick, sampleRandom number generator, forward model and assigns the player
 	 * to the avatar.
@@ -980,11 +934,6 @@ public abstract class Game {
 		this.clearAll(fwdModel); // clear all additional data, including dead
 		// sprites.
 		this.terminationHandling(); // check for game termination.
-		this.checkTimeOut(); // Check for end of game by time steps.
-
-		// if(gameTick == 0 || isEnded)
-		// fwdModel.printObservationGrid(); //uncomment this to show the
-		// observation grid.
 	}
 
 	/**
@@ -1022,21 +971,6 @@ public abstract class Game {
 		}
 
 		return scores;
-	}
-
-	/**
-	 * Checks if the game must finish because of number of cycles played. This
-	 * is a value stored in CompetitionParameters.MAX_TIMESTEPS. If the game is
-	 * due to end, the winner is determined and the flag isEnded is set to true.
-	 */
-	protected void checkTimeOut() {
-		if (gameTick >= CompetitionParameters.MAX_TIMESTEPS) {
-			isEnded = true;
-			for (int i = 0; i < no_players; i++) {
-				if (avatars[i].getWinState() != Types.WINNER.PLAYER_WINS)
-					avatars[i].setWinState(Types.WINNER.PLAYER_LOSES);
-			}
-		}
 	}
 
 	/**
@@ -1463,19 +1397,19 @@ public abstract class Game {
 	private void addEvent(VGDLSprite s1, VGDLSprite s2) {
 		if (s1.is_avatar)
 			historicEvents.add(
-					new AWTEvent(gameTick, false, s1.getType(), s2.getType(), s1.spriteID, s2.spriteID, s1.getPosition()));
+					new Event(gameTick, false, s1.getType(), s2.getType(), s1.spriteID, s2.spriteID, s1.getPosition()));
 
 		else if (s1.is_from_avatar)
 			historicEvents.add(
-					new AWTEvent(gameTick, true, s1.getType(), s2.getType(), s1.spriteID, s2.spriteID, s1.getPosition()));
+					new Event(gameTick, true, s1.getType(), s2.getType(), s1.spriteID, s2.spriteID, s1.getPosition()));
 
 		else if (s2.is_avatar)
 			historicEvents.add(
-					new AWTEvent(gameTick, false, s2.getType(), s1.getType(), s2.spriteID, s1.spriteID, s2.getPosition()));
+					new Event(gameTick, false, s2.getType(), s1.getType(), s2.spriteID, s1.spriteID, s2.getPosition()));
 
 		else if (s2.is_from_avatar)
 			historicEvents.add(
-					new AWTEvent(gameTick, true, s2.getType(), s1.getType(), s2.spriteID, s1.spriteID, s2.getPosition()));
+					new Event(gameTick, true, s2.getType(), s1.getType(), s2.spriteID, s1.spriteID, s2.getPosition()));
 	}
 
 	/**
@@ -1509,13 +1443,6 @@ public abstract class Game {
 					}
 				}
 			}
-		}
-		if(Logger.getInstance().getMessageCount() > CompetitionParameters.MAX_ALLOWED_WARNINGS){
-			System.out.println("Finishing the game due to number of warnings: " + Logger.getInstance().getMessageCount() +
-			 ". Messages will be flushed.");
-			Logger.getInstance().printMessages();
-		    isEnded = true;
-		    Logger.getInstance().flushMessages();
 		}
 	}
 

@@ -23,9 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-/**
- * Created by dperez on 19/03/2017.
- */
+
 public class LevelGenMachine
 {
 

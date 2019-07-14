@@ -14,10 +14,7 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.Map.Entry;
 
-/**
- * Created with IntelliJ IDEA. User: Diego Date: 06/11/13 Time: 11:24 This is a
- * Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class DesignMachine {
 
     public int[] numValuesGenome;

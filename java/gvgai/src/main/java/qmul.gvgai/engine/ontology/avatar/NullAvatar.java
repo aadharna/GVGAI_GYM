@@ -9,13 +9,7 @@ import qmul.gvgai.engine.tools.Vector2d;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 22/10/13
- * Time: 18:08
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class NullAvatar extends HorizontalAvatar
 {
     public NullAvatar(){}

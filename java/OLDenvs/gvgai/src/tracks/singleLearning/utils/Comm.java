@@ -8,9 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-/**
- * Created by dperez on 01/06/2017.
- */
+
 public abstract class Comm {
 
     /**

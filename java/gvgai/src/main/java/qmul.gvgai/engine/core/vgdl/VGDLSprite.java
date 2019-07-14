@@ -5,8 +5,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.GdxNativesLoader;
-import qmul.gvgai.engine.core.competition.CompetitionParameters;
 import qmul.gvgai.engine.core.content.SpriteContent;
+import qmul.gvgai.engine.core.game.Game;
 import qmul.gvgai.engine.ontology.Types;
 import qmul.gvgai.engine.ontology.physics.ContinuousPhysics;
 import qmul.gvgai.engine.ontology.physics.GridPhysics;
@@ -25,13 +25,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 17/10/13
- * Time: 10:59
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public abstract class VGDLSprite {
 
     static {
@@ -783,9 +777,9 @@ public abstract class VGDLSprite {
         int w = texture.getWidth();
         int h = texture.getHeight();
 
-        Pixmap rotated = rotation != 0 ? rotatePixmap(texture, rotation): texture;
+        Pixmap rotated = rotation != 0 ? rotatePixmap(texture, rotation) : texture;
 
-        pixmap.drawPixmap(rotated, 0,0, w, h, r.x, r.y, r.width, r.height);
+        pixmap.drawPixmap(rotated, 0, 0, w, h, r.x, r.y, r.width, r.height);
 
         // We only draw the arrow if the directional sprites are null
         if (draw_arrow) {
@@ -995,17 +989,16 @@ public abstract class VGDLSprite {
                 if (str.contains(".png"))
                     str = str.substring(0, str.length() - 3);
 
-                String imagePathBase = CompetitionParameters.IMG_PATH + str + "_";
 
                 //Get all the images for each orientation
                 if (isOrientedImg) for (Direction dir : directions) {
                     String strDir = Types.v2DirStr(dir.getVector());
-                    String imagePath = imagePathBase + strDir + "_";
+                    String imagePath = strDir + "_";
                     ArrayList<Pixmap> theImages = getAnimatedImages(imagePath);
                     textures.put(strDir, theImages);
                 }
                 else {
-                    ArrayList<Pixmap> theImages = getAnimatedImages(imagePathBase);
+                    ArrayList<Pixmap> theImages = getAnimatedImages(str);
                     textures.put("NONE", theImages);
                 }
 
@@ -1017,14 +1010,13 @@ public abstract class VGDLSprite {
                     if (str.contains(".png"))
                         str = str.substring(0, str.length() - 4);
 
-                    String base_image_file = CompetitionParameters.IMG_PATH + str;
                     Pixmap onlyImage;
 
                     for (Direction dir : directions) {
                         String strDir = Types.v2DirStr(dir.getVector());
                         ArrayList<Pixmap> theImages = new ArrayList<Pixmap>();
-                        String image_file = base_image_file + "_" + strDir + ".png";
-                        onlyImage = getTexture(image_file);
+                        String imageFile = strDir + ".png";
+                        onlyImage = getTexture(imageFile);
                         theImages.add(onlyImage);
 
                         textures.put(strDir, theImages);
@@ -1035,10 +1027,9 @@ public abstract class VGDLSprite {
 
                     if (!(str.contains(".png")))
                         str = str + ".png";
-                    String base_image_file = CompetitionParameters.IMG_PATH + str;
 
                     //Only one texture. images stays empty.
-                    texture = getTexture(base_image_file);
+                    texture = getTexture(str);
                 }
 
             }
@@ -1046,16 +1037,8 @@ public abstract class VGDLSprite {
         }
     }
 
-    private Pixmap getTexture(String image_file) {
-        try {
-            if ((new File(image_file).exists())) {
-                return new Pixmap(new FileHandle(image_file));
-            }
-
-            return new Pixmap(new FileHandle(new File(getClass().getResource("/" + image_file).getPath())));
-        } catch (Exception e) {
-            return null;
-        }
+    private Pixmap getTexture(String imageFile) {
+        return new Pixmap(new FileHandle(new File(getClass().getResource("/" + imageFile).getPath())));
     }
 
 
@@ -1068,7 +1051,7 @@ public abstract class VGDLSprite {
             do {
                 String currentFile = imagePath + i + ".png";
                 if ((new File(currentFile).exists())) {
-                    theImages.add(new Pixmap(new FileHandle(currentFile)));
+                    theImages.add(getTexture(currentFile));
                 } else {
                     noMoreFiles = true;
                 }

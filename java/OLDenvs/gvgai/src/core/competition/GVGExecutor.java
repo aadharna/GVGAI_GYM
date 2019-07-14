@@ -8,9 +8,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Created by dperez on 24/05/16.
- */
+
 public class GVGExecutor {
 
     public static String[] gameFiles;

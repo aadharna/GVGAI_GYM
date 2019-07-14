@@ -1,29 +1,32 @@
 package qmul.gvgai.engine.core.game;
 
-import java.awt.Dimension;
-import java.util.*;
-
 import qmul.gvgai.engine.core.vgdl.SpriteGroup;
 import qmul.gvgai.engine.core.vgdl.VGDLSprite;
 import qmul.gvgai.engine.ontology.Types;
 import qmul.gvgai.engine.ontology.avatar.MovingAvatar;
 import qmul.gvgai.engine.ontology.effects.TimeEffect;
-import qmul.gvgai.engine.core.game.Game;
+import qmul.gvgai.engine.tools.KeyHandler;
+import qmul.gvgai.engine.tools.Pair;
+import qmul.gvgai.engine.tools.Vector2d;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 13/11/13
- * Time: 15:37
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
+
+
 public class ForwardModel extends Game
 {
 
     /**
      * ID of the player that gets this FM
      */
-    int playerID;
+    private int playerID;
 
 
     /**
@@ -38,55 +41,55 @@ public class ForwardModel extends Game
      * Boolean map of sprite types that are NPCs.
      * npcList[spriteType]==true : spriteType is NPC.
      */
-    private boolean playerList[];
+    private boolean[] playerList;
 
     /**
      * Boolean map of sprite types that are NPCs.
      * npcList[spriteType]==true : spriteType is NPC.
      */
-    private boolean npcList[];
+    private boolean[] npcList;
 
     /**
      * Boolean map of sprite types that are immovable sprites.
      * immList[spriteType]==true : spriteType is immovable sprite.
      */
-    private boolean immList[];
+    private boolean[] immList;
 
     /**
      * Boolean map of sprite types that can move.
      * movList[spriteType]==true : spriteType can move.
      */
-    private boolean movList[];
+    private boolean[] movList;
 
     /**
      * Boolean map of sprite types that are resources.
      * resList[spriteType]==true : spriteType is resource.
      */
-    private boolean resList[];
+    private boolean[] resList;
 
     /**
      * Boolean map of sprite types that are portals or doors.
      * portalList[spriteType]==true : spriteType is portal or door.
      */
-    private boolean portalList[];
+    private boolean[] portalList;
 
     /**
      * Boolean map of sprite types that created by the avatar.
      * fromAvatar[spriteType]==true : spriteType is created by the avatar.
      */
-    private boolean fromAvatar[];
+    private boolean[] fromAvatar;
 
     /**
      * Boolean map of sprite types that are unknown.
      * unknownList[spriteType]==false : spriteType is unknown.
      */
-    private boolean unknownList[];
+    private boolean[] unknownList;
 
     /**
      * Boolean map of sprite types that are not hidden.
      * visibleList[playerID][spriteType]==true : sprite.hidden[playerID] = false;
      */
-    private boolean visibleList[][];
+    private boolean[][] visibleList;
 
     /**
      * List of (persistent) observations for all sprites, indexed by sprite ID.
@@ -630,7 +633,6 @@ public class ForwardModel extends Game
         eventHandling();
         clearAll(this);
         terminationHandling();
-        checkTimeOut();
         updateAllObservations();
         gameTick++;
     }

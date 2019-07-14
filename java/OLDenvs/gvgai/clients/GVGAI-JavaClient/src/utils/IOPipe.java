@@ -2,9 +2,7 @@ package utils;
 
 import java.io.*;
 
-/**
- * Created by dperez on 23/05/2017.
- */
+
 public class IOPipe extends IO {
 
     /**

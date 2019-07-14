@@ -94,16 +94,19 @@ import qmul.gvgai.engine.ontology.effects.unary.StepBack;
 import qmul.gvgai.engine.ontology.effects.unary.SubtractHealthPoints;
 import qmul.gvgai.engine.ontology.effects.unary.TransformTo;
 import qmul.gvgai.engine.ontology.effects.unary.TransformToRandomChild;
-import qmul.gvgai.engine.ontology.effects.unary.TurnAround;
 import qmul.gvgai.engine.ontology.effects.unary.UndoAll;
+import qmul.gvgai.engine.ontology.effects.unary.TurnAround;
 import qmul.gvgai.engine.ontology.effects.unary.UpdateSpawnType;
 import qmul.gvgai.engine.ontology.effects.unary.WaterPhysics;
 import qmul.gvgai.engine.ontology.effects.unary.WrapAround;
 import qmul.gvgai.engine.ontology.sprites.Conveyor;
 import qmul.gvgai.engine.ontology.sprites.Door;
+import qmul.gvgai.engine.ontology.sprites.Flicker;
+import qmul.gvgai.engine.ontology.sprites.Immovable;
 import qmul.gvgai.engine.ontology.sprites.OrientedFlicker;
 import qmul.gvgai.engine.ontology.sprites.Passive;
 import qmul.gvgai.engine.ontology.sprites.Resource;
+import qmul.gvgai.engine.ontology.sprites.ResourcePack;
 import qmul.gvgai.engine.ontology.sprites.Spreader;
 import qmul.gvgai.engine.ontology.sprites.missile.ErraticMissile;
 import qmul.gvgai.engine.ontology.sprites.missile.Missile;
@@ -134,13 +137,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 22/10/13
- * Time: 15:33
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class VGDLFactory
 {
 

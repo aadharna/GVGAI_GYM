@@ -10,13 +10,7 @@ import qmul.gvgai.engine.ontology.avatar.MovingAvatar;
 import qmul.gvgai.engine.ontology.effects.TimeEffect;
 import qmul.gvgai.engine.tools.*;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 13/11/13
- * Time: 15:37
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class ForwardModel extends Game
 {
 

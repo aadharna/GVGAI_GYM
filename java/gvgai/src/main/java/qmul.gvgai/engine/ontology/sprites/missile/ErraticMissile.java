@@ -6,13 +6,7 @@ import qmul.gvgai.engine.core.vgdl.VGDLSprite;
 import qmul.gvgai.engine.core.content.SpriteContent;
 import qmul.gvgai.engine.tools.Vector2d;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 21/10/13
- * Time: 18:19
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class ErraticMissile extends Missile
 {
     public ErraticMissile(){}

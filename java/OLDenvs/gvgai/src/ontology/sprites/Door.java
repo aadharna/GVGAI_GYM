@@ -6,9 +6,7 @@ import qmul.gvgai.engine.core.vgdl.VGDLSprite;
 import qmul.gvgai.engine.core.content.SpriteContent;
 import qmul.gvgai.engine.tools.Vector2d;
 
-/**
- * Created by diego on 17/02/14.
- */
+
 public class Door extends Immovable
 {
     public Door() {}

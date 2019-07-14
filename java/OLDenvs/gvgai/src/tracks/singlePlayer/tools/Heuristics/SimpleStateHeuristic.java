@@ -8,13 +8,7 @@ import qmul.gvgai.engine.core.game.StateObservation;
 import qmul.gvgai.engine.ontology.Types;
 import qmul.gvgai.engine.tools.Vector2d;
 
-/**
- * Created with IntelliJ IDEA.
- * User: ssamot
- * Date: 11/02/14
- * Time: 15:44
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class SimpleStateHeuristic extends StateHeuristic {
 
     double initialNpcCounter = 0;

@@ -8,9 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by dperez on 01/06/2017.
- */
+
 public class TestLearningClient
 {
     public static void main(String[] args)

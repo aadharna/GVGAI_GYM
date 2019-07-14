@@ -9,13 +9,7 @@ import qmul.gvgai.engine.core.content.InteractionContent;
 import qmul.gvgai.engine.core.game.Game;
 import qmul.gvgai.engine.ontology.effects.Effect;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 23/10/13
- * Time: 15:23
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class UndoAll extends Effect
 {
     /**

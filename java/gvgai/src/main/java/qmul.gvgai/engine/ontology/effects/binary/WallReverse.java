@@ -14,13 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 04/11/13
- * Time: 15:56
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class WallReverse extends Effect
 {
     private double friction;

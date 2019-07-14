@@ -15,13 +15,7 @@ import qmul.gvgai.engine.ontology.Types;
 import qmul.gvgai.engine.tools.Direction;
 import qmul.gvgai.engine.tools.Vector2d;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 23/10/13
- * Time: 15:20
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public abstract class Effect{
 
     //Indicates if this effect kills any sprite

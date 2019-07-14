@@ -1,6 +1,4 @@
-package utils; /**
- * Created by Daniel on 04.03.2017.
- */
+package utils;
 
 /**
  *  -----  DO NOT MODIFY THIS CLASS -----

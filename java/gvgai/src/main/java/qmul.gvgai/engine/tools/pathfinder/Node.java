@@ -7,9 +7,7 @@ import qmul.gvgai.engine.tools.Vector2d;
 import java.util.ArrayList;
 
 
-/**
- * Created by dperez on 13/01/16.
- */
+
 public class Node implements Comparable<Node> {
 
     public double totalCost;

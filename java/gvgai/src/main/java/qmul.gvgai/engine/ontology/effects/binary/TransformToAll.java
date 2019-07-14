@@ -11,13 +11,7 @@ import qmul.gvgai.engine.ontology.effects.unary.TransformTo;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 23/10/13
- * Time: 15:21
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class TransformToAll extends TransformTo {
 
     //This effect transforms all sprites of type stype to stype2.

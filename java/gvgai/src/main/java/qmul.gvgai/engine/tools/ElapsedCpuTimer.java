@@ -1,10 +1,5 @@
 package qmul.gvgai.engine.tools;
 
-/**
- * Created by diego on 26/02/14.
- */
-
-import qmul.gvgai.engine.core.competition.CompetitionParameters;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
@@ -21,8 +16,7 @@ public class ElapsedCpuTimer {
     }
 
 
-    public ElapsedCpuTimer copy()
-    {
+    public ElapsedCpuTimer copy() {
         ElapsedCpuTimer newCpuTimer = new ElapsedCpuTimer();
         newCpuTimer.maxTime = this.maxTime;
         newCpuTimer.oldTime = this.oldTime;
@@ -44,21 +38,21 @@ public class ElapsedCpuTimer {
     }
 
     public double elapsedSeconds() {
-        return elapsedMillis()/1000.0;
+        return elapsedMillis() / 1000.0;
     }
 
     public double elapsedMinutes() {
-        return elapsedMillis()/1000.0/60.0;
+        return elapsedMillis() / 1000.0 / 60.0;
     }
 
 
     public double elapsedHours() {
-        return elapsedMinutes()/60.0;
+        return elapsedMinutes() / 60.0;
     }
 
 
     @Override
-	public String toString() {
+    public String toString() {
         // now resets the timer...
         String ret = elapsed() / 1000000.0 + " ms elapsed";
         //reset();
@@ -70,9 +64,6 @@ public class ElapsedCpuTimer {
     }
 
     private long getCpuTime() {
-
-        if(CompetitionParameters.OS_WIN)
-            return System.nanoTime();
 
         if (bean.isCurrentThreadCpuTimeSupported()) {
             return bean.getCurrentThreadCpuTime();
@@ -87,8 +78,7 @@ public class ElapsedCpuTimer {
 
     }
 
-    public long remainingTimeMillis()
-    {
+    public long remainingTimeMillis() {
         long diff = maxTime - elapsed();
         return (long) (diff / 1000000.0);
     }

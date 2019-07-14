@@ -11,9 +11,7 @@ import java.util.Map;
 
 import static core.competition.CompetitionParameters.IMG_PATH;
 
-/**
- * Created by dperez on 01/06/2017.
- */
+
 public class JavaServer {
 
     public static void main(String[] args) throws Exception {

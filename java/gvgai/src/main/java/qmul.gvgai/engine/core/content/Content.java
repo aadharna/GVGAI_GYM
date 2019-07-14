@@ -4,13 +4,7 @@ import qmul.gvgai.engine.tools.Utils;
 
 import java.util.HashMap;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 16/10/13
- * Time: 14:08
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public abstract class Content
 {
     /**

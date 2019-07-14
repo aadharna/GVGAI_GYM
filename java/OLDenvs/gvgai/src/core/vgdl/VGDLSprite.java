@@ -26,13 +26,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 17/10/13
- * Time: 10:59
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public abstract class VGDLSprite {
 
     static {

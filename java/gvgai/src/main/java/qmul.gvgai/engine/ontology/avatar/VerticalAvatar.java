@@ -8,13 +8,7 @@ import qmul.gvgai.engine.tools.Vector2d;
 
 import java.awt.*;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 22/10/13
- * Time: 18:07
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class VerticalAvatar extends MovingAvatar
 {
     public VerticalAvatar(){}

@@ -18,13 +18,7 @@ import qmul.gvgai.engine.ontology.avatar.MovingAvatar;
 import qmul.gvgai.engine.ontology.effects.Effect;
 import qmul.gvgai.engine.tools.Direction;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 23/10/13
- * Time: 15:21
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class TransformToSingleton extends Effect {
 
     public String stype; //new type to be transormed to

@@ -6,9 +6,7 @@ import serialization.Types;
 import java.util.Arrays;
 import java.util.HashMap;
 
-/**
- * Created by Mike on 11/07/2017.
- */
+
 
 
 public class AvatarInfoState implements LearningState {

@@ -9,13 +9,7 @@ import java.util.Random;
 
 import qmul.gvgai.engine.ontology.Types;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 17/10/13
- * Time: 12:13
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class Utils
 {
     public static Object choice(Object[] elements, Random rnd)

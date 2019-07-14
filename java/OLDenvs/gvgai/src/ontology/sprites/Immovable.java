@@ -7,13 +7,7 @@ import qmul.gvgai.engine.tools.Vector2d;
 
 import java.awt.*;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 17/10/13
- * Time: 12:39
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class Immovable extends VGDLSprite
 {
     public Immovable(){}

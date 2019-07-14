@@ -5,9 +5,7 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.util.Scanner;
 
-/**
- * Created by dperez on 23/05/2017.
- */
+
 public class IOSocket extends IO {
 
 

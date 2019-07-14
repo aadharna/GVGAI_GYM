@@ -6,13 +6,7 @@ import qmul.gvgai.engine.core.content.TerminationContent;
 import qmul.gvgai.engine.core.game.Game;
 import qmul.gvgai.engine.core.game.GameDescription.TerminationData;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 22/10/13
- * Time: 18:48
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class Timeout extends Termination
 {
     public boolean use_counter = false;

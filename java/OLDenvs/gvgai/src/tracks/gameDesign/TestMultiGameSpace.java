@@ -6,10 +6,7 @@ import tracks.DesignMachine;
 
 import java.util.Random;
 
-/**
- * Created with IntelliJ IDEA. User: Diego Date: 04/10/13 Time: 16:29 This is a
- * Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class TestMultiGameSpace {
 
     public static void main(String[] args) {

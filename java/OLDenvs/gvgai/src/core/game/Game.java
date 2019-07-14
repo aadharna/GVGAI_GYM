@@ -27,10 +27,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 
-/**
- * Created with IntelliJ IDEA. User: Diego Date: 17/10/13 Time: 13:42 This is a
- * Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public abstract class Game {
 
 	/**

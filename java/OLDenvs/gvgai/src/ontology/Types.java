@@ -8,13 +8,7 @@ import java.util.Random;
 import qmul.gvgai.engine.tools.Direction;
 import qmul.gvgai.engine.tools.Vector2d;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 17/10/13
- * Time: 11:05
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class Types {
     public static final int PHYSICS_NONE = -1;
     public static final int GRID = 0;

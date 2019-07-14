@@ -7,11 +7,7 @@ import java.util.Map.Entry;
 import qmul.gvgai.engine.core.game.GameDescription;
 import qmul.gvgai.engine.core.game.GameDescription.SpriteData;
 
-/**
- * Helps to construct a HashMap<Character, Array<String>> easily
- * @author Ahmed A Khalifa
- *
- */
+
 public class LevelMapping {
 	/**
 	 * hashmap where each code has a sprite name

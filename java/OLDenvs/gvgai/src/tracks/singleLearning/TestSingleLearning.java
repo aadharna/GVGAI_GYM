@@ -6,9 +6,7 @@ import tracks.LearningMachine;
 
 import java.util.*;
 
-/**
- * Created by Daniel on 07.03.2017.
- */
+
 public class TestSingleLearning {
 
     public static void main(String[] args) throws Exception {

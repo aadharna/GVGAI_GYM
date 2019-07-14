@@ -13,13 +13,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 21/10/13
- * Time: 18:14
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class PathChaser extends RandomNPC
 {
     public boolean fleeing;

@@ -1,7 +1,5 @@
 package utils;
-/**
- * Created by diego on 26/02/14.
- */
+
 
 
 import java.lang.management.ManagementFactory;

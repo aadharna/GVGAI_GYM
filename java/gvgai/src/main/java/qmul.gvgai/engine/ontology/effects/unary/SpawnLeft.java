@@ -11,7 +11,7 @@ import qmul.gvgai.engine.tools.Vector2d;
 
 import java.util.ArrayList;
 
-import static ontology.Types.LEFT;
+import static qmul.gvgai.engine.ontology.Types.LEFT;
 
 public class SpawnLeft extends Effect {
 

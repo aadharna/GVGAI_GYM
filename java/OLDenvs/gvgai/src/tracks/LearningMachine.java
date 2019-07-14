@@ -16,9 +16,7 @@ import qmul.gvgai.engine.tools.StatSummary;
 import java.io.IOException;
 import java.util.Random;
 
-/**
- * Created by Daniel on 07.03.2017.
- */
+
 public class LearningMachine {
     public static final boolean VERBOSE = false;
 

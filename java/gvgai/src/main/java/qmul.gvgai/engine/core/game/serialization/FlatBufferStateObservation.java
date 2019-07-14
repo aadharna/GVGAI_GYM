@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static qmul.gvgai.engine.core.game.serialization.Observation.createObservation;
+
 public class FlatBufferStateObservation {
 
     private FlatBufferBuilder b;
@@ -152,7 +154,7 @@ public class FlatBufferStateObservation {
                     int referenceOffset = convertVector(o.reference);
                     int positionOffset = convertVector(o.position);
 
-                    int obs = core.game.serialization.Observation.createObservation(
+                    int obs = createObservation(
                             b,
                             o.category,
                             o.itype,
@@ -186,7 +188,7 @@ public class FlatBufferStateObservation {
                         int referenceOffset = convertVector(o.reference);
                         int positionOffset = convertVector(o.position);
 
-                        int obs = core.game.serialization.Observation.createObservation(
+                        int obs = createObservation(
                                 b,
                                 o.category,
                                 o.itype,
@@ -224,7 +226,7 @@ public class FlatBufferStateObservation {
         return intArray;
     }
 
-    private int convertVector(tools.Vector2d avatarPosition) {
+    private int convertVector(qmul.gvgai.engine.tools.Vector2d avatarPosition) {
         return Vector2d.createVector2d(b, avatarPosition.x, avatarPosition.y);
     }
 

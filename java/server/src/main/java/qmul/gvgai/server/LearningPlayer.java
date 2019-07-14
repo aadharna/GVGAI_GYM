@@ -1,31 +1,23 @@
-package qmul.gvgai.engine.core.player;
+package qmul.gvgai.server;
 
 import com.badlogic.gdx.graphics.Pixmap;
-import qmul.gvgai.engine.core.competition.CompetitionParameters;
-import qmul.gvgai.engine.core.game.SerializableStateObservation;
 import qmul.gvgai.engine.core.game.StateObservation;
 import qmul.gvgai.engine.core.game.StateObservationMulti;
 import qmul.gvgai.engine.core.game.serialization.FlatBufferStateObservation;
+import qmul.gvgai.engine.core.player.Player;
 import qmul.gvgai.engine.ontology.Types;
 import qmul.gvgai.engine.tools.ElapsedCpuTimer;
-import tracks.singleLearning.utils.Comm;
-import tracks.singleLearning.utils.Comm.Message;
-import tracks.singleLearning.utils.PipeComm;
-import tracks.singleLearning.utils.SocketComm;
+import qmul.gvgai.server.protocol.Comm;
+import qmul.gvgai.server.protocol.Message;
+import qmul.gvgai.server.protocol.SocketComm;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 
 
-/**
- * Created by Daniel on 07.03.2017.
- */
+
 public class LearningPlayer extends Player {
 
     /**
@@ -57,20 +49,12 @@ public class LearningPlayer extends Player {
      * Learning Player constructor.
      * Creates a new server side communication channel for every player.
      */
-    public LearningPlayer(Process proc, String port) {
-        if (CompetitionParameters.USE_SOCKETS) {
-            //Sockets:
-            this.comm = new SocketComm(port);
-        }
-        //Else: pipes
-        else {
-            this.comm = new PipeComm(proc);
-        }
-
+    public LearningPlayer(int port) {
+        this.comm = new SocketComm(port);
     }
 
 
-    public Types.ACTIONS act(SerializableStateObservation stateObs, ElapsedCpuTimer elapsedTimer) {
+    public Types.ACTIONS act() {
         return null;
     }
 
@@ -211,7 +195,7 @@ public class LearningPlayer extends Player {
      * writes a raw bitmap to memory to be sent when data is next serialized to the player
      */
     public void setObservation(Pixmap image) {
-        observationBuffer = new byte[image.getHeight()*image.getWidth()*3];
+        observationBuffer = new byte[image.getHeight() * image.getWidth() * 3];
         image.getPixels().position(0);
         image.getPixels().get(observationBuffer);
     }

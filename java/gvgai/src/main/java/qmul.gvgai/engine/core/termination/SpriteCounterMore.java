@@ -6,13 +6,7 @@ import qmul.gvgai.engine.core.game.Game;
 
 import java.util.ArrayList;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Diego
- * Date: 22/10/13
- * Time: 18:52
- * This is a Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class SpriteCounterMore extends Termination
 {
     public String stype;

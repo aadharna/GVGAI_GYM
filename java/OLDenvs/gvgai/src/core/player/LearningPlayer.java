@@ -23,9 +23,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 
-/**
- * Created by Daniel on 07.03.2017.
- */
+
 public class LearningPlayer extends Player {
 
     /**

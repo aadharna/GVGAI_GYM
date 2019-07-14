@@ -9,9 +9,7 @@ import qmul.gvgai.engine.tools.Direction;
 import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 import qmul.gvgai.engine.tools.Utils;
 
-/**
- * Created by diego on 06/02/14.
- */
+
 public class Agent extends AbstractMultiPlayer
 {
     int id; //this player's ID

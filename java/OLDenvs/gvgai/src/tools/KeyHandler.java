@@ -5,9 +5,7 @@ import qmul.gvgai.engine.ontology.Types;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-/**
- * Created by dperez on 25/10/15.
- */
+
 public abstract class KeyHandler extends KeyAdapter {
 
     //Mask with the actions.

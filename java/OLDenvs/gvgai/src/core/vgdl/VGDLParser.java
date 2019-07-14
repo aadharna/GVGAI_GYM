@@ -17,10 +17,7 @@ import qmul.gvgai.engine.tools.Pair;
 import qmul.gvgai.engine.core.logging.Logger;
 import qmul.gvgai.engine.core.logging.Message;
 
-/**
- * Created with IntelliJ IDEA. User: Diego Date: 04/10/13 Time: 16:52 This is a
- * Java port from Tom Schaul's VGDL - https://github.com/schaul/py-vgdl
- */
+
 public class VGDLParser {
 	/**
 	 * Game which description is being read.

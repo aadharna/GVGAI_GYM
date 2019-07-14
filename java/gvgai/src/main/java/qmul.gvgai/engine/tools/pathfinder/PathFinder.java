@@ -7,9 +7,7 @@ import qmul.gvgai.engine.tools.Vector2d;
 
 import java.util.ArrayList;
 
-/**
- * Created by dperez on 14/01/16.
- */
+
 public class PathFinder {
 
     public AStar astar;
