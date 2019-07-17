@@ -1,7 +1,10 @@
 package qmul.gvgai.engine.core.vgdl;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -69,60 +72,64 @@ public class VGDLParser {
 	/**
 	 * Parses a game passed whose file is passed by parameter.
 	 *
-	 * @param gamedesc_file
-	 *            filename of the file containing the game
+	 * @param gameFile filename of the file containing the game
 	 * @return the game created
 	 */
-	public Game parseGame(String gamedesc_file) {
-		String[] desc_lines = new IO().readFile(gamedesc_file);
-		if (desc_lines != null) {
-			Node rootNode = indentTreeParser(desc_lines);
+	public Game parseGame(String gameFile) {
+		try {
+			var desc_lines = Files.readAllLines(Path.of(getClass().getResource(gameFile).toURI()));
+			if (desc_lines != null) {
+				Node rootNode = indentTreeParser(desc_lines);
 
-			// Parse here game and arguments of the first line
-			game = VGDLFactory.GetInstance().createGame((GameContent) rootNode.content);
-			game.initMulti();
+				// Parse here game and arguments of the first line
+				game = VGDLFactory.GetInstance().createGame((GameContent) rootNode.content);
+				game.initMulti();
 
-			// Parse the parameter nodes first, if any.
-			parseParameterNodes(rootNode);
+				// Parse the parameter nodes first, if any.
+				parseParameterNodes(rootNode);
 
-			// Parse the nodes.
-			try {
-				parseNodes(rootNode);
-			} catch (Exception e) {
-			    logger.addMessage(new Message(Message.ERROR, "[PARSE ERROR] " + e.toString()));
+				// Parse the nodes.
+				try {
+					parseNodes(rootNode);
+				} catch (Exception e) {
+					logger.addMessage(new Message(Message.ERROR, "[PARSE ERROR] " + e.toString()));
+				}
 			}
-		}
 
-		return game;
+			return game;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
-	/**
-	 * Parses a game passed whose file is passed by parameter.
-	 *
-	 * @param gamedesc_file
-	 *            filename of the file containing the game
-	 * @return the game created
-	 */
-	public Game parseGameWithParameters(String gamedesc_file, HashMap<String, ParameterContent> parameters) {
-		String[] desc_lines = new IO().readFile(gamedesc_file);
-		if (desc_lines != null) {
-			Node rootNode = indentTreeParser(desc_lines);
-
-			// Parse here game and arguments of the first line
-			game = VGDLFactory.GetInstance().createGame((GameContent) rootNode.content);
-			game.initMulti();
-			game.setParameters(parameters);
-
-			// Parse the normal nodes, but not the parameters.
-			try {
-				parseNodes(rootNode);
-			} catch (Exception e) {
-			    logger.addMessage(new Message(Message.ERROR, "[PARSE ERROR] " + e.toString()));
-			}
-		}
-
-		return game;
-	}
+//	/**
+//	 * Parses a game passed whose file is passed by parameter.
+//	 *
+//	 * @param gamedesc_file
+//	 *            filename of the file containing the game
+//	 * @return the game created
+//	 */
+//	public Game parseGameWithParameters(String gamedesc_file, HashMap<String, ParameterContent> parameters) {
+//		String[] desc_lines = new IO().readFile(gamedesc_file);
+//		if (desc_lines != null) {
+//			Node rootNode = indentTreeParser(desc_lines);
+//
+//			// Parse here game and arguments of the first line
+//			game = VGDLFactory.GetInstance().createGame((GameContent) rootNode.content);
+//			game.initMulti();
+//			game.setParameters(parameters);
+//
+//			// Parse the normal nodes, but not the parameters.
+//			try {
+//				parseNodes(rootNode);
+//			} catch (Exception e) {
+//			    logger.addMessage(new Message(Message.ERROR, "[PARSE ERROR] " + e.toString()));
+//			}
+//		}
+//
+//		return game;
+//	}
 
 	/**
 	 * Parses the parameter nodes in VGDL description for game spaces.
@@ -186,76 +193,76 @@ public class VGDLParser {
 		}
 	}
 
-	/**
-	 * Parse a custom sprite set
-	 * @param currentGame 	the current game to modify
-	 * @param spriteStruct	the current structure of the sprite set
-	 * @param sprites		the current sprites
-	 */
-	public void parseSpriteSet(Game currentGame, HashMap<String, ArrayList<String>> spriteStruct, HashMap<String, String> sprites){
-		this.game = currentGame;
-		String template = "    ";
+//	/**
+//	 * Parse a custom sprite set
+//	 * @param currentGame 	the current game to modify
+//	 * @param spriteStruct	the current structure of the sprite set
+//	 * @param sprites		the current sprites
+//	 */
+//	public void parseSpriteSet(Game currentGame, HashMap<String, ArrayList<String>> spriteStruct, HashMap<String, String> sprites){
+//		this.game = currentGame;
+//		String template = "    ";
+//
+//		ArrayList<String> msprites = new ArrayList<String>();
+//		msprites.add("SpriteSet");
+//		for(String key:spriteStruct.keySet()){
+//			msprites.add(template + key + " >");
+//			for(int i=0; i<spriteStruct.get(key).size(); i++){
+//				if(sprites.containsKey(spriteStruct.get(key).get(i).trim())){
+//					msprites.add(template + template + sprites.get(spriteStruct.get(key).get(i).trim()).trim());
+//					sprites.remove(spriteStruct.get(key).get(i).trim());
+//				}
+//				else{
+//					Logger.getInstance().addMessage(new Message(Message.ERROR, "Undefined " + spriteStruct.get(key).get(i) + " in the provided sprite set."));
+//				}
+//			}
+//		}
+//		for(String value:sprites.values()){
+//			msprites.add(template + value.trim());
+//		}
+//
+//		Node spriteNode = indentTreeParser(msprites);
+//		try {
+//			parseSpriteSet(spriteNode.children);
+//		} catch (Exception e) {
+//			logger.addMessage(new Message(1, "[PARSE ERROR]"));
+//		}
+//	}
 
-		ArrayList<String> msprites = new ArrayList<String>();
-		msprites.add("SpriteSet");
-		for(String key:spriteStruct.keySet()){
-			msprites.add(template + key + " >");
-			for(int i=0; i<spriteStruct.get(key).size(); i++){
-				if(sprites.containsKey(spriteStruct.get(key).get(i).trim())){
-					msprites.add(template + template + sprites.get(spriteStruct.get(key).get(i).trim()).trim());
-					sprites.remove(spriteStruct.get(key).get(i).trim());
-				}
-				else{
-					Logger.getInstance().addMessage(new Message(Message.ERROR, "Undefined " + spriteStruct.get(key).get(i) + " in the provided sprite set."));
-				}
-			}
-		}
-		for(String value:sprites.values()){
-			msprites.add(template + value.trim());
-		}
-
-		Node spriteNode = indentTreeParser(msprites.toArray(new String[msprites.size()]));
-		try {
-			parseSpriteSet(spriteNode.children);
-		} catch (Exception e) {
-			logger.addMessage(new Message(1, "[PARSE ERROR]"));
-		}
-	}
-
-	/**
-	 * parse both rules and termination and add them to the current game object
-	 *
-	 * @param currentGame
-	 *            the current game object
-	 * @param rules
-	 *            the current interaction set as in the VGDL file
-	 * @param terminations
-	 *            the current termination set as in the VGDL file
-	 * @throws Exception
-	 */
-	public void parseInteractionTermination(Game currentGame, String[] rules, String[] terminations) {
-		this.game = currentGame;
-
-		String[] mrules = new String[rules.length + 1];
-		mrules[0] = "InteractionSet";
-		for(int i=0; i<rules.length; i++){
-			mrules[i + 1] = "    " + rules[i];
-		}
-		String[] mterm = new String[terminations.length + 1];
-		mterm[0] = "TerminationSet";
-		for(int i=0; i<terminations.length; i++){
-			mterm[i + 1] = "    " + terminations[i];
-		}
-
-		Node rulesNode = indentTreeParser(mrules);
-		Node terNode = indentTreeParser(mterm);
-		try {
-			parseInteractionSet(rulesNode.children);
-			parseTerminationSet(terNode.children);
-		} catch (Exception e) {
-			logger.addMessage(new Message(1, "[PARSE ERROR]"));
-		}
-	}
+//	/**
+//	 * parse both rules and termination and add them to the current game object
+//	 *
+//	 * @param currentGame
+//	 *            the current game object
+//	 * @param rules
+//	 *            the current interaction set as in the VGDL file
+//	 * @param terminations
+//	 *            the current termination set as in the VGDL file
+//	 * @throws Exception
+//	 */
+//	public void parseInteractionTermination(Game currentGame, String[] rules, String[] terminations) {
+//		this.game = currentGame;
+//
+//		String[] mrules = new String[rules.length + 1];
+//		mrules[0] = "InteractionSet";
+//		for(int i=0; i<rules.length; i++){
+//			mrules[i + 1] = "    " + rules[i];
+//		}
+//		String[] mterm = new String[terminations.length + 1];
+//		mterm[0] = "TerminationSet";
+//		for(int i=0; i<terminations.length; i++){
+//			mterm[i + 1] = "    " + terminations[i];
+//		}
+//
+//		Node rulesNode = indentTreeParser(mrules);
+//		Node terNode = indentTreeParser(mterm);
+//		try {
+//			parseInteractionSet(rulesNode.children);
+//			parseTerminationSet(terNode.children);
+//		} catch (Exception e) {
+//			logger.addMessage(new Message(1, "[PARSE ERROR]"));
+//		}
+//	}
 
 	/**
 	 * Builds the tree structure that defines the game.
@@ -264,7 +271,7 @@ public class VGDLParser {
 	 *            array with the lines read from the game description file.
 	 * @return the root of the final game tree
 	 */
-	public Node indentTreeParser(String[] lines) {
+	public Node indentTreeParser(List<String> lines) {
 		// By default, let's make tab as four spaces
 		String tabTemplate = "    ";
 		Node last = null;

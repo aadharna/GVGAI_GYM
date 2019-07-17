@@ -24,7 +24,7 @@ import qmul.gvgai.engine.core.vgdl.SpriteGroup;
 import qmul.gvgai.engine.core.vgdl.VGDLSprite;
 import qmul.gvgai.engine.tools.Direction;
 import qmul.gvgai.engine.tools.KeyHandler;
-import qmul.gvgai.engine.tools.Pair;O
+import qmul.gvgai.engine.tools.Pair;
 import qmul.gvgai.engine.tools.Vector2d;
 import qmul.gvgai.engine.tools.WindowInput;
 import qmul.gvgai.engine.tools.pathfinder.Node;
@@ -860,12 +860,14 @@ public abstract class Game {
 		return acum;
 	}
 
-	public double[] playOnlineGame(Player[] players, int randomSeed, boolean isHuman, int humanID) {
+	public double[] playOnlineGame(Player player, int randomSeed, boolean isHuman, int humanID) {
+
+		Player[] players = new Player[] {player};
+
 		// Prepare some structures and references for this game.
 		prepareGame(players, randomSeed, humanID);
 
 		// Create and initialize the panel for the graphics.
-		VGDLViewer view = new VGDLViewer(this, players[humanID]);
 		wi.windowClosed = false;
 
 		boolean firstRun = true;
@@ -875,14 +877,10 @@ public abstract class Game {
 
 			this.gameCycle(); // Execute a game cycle.
 
-			// Draw all sprites in the panel.
-			view.paint(this.spriteGroups);
-
 			if (firstRun && isHuman) {
 				firstRun = false;
 			}
 		}
-
 
 		// Update the forward model for the game state sent to the controller.
 		fwdModel.update(this);
@@ -1645,6 +1643,10 @@ public abstract class Game {
 		} else {
 			kill_list.add(sprite);
 		}
+	}
+
+	public SpriteGroup[] getSpriteGroups() {
+		return this.spriteGroups;
 	}
 
 	/**

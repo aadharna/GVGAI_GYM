@@ -3,7 +3,6 @@ import sys
 import os
 import numpy as np
 import tempfile
-import gzip
 import subprocess
 import shutil
 from struct import pack_into

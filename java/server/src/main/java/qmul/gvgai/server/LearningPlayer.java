@@ -1,10 +1,13 @@
 package qmul.gvgai.server;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import qmul.gvgai.engine.core.game.Game;
 import qmul.gvgai.engine.core.game.StateObservation;
 import qmul.gvgai.engine.core.game.StateObservationMulti;
 import qmul.gvgai.engine.core.game.serialization.FlatBufferStateObservation;
 import qmul.gvgai.engine.core.player.Player;
+import qmul.gvgai.engine.core.vgdl.VGDLRenderer;
+import qmul.gvgai.engine.core.vgdl.VGDLViewer;
 import qmul.gvgai.engine.ontology.Types;
 import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 import qmul.gvgai.server.protocol.Comm;
@@ -15,7 +18,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-
+import java.nio.charset.StandardCharsets;
 
 
 public class LearningPlayer extends Player {
@@ -24,26 +27,10 @@ public class LearningPlayer extends Player {
      * Server communication channel
      */
     private Comm comm;
-
-    /**
-     * Fast way to store and serialize texture data for learning agents
-     */
-    private byte[] observationBuffer;
-
-    public byte[] getObservationBuffer() {
-        return observationBuffer;
-    }
-
-    public boolean isRequiresImage() {
-        return requiresImage;
-    }
-
-    public void setRequiresImage(boolean requiresImage) {
-        this.requiresImage = requiresImage;
-    }
-
-    private boolean requiresImage;
+    private String currentLevel;
     private boolean includeSemanticData = false;
+
+    private VGDLRenderer renderer = null;
 
     /**
      * Learning Player constructor.
@@ -51,8 +38,8 @@ public class LearningPlayer extends Player {
      */
     public LearningPlayer(int port) {
         this.comm = new SocketComm(port);
-    }
 
+    }
 
     public Types.ACTIONS act() {
         return null;
@@ -72,8 +59,8 @@ public class LearningPlayer extends Player {
     public Types.ACTIONS act(StateObservation so, ElapsedCpuTimer elapsedTimer) {
         // Sending messages.
         try {
-
-            FlatBufferStateObservation fbso = new FlatBufferStateObservation(so, includeSemanticData, getObservationBuffer());
+            renderer.paintFrameBuffer();
+            FlatBufferStateObservation fbso = new FlatBufferStateObservation(so, includeSemanticData, renderer.getBuffer());
 
             Message message = new Message(Types.GamePhase.ACT_STATE.ordinal(), fbso.serialize());
             comm.commSend(message);
@@ -94,18 +81,22 @@ public class LearningPlayer extends Player {
 
     }
 
-    /***
-     * @param so           State observation of the current game in its initial state
-     * @param isValidation true if the level to play is a validation one.
-     * @return true if Init worked.
+    /**
+     * @param game the game that
+     * @return true if initialization is OK
      */
-    public boolean init(StateObservation so, boolean isValidation) {
+    public boolean init(Game game) {
+
+        var so = game.getObservation();
+
+        renderer = new VGDLRenderer(game);
+        renderer.paintFrameBuffer();
+
         //Sending messages.
         try {
             // Set the game state to the appropriate state and the millisecond counter, then send the serialized observation.
             so.currentGameState = Types.GamePhase.INIT_STATE;
-            FlatBufferStateObservation sso = new FlatBufferStateObservation(so, includeSemanticData, getObservationBuffer());
-            sso.isValidation = isValidation;
+            FlatBufferStateObservation sso = new FlatBufferStateObservation(so, includeSemanticData, renderer.getBuffer());
 
             Message message = new Message(Types.GamePhase.INIT_STATE.ordinal(), sso.serialize());
 
@@ -120,21 +111,21 @@ public class LearningPlayer extends Player {
 
     }
 
-    public int chooseLevel() {
+    public String chooseLevel() {
         try {
 
-            Message message = new Message(Types.GamePhase.CHOOSE_LEVEL_STATE.ordinal());
+            Message message = new Message(Types.GamePhase.CHOOSE_ENVIRONMENT_STATE.ordinal());
 
             comm.commSend(message);
             Message response = comm.commRecv();
 
-            if (Types.AgentPhase.CHOOSE_LEVEL_STATE.ordinal() == response.phase) {
+            if (Types.AgentPhase.CHOOSE_ENVIRONMENT_STATE.ordinal() == response.phase) {
                 DataInputStream data = new DataInputStream(new ByteArrayInputStream(response.data));
 
-                int level = data.readInt();
-                this.requiresImage = data.readBoolean();
+                int levelLength = data.readInt();
+                this.currentLevel = new String(data.readNBytes(levelLength), StandardCharsets.UTF_8);
 
-                return level;
+                return currentLevel;
             }
 
 
@@ -142,8 +133,8 @@ public class LearningPlayer extends Player {
             throw new RuntimeException(e);
         }
 
-        // No level chosen.. what to do here?
-        return -1;
+        // No level chosen or an error. End
+        return "END";
     }
 
     @Override
@@ -158,10 +149,8 @@ public class LearningPlayer extends Player {
      * @param stateObs the game state at the end of the game
      * @returns Level to be plated.
      */
-    public int result(StateObservation stateObs) {
-        int result = this.comm.finishGame(stateObs);
-//        System.out.println("Client replied: " + result);
-        return result;
+    public int endGame(StateObservation stateObs) {
+        return this.comm.endGame(stateObs);
     }
 
     /**
@@ -170,33 +159,14 @@ public class LearningPlayer extends Player {
      * @return true or false, depending on whether the initialization has been successful
      */
     public boolean startPlayerCommunication() {
-
-        //Initialize the controller.
-        if (!this.comm.startComm())
-            return false;
-
-        return true;
+        return this.comm.startComm();
     }
 
     /**
      * Tells the client that this is over. Se finito.
      */
     public boolean finishPlayerCommunication() {
-
-        //Initialize the controller.
-        if (!this.comm.endComm())
-            return false;
-
-        return true;
+        return this.comm.endComm();
     }
 
-    /**
-     * Fast method for serializing observation data
-     * writes a raw bitmap to memory to be sent when data is next serialized to the player
-     */
-    public void setObservation(Pixmap image) {
-        observationBuffer = new byte[image.getHeight() * image.getWidth() * 3];
-        image.getPixels().position(0);
-        image.getPixels().get(observationBuffer);
-    }
 }

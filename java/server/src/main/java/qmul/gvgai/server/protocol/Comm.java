@@ -37,9 +37,9 @@ public abstract class Comm {
      * ABORT_STATE: Game is violently ended by player using "ABORT" message or ACTION_ESCAPE key
      *
      * @param so State observation of the game in progress to be used for message sending.
-     * @return response by the client (level to be played)
+     * @return 1 if OK and -1 if not
      */
-    public int finishGame(StateObservation so) {
+    public int endGame(StateObservation so) {
 
         try {
             // Set the game state to the appropriate state and the millisecond counter, then send the serialized observation.

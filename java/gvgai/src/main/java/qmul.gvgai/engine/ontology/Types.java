@@ -199,7 +199,7 @@ public class Types {
      * This is an enum type that describes the potential states of the game
      */
     public static enum GamePhase {
-        START_STATE, CHOOSE_LEVEL_STATE, INIT_STATE, ACT_STATE, END_STATE, ABORT_STATE
+        START_STATE, CHOOSE_ENVIRONMENT_STATE, INIT_STATE, ACT_STATE, END_STATE, ABORT_STATE
     }
 
 
@@ -210,7 +210,7 @@ public class Types {
     }
 
     public static enum AgentPhase {
-        START_STATE, CHOOSE_LEVEL_STATE, INIT_STATE, ACT_STATE, END_STATE, ABORT_STATE
+        START_STATE, CHOOSE_ENVIRONMENT_STATE, INIT_STATE, ACT_STATE, END_STATE, ABORT_STATE
     }
 
     public static final int SCORE_DISQ = -1000;

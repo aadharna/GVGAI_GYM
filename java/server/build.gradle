@@ -3,10 +3,17 @@ plugins {
     id 'application'
 }
 
+application {
+    mainClassName = 'qmul.gvgai.server.Application'
+}
+
 dependencies {
     compile project(':gvgai')
     
     // Command-line parsing
-    compile group: 'info.picocli', name: 'picocli', version: '3.9.6'
+    compile group: 'info.picocli', name: 'picocli', version: '4.0.0'
+
+    // Lombok
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
 
 }

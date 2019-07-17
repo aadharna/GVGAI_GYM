@@ -99,19 +99,13 @@ public abstract class Player {
 
     /**
      * This function sets up the controller to save the actions executed in a given game.
-     * @param actionFile file to save the actions to.
      * @param randomSeed Seed for the sampleRandom generator of the game to be played.
      * @param isHuman Indicates if the player is a human or not.
      */
-    public void setup(String actionFile, int randomSeed, boolean isHuman) {
-        this.actionFile = actionFile;
+    public void setup(int randomSeed, boolean isHuman) {
         this.randomSeed = randomSeed;
         this.isHuman = isHuman;
 
-        if(this.actionFile!=null && SHOULD_LOG)
-        {
-            allActions = new ArrayList<>();
-        }
     }
 
     /**
