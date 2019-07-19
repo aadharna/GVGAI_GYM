@@ -7,12 +7,14 @@ import qmul.gvgai.engine.core.logging.Message;
 import qmul.gvgai.engine.core.vgdl.VGDLFactory;
 import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
 import qmul.gvgai.engine.core.vgdl.VGDLSprite;
-import qmul.gvgai.engine.tools.IO;
 import qmul.gvgai.engine.tools.Vector2d;
 import qmul.gvgai.engine.tools.pathfinder.PathFinder;
 
 import java.awt.Dimension;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -60,45 +62,44 @@ public class BasicGame extends Game {
     /**
      * Builds a level, receiving a file name.
      *
-     * @param gamelvl file name containing the level.
+     * @param levelFile file name containing the level.
      */
-    public void buildLevel(String gamelvl, int randomSeed) {
-        String[] lines = new IO().readFile(gamelvl);
+    public void buildLevel(String levelFile, int randomSeed) {
+        try {
+            var lines = Files.readAllLines(Path.of(getClass().getResource("/games/" + levelFile).toURI()));
+            // Pathfinder
+            obstacles = new ArrayList<>();
+            boolean doPathf = false;
 
-        // Pathfinder
-        obstacles = new ArrayList<>();
-        boolean doPathf = false;
+            if (obs != null) {
+                doPathf = true;
+                int obsArray[] = VGDLRegistry.GetInstance().explode(obs);
+                for (Integer it : obsArray)
+                    obstacles.add(it);
+            }
 
-        if (obs != null) {
-            doPathf = true;
-            int obsArray[] = VGDLRegistry.GetInstance().explode(obs);
-            for (Integer it : obsArray)
-                obstacles.add(it);
-        }
+            if (doPathf)
+                pathf = new PathFinder(obstacles);
 
-        if (doPathf)
-            pathf = new PathFinder(obstacles);
+            buildStringLevel(lines, randomSeed);
 
-        buildStringLevel(lines, randomSeed);
+            if (doPathf) {
+                long t = System.currentTimeMillis();
 
-        if (doPathf) {
-            long t = System.currentTimeMillis();
+                pathf.run(this.getObservation());
+                System.out.println(System.currentTimeMillis() - t);
+            }
 
-            pathf.run(this.getObservation());
-            System.out.println(System.currentTimeMillis() - t);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    /**
-     * Builds a level from this game, reading it from file.
-     *
-     * @param gamelvl
-     *            filename of the level to load.
-     */
-    public void buildStringLevel(String[] lines, int randomSeed) {
+    public void buildStringLevel(List<String> lines, int randomSeed) {
         // Read the level description
-        String[] desc_lines = lines;
+
+        var desc_lines = lines.toArray(new String[lines.size()]);
 
         // Dimensions of the level read from the file.
         size.width = desc_lines[0].length();

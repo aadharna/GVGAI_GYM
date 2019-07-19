@@ -38,6 +38,7 @@ import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -2019,7 +2020,7 @@ public abstract class Game {
 		return block_size;
 	}
 
-	public abstract void buildStringLevel(String[] levelString, int randomSeed);
+	public abstract void buildStringLevel(List<String> lines, int randomSeed);
 
 	/**
 	 * Builds a level, receiving a file name.

@@ -1038,7 +1038,7 @@ public abstract class VGDLSprite {
     }
 
     private Pixmap getTexture(String imageFile) {
-        return new Pixmap(new FileHandle(new File(getClass().getResource("/" + imageFile).getPath())));
+        return new Pixmap(new FileHandle(new File(getClass().getResource("/sprites/" + imageFile).getPath())));
     }
 
 

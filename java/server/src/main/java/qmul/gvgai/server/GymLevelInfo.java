@@ -7,17 +7,15 @@ import lombok.Value;
 public class GymLevelInfo {
     private final String game;
     private final String lvl;
-    private final String version;
 
     private final String gameFile;
     private final String levelFile;
 
-    public GymLevelInfo(String game, String lvl, String version) {
+    public GymLevelInfo(String game, String lvl) {
         this.game = game;
         this.lvl = lvl;
-        this.version = version;
 
-        var gameDirectory = game + "_" + version;
+        var gameDirectory = game + "_v0";
 
         this.gameFile = gameDirectory + "/" + game + ".txt";
         this.levelFile = gameDirectory + "/" + game + "_" + lvl + ".txt";

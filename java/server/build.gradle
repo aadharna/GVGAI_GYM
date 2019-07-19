@@ -14,6 +14,9 @@ dependencies {
     compile group: 'info.picocli', name: 'picocli', version: '4.0.0'
 
     // Lombok
-    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
+    testCompileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
+    testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
 
 }

@@ -1,18 +1,23 @@
-#!/usr/bin/env python
-import gym_gvgai
+import logging
+import gym
+import gvgai
 import time
-from python.examples import Agent as Agent
+import numpy as np
 
 # Predefined names referring to framework
 games = ['gvgai-testgame1', 'gvgai-testgame2', 'gvgai-testgame3']
 trainingLevels = ['lvl0-v0', 'lvl1-v0']
 testLevels = ['lvl2-v0', 'lvl3-v0', 'lvl4-v0']
 
+# Turn debug logging on
+logging.basicConfig(level=logging.DEBUG)
+
+logger = logging.getLogger("Test Agent")
+
 for game in games:
     for level in trainingLevels:  # testLevels:
-        agent = Agent.Agent()
-        env = gym_gvgai.make('gvgai-cec1-pixels-lvl0-v0')
-        print('Starting ' + env.env.game + " with Level " + str(env.env.level))
+        env = gym.make('gvgai-cec1-lvl0-v0')
+        logger.info(f'Starting {env.env.game} with Level {env.env.level}')
         # reset environment
         stateObs = env.reset()
         actions = env.unwrapped.get_action_meanings()
@@ -21,10 +26,9 @@ for game in games:
         for t in range(20000):
             # choose action based on trained policy
             # do action and get new state and its reward
-            action_id = agent.act(stateObs, actions)
+            action_id = np.random.randint(5)
             stateObs, diffScore, done, debug = env.step(action_id)
             env.render()
-            # print("Action " + str(action_id) + " tick " + str(t+1) + " reward " + str(diffScore) + " win " + str(debug["winner"]))
 
             frames += 1
 
@@ -32,7 +36,7 @@ for game in games:
                 end = time.time()
                 total_time = end - start
                 fps = (frames / total_time)
-                print("frames per second: %d" % int(fps))
+                logger.debug(f'frames per second: {fps}')
 
             # break loop when terminal state is reached
             if done:
@@ -41,4 +45,4 @@ for game in games:
         end = time.time()
         total_time = end - start
         fps = (frames / total_time)
-        print("frames per second: %d" % int(fps))
+        logger.debug(f'frames per second: {fps}')

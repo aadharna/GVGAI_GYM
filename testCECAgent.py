@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-import gym
 import gym_gvgai
-import Agent as Agent
+from python.examples import Agent as Agent
 
 testing_times = 20
 # Predefined names referring to framework

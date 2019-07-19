@@ -1,6 +1,7 @@
 package qmul.gvgai.server;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import lombok.extern.slf4j.Slf4j;
 import qmul.gvgai.engine.core.game.Game;
 import qmul.gvgai.engine.core.game.StateObservation;
 import qmul.gvgai.engine.core.game.StateObservationMulti;
@@ -21,6 +22,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 
+@Slf4j
 public class LearningPlayer extends Player {
 
     /**
@@ -57,6 +59,9 @@ public class LearningPlayer extends Player {
      */
     @Override
     public Types.ACTIONS act(StateObservation so, ElapsedCpuTimer elapsedTimer) {
+
+        log.debug("ACT");
+
         // Sending messages.
         try {
             renderer.paintFrameBuffer();
@@ -87,6 +92,8 @@ public class LearningPlayer extends Player {
      */
     public boolean init(Game game) {
 
+        log.debug("INIT - [{}]", game);
+
         var so = game.getObservation();
 
         renderer = new VGDLRenderer(game);
@@ -112,6 +119,9 @@ public class LearningPlayer extends Player {
     }
 
     public String chooseLevel() {
+
+        log.debug("CHOOSE LEVEL");
+
         try {
 
             Message message = new Message(Types.GamePhase.CHOOSE_ENVIRONMENT_STATE.ordinal());

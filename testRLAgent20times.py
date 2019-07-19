@@ -1,9 +1,6 @@
 #!/usr/bin/env python
-import gym
 import gym_gvgai
-import Agent as Agent
-
-
+from python.examples import Agent as Agent
 
 env = gym_gvgai.make('gvgai-aai-lvl0-v0')
 agent = Agent.Agent()

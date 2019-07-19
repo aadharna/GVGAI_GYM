@@ -1,5 +1,6 @@
 package qmul.gvgai.server;
 
+import lombok.extern.slf4j.Slf4j;
 import qmul.gvgai.engine.core.game.Game;
 import qmul.gvgai.engine.core.game.StateObservation;
 import qmul.gvgai.engine.core.vgdl.VGDLFactory;
@@ -12,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+@Slf4j
 public class LearningServer {
 
     private final int port;
@@ -20,9 +22,11 @@ public class LearningServer {
         this.port = port;
     }
 
-    private static final Pattern levelPattern = Pattern.compile("gvgai-(?<game>:$.*)-(?<level>:lvl\\d+)-(?<version>:v\\d+)^");
+    private static final Pattern levelPattern = Pattern.compile("(?<game>.*)-(?<level>lvl\\d+)");
 
     public void start() {
+
+        log.debug("Starting GVGAI server on port [{}]", port);
         VGDLFactory.GetInstance().init();
         VGDLRegistry.GetInstance().init();
 
@@ -37,7 +41,7 @@ public class LearningServer {
 
         String level = player.chooseLevel();
 
-        while(!level.equals("END")) {
+        while (!level.equals("END")) {
             playOneLevel(level, player);
         }
 
@@ -46,10 +50,14 @@ public class LearningServer {
 
     public static void playOneLevel(String level, LearningPlayer player) {
 
+        log.debug("Starting level [{}]", level);
+
         // Create a new random seed for the next level.
         int randomSeed = new Random().nextInt();
 
         var environmentInfo = parseLevelName(level);
+
+        assert environmentInfo != null;
 
         Game toPlay = new VGDLParser().parseGame(environmentInfo.getGameFile());
         toPlay.buildLevel(environmentInfo.getLevelFile(), randomSeed);
@@ -62,11 +70,9 @@ public class LearningServer {
         //Finally, when the game is over, we need to tear the player down.
         LearningServer.tearPlayerDown(player, toPlay);
 
-        // Send results to player and save their choice of next level to be played
-        // First create a new observation
         StateObservation so = toPlay.getObservation();
 
-        // Sends results to player and retrieve the next level to be played
+        log.debug("Ending level [{}]", level);
         player.endGame(so);
 
         //reset the game.
@@ -101,12 +107,14 @@ public class LearningServer {
     private static GymLevelInfo parseLevelName(String level) {
 
         Matcher m = levelPattern.matcher(level);
-        String game = m.group("game");
-        String lvl = m.group("level");
-        String version = m.group("version");
+        if (m.find()) {
+            String game = m.group("game");
+            String lvl = m.group("level");
 
-        return new GymLevelInfo(game, lvl, version);
+            return new GymLevelInfo(game, lvl);
+        }
 
+        return null;
     }
 
 }

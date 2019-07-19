@@ -1,5 +1,4 @@
 import logging
-import os
 import socket
 import sys
 import traceback
@@ -7,25 +6,23 @@ import time
 from struct import pack_into, unpack_from
 
 class IOSocket:
-    """
-     * Socket for communication
-    """
 
-    def __init__(self, tmpDir):
+    def __init__(self, client_only=False):
         self.HEADER_SIZE = 13
         self.BUFFER_SIZE = 8192*10
         self.hostname, self.port = self.getOpenAddress()
-        #self.port = 8083
         self.connected = False
         self.socket = None
         self._last_message_id = 0
-        self.logfilename = os.path.normpath(os.path.join(tmpDir, "logs", "clientLog.txt"))
 
-        os.makedirs(os.path.join(tmpDir, 'logs'), exist_ok=True)
-        self.logfile = open(self.logfilename, "a")
+        # Default port if this is in client only mode
+        if client_only:
+            self.port = 8083
+
+        self._logger = logging.getLogger("IOSocket")
 
     def initBuffers(self):
-        print ("Connecting to host " + str(self.hostname) + " at port " + str(self.port) + " ...")
+        self._logger.debug(f'Connecting to host {self.hostname} at port {self.port}')
         while not self.connected:
             try:
                 self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -33,17 +30,11 @@ class IOSocket:
                 self.socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_QUICKACK, 1)
                 self.socket.connect((self.hostname, self.port))
                 self.connected = True
-                print ("Client connected to server [OK]")
+                self._logger.debug("Client connected to server [OK]")
             except Exception as e:
                 time.sleep(1)
 
-    def writeToFile(self, line):
-        sys.stdout.write(line + os.linesep)
-        self.logfile.write(line + os.linesep)
-        sys.stdout.flush()
-        self.logfile.flush()
-
-    def writeToServer(self, agent_phase, data=None, log=False):
+    def writeToServer(self, agent_phase, data=None):
 
         payload_size = len(data) if data is not None else 0
         buffer_size = 13 + payload_size
@@ -64,11 +55,8 @@ class IOSocket:
 
         try:
             self.socket.send(buffer)
-            if log:
-                self.writeToFile(buffer)
         except Exception as e:
             logging.exception(e)
-            print ("Write " + self.logfilename + " to server [FAILED]")
             traceback.print_exc()
             sys.exit()
 
