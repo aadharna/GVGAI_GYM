@@ -1,30 +1,26 @@
 package qmul.gvgai.engine.ontology.effects.binary;
 
-import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import lombok.extern.slf4j.Slf4j;
 import qmul.gvgai.engine.core.content.InteractionContent;
 import qmul.gvgai.engine.core.game.Game;
-import qmul.gvgai.engine.core.logging.Logger;
-import qmul.gvgai.engine.core.logging.Message;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
 import qmul.gvgai.engine.ontology.effects.Effect;
 
 import java.awt.*;
 
-
-public class Align extends Effect
-{
+@Slf4j
+public class Align extends Effect {
     public boolean orient = true;
 
-    public Align(InteractionContent cnt)
-    {
+    public Align(InteractionContent cnt) {
         this.parseParameters(cnt);
         setStochastic();
     }
 
     @Override
-    public void execute(VGDLSprite sprite1, VGDLSprite sprite2, Game game)
-    {
-        if(sprite1 == null || sprite2 == null){
-            Logger.getInstance().addMessage(new Message(Message.WARNING, "Neither 1st not 2nd sprite can be EOS with Align interaction."));
+    public void execute(VGDLSprite sprite1, VGDLSprite sprite2, Game game) {
+        if (sprite1 == null || sprite2 == null) {
+            log.warn("Neither 1st not 2nd sprite can be EOS with Align interaction.");
             return;
         }
         if (orient) {

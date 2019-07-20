@@ -1,23 +1,22 @@
 package qmul.gvgai.engine.core.game;
 
 import com.badlogic.gdx.graphics.Pixmap;
+import lombok.extern.slf4j.Slf4j;
 import qmul.gvgai.engine.core.content.GameContent;
-import qmul.gvgai.engine.core.logging.Logger;
-import qmul.gvgai.engine.core.logging.Message;
 import qmul.gvgai.engine.core.vgdl.VGDLFactory;
 import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
 import qmul.gvgai.engine.core.vgdl.VGDLSprite;
 import qmul.gvgai.engine.tools.Vector2d;
 import qmul.gvgai.engine.tools.pathfinder.PathFinder;
 
-import java.awt.Dimension;
+import java.awt.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-
+@Slf4j
 public class BasicGame extends Game {
 
     /**
@@ -176,14 +175,13 @@ public class BasicGame extends Game {
                         }
                     }
                 } else if (c != ' ') {
-                    Logger.getInstance().addMessage(new Message(Message.WARNING, "\"" + c + "\" is not defined in the level mapping."));
+                    log.warn( "\"" + c + "\" is not defined in the level mapping.");
                 }
             }
         }
 
         if (avatars.size() > no_players) {
-            Logger.getInstance().addMessage(new Message(Message.WARNING,
-                    "No more than " + no_players + " avatar(s) allowed (Others are destroyed)."));
+            log.warn("No more than " + no_players + " avatar(s) allowed (Others are destroyed).");
             for (int i = 0; i < this.spriteGroups.length; i++) {
                 for (int j = no_players; j < avatars.size(); j++) {
                     this.spriteGroups[i].removeSprite(avatars.get(j));

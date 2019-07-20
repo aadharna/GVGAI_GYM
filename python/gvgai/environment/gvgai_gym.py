@@ -11,6 +11,7 @@ import gym
 from gym import error, spaces, utils
 from gvgai import GVGAIClient
 
+
 class GVGAI_Env(gym.Env):
     """
     Define a VGDL environment.
@@ -18,19 +19,35 @@ class GVGAI_Env(gym.Env):
     when the agent receives which reward.
     """
 
-    def __init__(self, game, client_only=False):
+    # Static client that we re-use if the level changes
+    gvgai_client = None
+
+    @staticmethod
+    def get_client(client_only=False):
+        if GVGAI_Env.gvgai_client is None:
+            GVGAI_Env.gvgai_client = GVGAIClient(client_only=client_only)
+        return GVGAI_Env.gvgai_client
+
+    @staticmethod
+    def stop_client():
+        if GVGAI_Env.gvgai_client is not None:
+            GVGAI_Env.gvgai_client.stop()
+
+    def __init__(self, environment_id=None, client_only=False):
         self.__version__ = "0.0.2"
         metadata = {'render.modes': ['human', 'rgb_array']}
 
-        #Send the level to play
-        self.GVGAI = GVGAIClient(game, client_only)
-        self.game = game
+        # Get or create the client and set the environment
+        self.GVGAI = GVGAI_Env.get_client(client_only)
+        self.GVGAI.reset(environment_id)
+
+        self.environment_id = environment_id
         self.actions = self.GVGAI.actions
         self.world_dimensions = self.GVGAI.world_dimensions
         self.viewer = None
 
-        #Only allow gridphysics games for now
-        #Get number of moves for a selected game
+        # Only allow gridphysics games for now
+        # Get number of moves for a selected game
         self.action_space = spaces.Discrete(len(self.actions))
 
         height, width = self.world_dimensions
@@ -64,14 +81,18 @@ class GVGAI_Env(gym.Env):
         self.img = state
         return state, reward, isOver, info
 
-    def reset(self):
+    def reset(self, environment_id=None):
         """
         Reset the state of the environment and returns an initial observation.
         Returns
         -------
         observation (object): the initial observation of the space.
         """
-        self.img = self.GVGAI.reset(self.level)
+
+        if environment_id is not None:
+            self._set_environment_id(environment_id)
+
+        self.img = self.GVGAI.reset(self.environment_id)
         return self.img
 
     def render(self, mode='human'):
@@ -95,29 +116,16 @@ class GVGAI_Env(gym.Env):
             self.viewer.close()
             self.viewer = None
 
-    #Expects path string or int value
-    def _setLevel(self, level):
-        if(type(level) == int):
-            if(level < 5):
-                self.level = level
-            else:
-                print("Level doesn't exist, playing level 0")
-                self.level = 0
-        else:
-            newLvl = path.realpath(level)
-            ogLvls = [path.realpath(path.join(dir, 'games', '{}_v{}'.format(self.game, self.version), '{}_lvl{}.txt'.format(self.game, i))) for i in range(5)]
-            if(newLvl in ogLvls):
-                lvl = ogLvls.index(newLvl)
-                self.level = lvl
-            elif(path.exists(newLvl)):
-                self.GVGAI.addLevel(newLvl)
-                self.level = 5
-            else:
-                print("Level doesn't exist, playing level 0")
-                self.level = 0
+    # Expects path string or int value
+    def _set_environment_id(self, environment_id):
+        self.close()
+        self.environment_id = environment_id
 
     def get_action_meanings(self):
         return self.actions
+
+    def __del__(self):
+        self.close()
 
 class SimpleImageViewer(object):
     def __init__(self, display=None, maxwidth=500):
@@ -125,11 +133,12 @@ class SimpleImageViewer(object):
         self.isopen = False
         self.display = display
         self.maxwidth = maxwidth
-        #self.scale = scale
+        # self.scale = scale
+
     def imshow(self, arr):
         if self.window is None:
             height, width, _channels = arr.shape
-            #if width > self.maxwidth:
+            # if width > self.maxwidth:
             scale = self.maxwidth / width
             width = int(scale * width)
             height = int(scale * height)
@@ -150,7 +159,7 @@ class SimpleImageViewer(object):
 
         assert len(arr.shape) == 3, "You passed in an image with the wrong number shape"
         image = pyglet.image.ImageData(arr.shape[1], arr.shape[0],
-                                       'RGB', arr.tobytes(), pitch=arr.shape[1]*-3)
+                                       'RGB', arr.tobytes(), pitch=arr.shape[1] * -3)
         gl.glTexParameteri(gl.GL_TEXTURE_2D,
                            gl.GL_TEXTURE_MAG_FILTER, gl.GL_NEAREST)
         texture = image.get_texture()
@@ -159,13 +168,12 @@ class SimpleImageViewer(object):
         self.window.clear()
         self.window.switch_to()
         self.window.dispatch_events()
-        texture.blit(0, 0) # draw
+        texture.blit(0, 0)  # draw
         self.window.flip()
+
     def close(self):
-        if self.isopen and sys.meta_path:
-            # ^^^ check sys.meta_path to avoid 'ImportError: sys.meta_path is None, Python is likely shutting down'
-            self.window.close()
-            self.isopen = False
+        self.window.close()
+        self.isopen = False
 
     def __del__(self):
         self.close()

@@ -4,6 +4,7 @@ import sys
 import subprocess
 from struct import pack_into
 
+import gym
 import numpy as np
 
 from gvgai.environment.client.iosocket import IOSocket
@@ -12,7 +13,7 @@ from gvgai.environment.client.types import GamePhase, Action, AgentPhase
 from gvgai.environment.client.utils import LogPipe
 
 
-class GVGAIClient:
+class GVGAIClient():
 
     def _get_libs(self, path):
         libs = []
@@ -22,7 +23,7 @@ class GVGAIClient:
                     libs.append(os.path.join(root, f))
         return libs
 
-    def __init__(self, environment_id, client_only=False):
+    def __init__(self, client_only=False):
 
         self.io = IOSocket(client_only)
         self.player = None
@@ -37,7 +38,7 @@ class GVGAIClient:
         if not client_only:
             gradle_path = os.path.realpath(os.path.dirname(os.path.realpath(__file__)) + "/../../../../")
 
-            self._logpipe = LogPipe(level=logging.DEBUG)
+            self._logpipe = LogPipe("JAVA", level=logging.DEBUG)
             # Run the application using gradle
             cmd = [f'{gradle_path}/gradlew', 'run', f'--args=--port {self.io.port}']
             try:
@@ -55,8 +56,6 @@ class GVGAIClient:
             game_phase)
 
         self._start()
-
-        self.reset(environment_id)
 
     def step(self, act):
 
@@ -79,7 +78,7 @@ class GVGAIClient:
         info = {'winner': state.GameWinner(), 'actions': [a.value for a in actions]}
         return image, reward, done, info
 
-    def reset(self, environment_id):
+    def reset(self, environment_id=None):
         self._previous_score = 0
         self.image = None
 
@@ -174,9 +173,22 @@ class GVGAIClient:
         self.world_dimensions = state.WorldDimensionAsNumpy().astype(np.int32)
         self.io.writeToServer(AgentPhase.INIT_STATE)
 
+    def stop(self):
+
+        if self._running:
+            self._running = False
+            try:
+                game_phase, state, image = self._read_and_process_server_response()
+                assert game_phase == GamePhase.ACT_STATE, "Expecting ACT_STATE from GVGAI, but received %s" % GamePhase(
+                    game_phase)
+                # Tells Java Process to end
+                self._abort_game()
+                self._choose_level("END")
+                if hasattr(self, 'java'):
+                    self.java.kill()
+                    self._logpipe.close()
+            except AssertionError as e:
+                self._logger.error(e)
+
     def __del__(self):
-        try:
-            self.java.kill()
-            self._logpipe.close()
-        except:
-            pass
+        self.stop()

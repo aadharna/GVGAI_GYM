@@ -9,14 +9,19 @@ application {
 
 dependencies {
     compile project(':gvgai')
-    
+
     // Command-line parsing
     compile group: 'info.picocli', name: 'picocli', version: '4.0.0'
 
-    // Lombok
-    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
-    testCompileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
-    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
-    testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
+}
 
+// Have to include the resources from gvgai when running so the assets can be found on the classpath
+sourceSets {
+    main {
+        resources {
+            srcDirs += [
+                    project(':gvgai').sourceSets.main.resources
+            ]
+        }
+    }
 }

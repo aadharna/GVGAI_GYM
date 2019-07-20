@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import lombok.extern.slf4j.Slf4j;
 import qmul.gvgai.engine.core.content.*;
 import qmul.gvgai.engine.core.game.Game;
 import qmul.gvgai.engine.core.game.GameSpace;
@@ -16,10 +17,9 @@ import qmul.gvgai.engine.ontology.Types;
 import qmul.gvgai.engine.ontology.effects.Effect;
 import qmul.gvgai.engine.ontology.effects.TimeEffect;
 import qmul.gvgai.engine.tools.Pair;
-import qmul.gvgai.engine.core.logging.Logger;
-import qmul.gvgai.engine.core.logging.Message;
 
 
+@Slf4j
 public class VGDLParser {
     /**
      * Game which description is being read.
@@ -53,19 +53,13 @@ public class VGDLParser {
     private static boolean VERBOSE_PARSER = false;
 
     /**
-     * private Logger which logs warnings and errors
-     */
-    private Logger logger;
-
-    /**
      * Default constructor.
      */
     public VGDLParser() {
         currentSet = Types.VGDL_GAME_DEF;
-        spriteOrderTmp = new ArrayList<Integer>();
-        singletonTmp = new ArrayList<Integer>();
-        constructors = new HashMap<Integer, SpriteContent>();
-        logger = Logger.getInstance();
+        spriteOrderTmp = new ArrayList<>();
+        singletonTmp = new ArrayList<>();
+        constructors = new HashMap<>();
     }
 
     /**
@@ -76,7 +70,9 @@ public class VGDLParser {
      */
     public Game parseGame(String gameFile) {
         try {
-            var desc_lines = Files.readAllLines(Path.of(getClass().getResource("/games/" + gameFile).toURI()));
+            var resource = "/games/" + gameFile;
+            log.debug("Loading game: [{}]", resource);
+            var desc_lines = Files.readAllLines(Path.of(getClass().getResource(resource).toURI()));
             if (desc_lines != null) {
                 Node rootNode = indentTreeParser(desc_lines);
 
@@ -91,7 +87,7 @@ public class VGDLParser {
                 try {
                     parseNodes(rootNode);
                 } catch (Exception e) {
-                    logger.addMessage(new Message(Message.ERROR, "[PARSE ERROR] " + e.toString()));
+                    log.error("Could not parse game file.", e);
                 }
             }
 
@@ -123,7 +119,7 @@ public class VGDLParser {
 //			try {
 //				parseNodes(rootNode);
 //			} catch (Exception e) {
-//			    logger.addMessage(new Message(Message.ERROR, "[PARSE ERROR] " + e.toString()));
+//			    log.error("[PARSE ERROR] " + e.toString()));
 //			}
 //		}
 //
@@ -144,25 +140,25 @@ public class VGDLParser {
                     try {
                         parseSpriteSet(n.children);
                     } catch (Exception e) {
-                        logger.addMessage(new Message(Message.ERROR, "Sprite Set Error: " + e.toString()));
+                        log.error("Sprite Set Error.", e);
                     }
                 } else if (n.content.identifier.equals("InteractionSet")) {
                     try {
                         parseInteractionSet(n.children);
                     } catch (Exception e) {
-                        logger.addMessage(new Message(Message.ERROR, "Interaction Set Error: " + e.getMessage()));
+                        log.error("Interaction Set Error.", e);
                     }
                 } else if (n.content.identifier.equals("LevelMapping")) {
                     try {
                         parseLevelMapping(n.children);
                     } catch (Exception e) {
-                        logger.addMessage(new Message(Message.ERROR, "Level Mapping Error: " + e.toString()));
+                        log.error("Level Mapping Error.", e);
                     }
                 } else if (n.content.identifier.equals("TerminationSet")) {
                     try {
                         parseTerminationSet(n.children);
                     } catch (Exception e) {
-                        logger.addMessage(new Message(Message.ERROR, "Termination Set Error: " + e.toString()));
+                        log.error("Termination Set Error.", e);
                     }
                 }
             }
@@ -295,7 +291,7 @@ public class VGDLParser {
                 try {
                     last = new Node(content, indent, last, currentSet, lineNumber);
                 } catch (Exception e) {
-                    Logger.getInstance().addMessage(new Message(Message.ERROR, "[PARSE ERROR]" + e.getMessage() + " Line: " + lineNumber + ":" + line.trim()));
+                   log.error("[PARSE ERROR] Line: [{}]:[{}]", lineNumber, line.trim(), e);
                 }
             }
             lineNumber++;

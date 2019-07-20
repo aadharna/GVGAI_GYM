@@ -6,19 +6,18 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import lombok.extern.slf4j.Slf4j;
 import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
 import qmul.gvgai.engine.core.vgdl.VGDLSprite;
 import qmul.gvgai.engine.core.content.InteractionContent;
 import qmul.gvgai.engine.core.game.Game;
-import qmul.gvgai.engine.core.logging.Logger;
-import qmul.gvgai.engine.core.logging.Message;
 import qmul.gvgai.engine.core.player.Player;
 import qmul.gvgai.engine.ontology.Types;
 import qmul.gvgai.engine.ontology.avatar.MovingAvatar;
 import qmul.gvgai.engine.ontology.effects.Effect;
 import qmul.gvgai.engine.tools.Direction;
 
-
+@Slf4j
 public class TransformToSingleton extends Effect {
 
     public String stype; //new type to be transormed to
@@ -32,48 +31,44 @@ public class TransformToSingleton extends Effect {
     public int itype_other;    // type the sprites of type stype are transormed back to
 
 
-    public TransformToSingleton(InteractionContent cnt) throws Exception
-    {
+    public TransformToSingleton(InteractionContent cnt) throws Exception {
         takeOrientation = false;
         is_kill_effect = true;
         this.parseParameters(cnt);
         itype = VGDLRegistry.GetInstance().getRegisteredSpriteValue(stype);
         itype_other = VGDLRegistry.GetInstance().getRegisteredSpriteValue(stype_other);
-        if(itype == -1){
+        if (itype == -1) {
             throw new Exception("Undefined sprite " + stype);
         }
-        if(itype_other == -1){
+        if (itype_other == -1) {
             throw new Exception("Undefined sprite " + stype_other);
         }
     }
 
     @Override
-    public void execute(VGDLSprite sprite1, VGDLSprite sprite2, Game game)
-    {
-	if(sprite1 == null || sprite2 == null){
-	    Logger.getInstance().addMessage(new Message(Message.WARNING, "Neither the 1st nor 2nd sprite can be EOS with TransformToSingleton interaction."));
-	    return;
-	}
-	
+    public void execute(VGDLSprite sprite1, VGDLSprite sprite2, Game game) {
+        if (sprite1 == null || sprite2 == null) {
+            log.warn("Neither the 1st nor 2nd sprite can be EOS with TransformToSingleton interaction.");
+            return;
+        }
+
         //First, transform all sprites in the game to the itype_other type.
         // (in theory, there should be only 1 or none).
         Iterator<VGDLSprite> itSprites = game.getSpriteGroup(itype);
-        if(itSprites != null) while(itSprites.hasNext())
-        {
+        if (itSprites != null) while (itSprites.hasNext()) {
             VGDLSprite sprite = itSprites.next();
 
             VGDLSprite newSprite = game.addSprite(itype_other, sprite.getPosition());
-            if(newSprite != null)
+            if (newSprite != null)
                 setSpriteFields(game, newSprite, sprite);
         }
 
         //Now, make the transformTo normal operation.
         VGDLSprite newSprite = game.addSprite(itype, sprite1.getPosition());
-        if(newSprite != null)
-        {
+        if (newSprite != null) {
             setSpriteFields(game, newSprite, sprite1);
 
-            if(takeOrientation) {
+            if (takeOrientation) {
                 Direction orientation = new Direction(-sprite2.orientation.x(), -sprite2.orientation.y());
                 newSprite.is_oriented = true;
                 newSprite.orientation = orientation;
@@ -81,24 +76,20 @@ public class TransformToSingleton extends Effect {
         }
     }
 
-    private void setSpriteFields(Game game, VGDLSprite newSprite, VGDLSprite oldSprite)
-    {
+    private void setSpriteFields(Game game, VGDLSprite newSprite, VGDLSprite oldSprite) {
         //Orientation
-        if(newSprite.is_oriented && oldSprite.is_oriented)
-        {
+        if (newSprite.is_oriented && oldSprite.is_oriented) {
             newSprite.orientation = oldSprite.orientation;
         }
 
         //Last position of the avatar.
-        newSprite.lastrect =  new Rectangle(oldSprite.lastrect.x, oldSprite.lastrect.y,
+        newSprite.lastrect = new Rectangle(oldSprite.lastrect.x, oldSprite.lastrect.y,
                 oldSprite.lastrect.width, oldSprite.lastrect.height);
 
         //Copy resources
-        if(oldSprite.resources.size() > 0)
-        {
+        if (oldSprite.resources.size() > 0) {
             Set<Map.Entry<Integer, Integer>> entries = oldSprite.resources.entrySet();
-            for(Map.Entry<Integer, Integer> entry : entries)
-            {
+            for (Map.Entry<Integer, Integer> entry : entries) {
                 int resType = entry.getKey();
                 int resValue = entry.getValue();
                 newSprite.modifyResource(resType, resValue);
@@ -108,10 +99,9 @@ public class TransformToSingleton extends Effect {
 
         //Avatar handling (I think considering avatars here is weird...)
         boolean transformed = true;
-        if(oldSprite.is_avatar)
-        {
+        if (oldSprite.is_avatar) {
             try {
-                int id = ((MovingAvatar)oldSprite).getPlayerID();
+                int id = ((MovingAvatar) oldSprite).getPlayerID();
                 Player p = game.getAvatar(id).player;
                 double score = game.getAvatar(id).getScore();
                 Types.WINNER win = game.getAvatar(id).getWinState();
@@ -130,13 +120,13 @@ public class TransformToSingleton extends Effect {
         //boolean variable set to true to indicate the sprite was transformed
         game.killSprite(oldSprite, transformed);
     }
-    
+
     @Override
-    public ArrayList<String> getEffectSprites(){
-    	ArrayList<String> result = new ArrayList<String>();
-    	if(stype!=null) result.add(stype);
-    	if(stype_other!=null) result.add(stype_other);
-    	
-    	return result;
+    public ArrayList<String> getEffectSprites() {
+        ArrayList<String> result = new ArrayList<String>();
+        if (stype != null) result.add(stype);
+        if (stype_other != null) result.add(stype_other);
+
+        return result;
     }
 }

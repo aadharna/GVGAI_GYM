@@ -4,7 +4,7 @@ import os
 
 class LogPipe(threading.Thread):
 
-    def __init__(self, level):
+    def __init__(self, name, level):
         """Setup the object with a logger and a loglevel
         and start the thread
         """
@@ -13,6 +13,9 @@ class LogPipe(threading.Thread):
         self.level = level
         self.fdRead, self.fdWrite = os.pipe()
         self.pipeReader = os.fdopen(self.fdRead)
+
+        self._logger = logging.getLogger(name)
+
         self.start()
 
     def fileno(self):
@@ -24,7 +27,7 @@ class LogPipe(threading.Thread):
         """Run the thread, logging everything.
         """
         for line in iter(self.pipeReader.readline, ''):
-            logging.log(self.level, line.strip('\n'))
+            self._logger.log(self.level, line.strip('\n'))
 
         self.pipeReader.close()
 

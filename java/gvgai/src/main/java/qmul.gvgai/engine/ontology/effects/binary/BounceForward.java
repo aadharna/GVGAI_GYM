@@ -1,15 +1,15 @@
 package qmul.gvgai.engine.ontology.effects.binary;
 
+import lombok.extern.slf4j.Slf4j;
 import qmul.gvgai.engine.core.vgdl.VGDLSprite;
 import qmul.gvgai.engine.core.content.InteractionContent;
 import qmul.gvgai.engine.core.game.Game;
-import qmul.gvgai.engine.core.logging.Logger;
-import qmul.gvgai.engine.core.logging.Message;
 import qmul.gvgai.engine.ontology.effects.Effect;
 import qmul.gvgai.engine.tools.Direction;
 import qmul.gvgai.engine.tools.Vector2d;
 
 
+@Slf4j
 public class BounceForward extends Effect
 {
 
@@ -22,7 +22,7 @@ public class BounceForward extends Effect
     public void execute(VGDLSprite sprite1, VGDLSprite sprite2, Game game)
     {
         if(sprite1 == null || sprite2 == null){
-            Logger.getInstance().addMessage(new Message(Message.WARNING, "Neither the 1st nor 2nd sprite can be EOS with BounceForward interaction."));
+            log.warn("Neither the 1st nor 2nd sprite can be EOS with BounceForward interaction.");
             return;
         }
 

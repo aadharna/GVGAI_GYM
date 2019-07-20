@@ -75,6 +75,7 @@ public class LearningPlayer extends Player {
             Message response = comm.commRecv();
 
             if (response.phase != Types.AgentPhase.ACT_STATE.ordinal()) {
+                log.debug("Client not sending ACT phase message. Aborting game [{}]", response.phase);
                 return Types.ACTIONS.ACTION_ESCAPE;
             }
 
@@ -92,7 +93,7 @@ public class LearningPlayer extends Player {
      */
     public boolean init(Game game) {
 
-        log.debug("INIT - [{}]", game);
+        log.debug("INIT");
 
         var so = game.getObservation();
 
@@ -135,6 +136,7 @@ public class LearningPlayer extends Player {
                 int levelLength = data.readInt();
                 this.currentLevel = new String(data.readNBytes(levelLength), StandardCharsets.UTF_8);
 
+                log.debug("Level chosen: [{}]", this.currentLevel);
                 return currentLevel;
             }
 

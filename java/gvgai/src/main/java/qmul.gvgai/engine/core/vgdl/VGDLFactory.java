@@ -1,5 +1,6 @@
 package qmul.gvgai.engine.core.vgdl;
 
+import lombok.extern.slf4j.Slf4j;
 import qmul.gvgai.engine.core.content.Content;
 import qmul.gvgai.engine.core.content.GameContent;
 import qmul.gvgai.engine.core.content.InteractionContent;
@@ -9,8 +10,6 @@ import qmul.gvgai.engine.core.content.TerminationContent;
 import qmul.gvgai.engine.core.game.BasicGame;
 import qmul.gvgai.engine.core.game.Game;
 import qmul.gvgai.engine.core.game.GameSpace;
-import qmul.gvgai.engine.core.logging.Logger;
-import qmul.gvgai.engine.core.logging.Message;
 import qmul.gvgai.engine.core.termination.MultiSpriteCounter;
 import qmul.gvgai.engine.core.termination.MultiSpriteCounterSubTypes;
 import qmul.gvgai.engine.core.termination.SpriteCounter;
@@ -94,8 +93,8 @@ import qmul.gvgai.engine.ontology.effects.unary.StepBack;
 import qmul.gvgai.engine.ontology.effects.unary.SubtractHealthPoints;
 import qmul.gvgai.engine.ontology.effects.unary.TransformTo;
 import qmul.gvgai.engine.ontology.effects.unary.TransformToRandomChild;
-import qmul.gvgai.engine.ontology.effects.unary.UndoAll;
 import qmul.gvgai.engine.ontology.effects.unary.TurnAround;
+import qmul.gvgai.engine.ontology.effects.unary.UndoAll;
 import qmul.gvgai.engine.ontology.effects.unary.UpdateSpawnType;
 import qmul.gvgai.engine.ontology.effects.unary.WaterPhysics;
 import qmul.gvgai.engine.ontology.effects.unary.WrapAround;
@@ -132,28 +131,28 @@ import qmul.gvgai.engine.ontology.sprites.producer.SpawnPointMultiSprite;
 import qmul.gvgai.engine.ontology.sprites.producer.SpriteProducer;
 import qmul.gvgai.engine.tools.Vector2d;
 
-import java.awt.Dimension;
+import java.awt.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
 
-public class VGDLFactory
-{
+@Slf4j
+public class VGDLFactory {
 
     /**
      * Available sprites for VGDL.
      */
     private String[] spriteStrings = new String[]
             {"Conveyor", "Flicker", "Immovable", "OrientedFlicker", "Passive", "Resource", "Spreader",
-             "ErraticMissile", "Missile", "RandomMissile", "Walker", "WalkerJumper",
-             "ResourcePack", "Chaser", "PathChaser", "Fleeing", "RandomInertial",
-             "RandomNPC", "AlternateChaser", "RandomAltChaser","PathAltChaser", "RandomPathAltChaser",
-             "Bomber", "RandomBomber", "Portal", "SpawnPoint", "SpriteProducer", "Door",
-             "FlakAvatar", "HorizontalAvatar", "VerticalAvatar", "MovingAvatar","MissileAvatar",
-             "OrientedAvatar","ShootAvatar", "OngoingAvatar", "OngoingTurningAvatar", "BomberRandomMissile",
-             "OngoingShootAvatar", "NullAvatar", "AimedAvatar", "PlatformerAvatar", "BirdAvatar",
-             "SpaceshipAvatar", "CarAvatar", "WizardAvatar", "LanderAvatar", "ShootOnlyAvatar", "SpawnPointMultiSprite",
+                    "ErraticMissile", "Missile", "RandomMissile", "Walker", "WalkerJumper",
+                    "ResourcePack", "Chaser", "PathChaser", "Fleeing", "RandomInertial",
+                    "RandomNPC", "AlternateChaser", "RandomAltChaser", "PathAltChaser", "RandomPathAltChaser",
+                    "Bomber", "RandomBomber", "Portal", "SpawnPoint", "SpriteProducer", "Door",
+                    "FlakAvatar", "HorizontalAvatar", "VerticalAvatar", "MovingAvatar", "MissileAvatar",
+                    "OrientedAvatar", "ShootAvatar", "OngoingAvatar", "OngoingTurningAvatar", "BomberRandomMissile",
+                    "OngoingShootAvatar", "NullAvatar", "AimedAvatar", "PlatformerAvatar", "BirdAvatar",
+                    "SpaceshipAvatar", "CarAvatar", "WizardAvatar", "LanderAvatar", "ShootOnlyAvatar", "SpawnPointMultiSprite",
                     "LOSChaser"};
 
 
@@ -162,14 +161,14 @@ public class VGDLFactory
      */
     private Class[] spriteClasses = new Class[]
             {Conveyor.class, Flicker.class, Immovable.class, OrientedFlicker.class, Passive.class, Resource.class, Spreader.class,
-             ErraticMissile.class, Missile.class, RandomMissile.class, Walker.class, WalkerJumper.class,
-             ResourcePack.class, Chaser.class, PathChaser.class, Fleeing.class, RandomInertial.class,
-             RandomNPC.class, AlternateChaser.class, RandomAltChaser.class, PathAltChaser.class, RandomPathAltChaser.class,
-             Bomber.class, RandomBomber.class, Portal.class, SpawnPoint.class, SpriteProducer.class, Door.class,
-             FlakAvatar.class, HorizontalAvatar.class, VerticalAvatar.class, MovingAvatar.class,MissileAvatar.class,
-             OrientedAvatar.class,ShootAvatar.class, OngoingAvatar.class, OngoingTurningAvatar.class, BomberRandomMissile.class,
-             OngoingShootAvatar.class, NullAvatar.class, AimedAvatar.class, PlatformerAvatar.class, BirdAvatar.class,
-             SpaceshipAvatar.class, CarAvatar.class, WizardAvatar.class, LanderAvatar.class, ShootOnlyAvatar.class, SpawnPointMultiSprite.class,
+                    ErraticMissile.class, Missile.class, RandomMissile.class, Walker.class, WalkerJumper.class,
+                    ResourcePack.class, Chaser.class, PathChaser.class, Fleeing.class, RandomInertial.class,
+                    RandomNPC.class, AlternateChaser.class, RandomAltChaser.class, PathAltChaser.class, RandomPathAltChaser.class,
+                    Bomber.class, RandomBomber.class, Portal.class, SpawnPoint.class, SpriteProducer.class, Door.class,
+                    FlakAvatar.class, HorizontalAvatar.class, VerticalAvatar.class, MovingAvatar.class, MissileAvatar.class,
+                    OrientedAvatar.class, ShootAvatar.class, OngoingAvatar.class, OngoingTurningAvatar.class, BomberRandomMissile.class,
+                    OngoingShootAvatar.class, NullAvatar.class, AimedAvatar.class, PlatformerAvatar.class, BirdAvatar.class,
+                    SpaceshipAvatar.class, CarAvatar.class, WizardAvatar.class, LanderAvatar.class, ShootOnlyAvatar.class, SpawnPointMultiSprite.class,
                     LOSChaser.class};
 
     /**
@@ -194,7 +193,7 @@ public class VGDLFactory
     private Class[] effectClasses = new Class[]
             {
                     StepBack.class, TurnAround.class, KillSprite.class, KillBoth.class, KillAll.class, TransformTo.class, TransformToSingleton.class, TransformIfCount.class,
-                    WrapAround.class,ChangeResource.class, KillIfHasLess.class, KillIfHasMore.class, CloneSprite.class,
+                    WrapAround.class, ChangeResource.class, KillIfHasLess.class, KillIfHasMore.class, CloneSprite.class,
                     FlipDirection.class, ReverseDirection.class, ShieldFrom.class, UndoAll.class, Spawn.class, SpawnIfHasMore.class, SpawnIfHasLess.class,
                     PullWithIt.class, WallStop.class, CollectResource.class, CollectResourceIfHeld.class, KillIfOtherHasMore.class, KillIfFromAbove.class,
                     TeleportToExit.class, BounceForward.class, AttractGaze.class, Align.class, SubtractHealthPoints.class, AddHealthPoints.class,
@@ -251,66 +250,61 @@ public class VGDLFactory
     /**
      * Default private constructor of this singleton.
      */
-    private VGDLFactory(){}
+    private VGDLFactory() {
+    }
 
     /**
      * Initializes the maps for caching classes.
      */
-    public void init()
-    {
-        registeredGames = new HashMap<String, Class>();
+    public void init() {
+        registeredGames = new HashMap<>();
         registeredGames.put("BasicGame", BasicGame.class);
         registeredGames.put("GameSpace", GameSpace.class);
 
         registeredSprites = new HashMap<String, Class>();
-        for(int i = 0;  i < spriteStrings.length; ++i)
-        {
+        for (int i = 0; i < spriteStrings.length; ++i) {
             registeredSprites.put(spriteStrings[i], spriteClasses[i]);
         }
 
-        registeredEffects  = new HashMap<String, Class>();
-        for(int i = 0;  i < effectStrings.length; ++i)
-        {
+        registeredEffects = new HashMap<String, Class>();
+        for (int i = 0; i < effectStrings.length; ++i) {
             registeredEffects.put(effectStrings[i], effectClasses[i]);
         }
 
         registeredTerminations = new HashMap<String, Class>();
-        for(int i = 0;  i < terminationStrings.length; ++i)
-        {
+        for (int i = 0; i < terminationStrings.length; ++i) {
             registeredTerminations.put(terminationStrings[i], terminationClasses[i]);
         }
     }
 
     /**
      * Returns the unique instance of this class.
+     *
      * @return the factory that creates the game and the sprite objects.
      */
-    public static VGDLFactory GetInstance()
-    {
-        if(factory == null)
+    public static VGDLFactory GetInstance() {
+        if (factory == null)
             factory = new VGDLFactory();
         return factory;
     }
 
     /**
      * Creates a game, receiving a GameContent object
+     *
      * @param content potential parameters for the class.
      * @return The game just created.
      */
     @SuppressWarnings("unchecked")
-    public Game createGame(GameContent content)
-    {
-        try{
+    public Game createGame(GameContent content) {
+        try {
             Class gameClass = registeredGames.get(content.referenceClass);
-            Constructor gameConstructor = gameClass.getConstructor(new Class[] {GameContent.class});
+            Constructor gameConstructor = gameClass.getConstructor(new Class[]{GameContent.class});
             return (Game) gameConstructor.newInstance(new Object[]{content});
 
-        }catch (NoSuchMethodException e)
-        {
+        } catch (NoSuchMethodException e) {
             e.printStackTrace();
             System.out.println("Error creating game of class " + content.referenceClass);
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error creating game of class " + content.referenceClass);
         }
@@ -320,33 +314,29 @@ public class VGDLFactory
 
     /**
      * Creates a new sprite with a given dimension in a certain position. Parameters are passed as SpriteContent.
-     * @param game Game that is creating the sprite.
-     * @param content parameters for the sprite, including its class.
+     *
+     * @param game     Game that is creating the sprite.
+     * @param content  parameters for the sprite, including its class.
      * @param position position of the object.
-     * @param dim dimensions of the sprite on the world.
+     * @param dim      dimensions of the sprite on the world.
      * @return the new sprite, created and initialized, ready for play!
      */
     @SuppressWarnings("unchecked")
-    public VGDLSprite createSprite(Game game, SpriteContent content, Vector2d position, Dimension dim)
-    {
+    public VGDLSprite createSprite(Game game, SpriteContent content, Vector2d position, Dimension dim) {
 
         decorateContent(game, content);
 
-        try{
+        try {
             Class spriteClass = registeredSprites.get(content.referenceClass);
             Constructor spriteConstructor = spriteClass.getConstructor
-                    (new Class[] {Vector2d.class, Dimension.class, SpriteContent.class});
+                    (new Class[]{Vector2d.class, Dimension.class, SpriteContent.class});
             return (VGDLSprite) spriteConstructor.newInstance(new Object[]{position, dim, content});
 
-        }catch (NoSuchMethodException e)
-        {
+        } catch (NoSuchMethodException e) {
             e.printStackTrace();
             System.out.println("Error creating sprite " + content.identifier + " of class " + content.referenceClass);
-        }
-        catch (NullPointerException e){
-        }
-        catch (Exception e)
-        {
+        } catch (NullPointerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error creating sprite " + content.identifier + " of class " + content.referenceClass);
         }
@@ -354,16 +344,13 @@ public class VGDLFactory
         return null;
     }
 
-    private void decorateContent(Game game, Content content)
-    {
-        try{
+    private void decorateContent(Game game, Content content) {
+        try {
             HashMap<String, ParameterContent> paramsGameSpaceContent = game.getParameters();
-            if(paramsGameSpaceContent != null)
-            {
+            if (paramsGameSpaceContent != null) {
                 content.decorate(paramsGameSpaceContent);
             }
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error Parametrizing Content " + content.identifier);
         }
@@ -372,43 +359,41 @@ public class VGDLFactory
 
     /**
      * Creates a new effect, with parameters passed as InteractionContent.
+     *
      * @param content parameters for the effect, including its class.
      * @return the new effect, created and initialized, ready to be triggered!
-     * @throws Exception 
+     * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public Effect createEffect(Game game, InteractionContent content) throws Exception
-    {
-        if(game != null)
+    public Effect createEffect(Game game, InteractionContent content) throws Exception {
+        if (game != null)
             decorateContent(game, content);
 
-        try{
+        try {
             Class effectClass = registeredEffects.get(content.function);
             Constructor effectConstructor = effectClass.getConstructor
-                    (new Class[] {InteractionContent.class});
+                    (new Class[]{InteractionContent.class});
             Effect ef = (Effect) effectConstructor.newInstance(new Object[]{content});
 
-            if( content.object1.equalsIgnoreCase("TIME") ||
-                content.object2[0].equalsIgnoreCase("TIME"))
+            if (content.object1.equalsIgnoreCase("TIME") ||
+                    content.object2[0].equalsIgnoreCase("TIME"))
                 return new TimeEffect(content, ef);
 
             return ef;
 
-        }catch (NoSuchMethodException e)
-        {
+        } catch (NoSuchMethodException e) {
             String message = "Error creating effect " + content.function + " between "
-            		+ content.object1 + " and ";
-            for(String obj : content.object2) {
-            	message += obj + " ";
+                    + content.object1 + " and ";
+            for (String obj : content.object2) {
+                message += obj + " ";
             }
             message += "\n** Line: " + content.lineNumber + " ** " + content.line;
             throw new Exception(message);
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             String message = "Error creating effect " + content.function + " between "
-            		+ content.object1 + " and ";
-            for(String obj : content.object2) {
-            	message += obj + " ";
+                    + content.object1 + " and ";
+            for (String obj : content.object2) {
+                message += obj + " ";
             }
             message += "\n** Line: " + content.lineNumber + " ** " + content.line;
             throw new Exception(message);
@@ -418,44 +403,41 @@ public class VGDLFactory
 
     /**
      * Creates a new termination, with parameters passed as TerminationContent.
+     *
      * @param content parameters for the termination condition, including its class.
      * @return the new termination, created and initialized, ready to be checked!
-     * @throws Exception 
+     * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public Termination createTermination(Game game, TerminationContent content) throws Exception
-    {
+    public Termination createTermination(Game game, TerminationContent content) throws Exception {
         decorateContent(game, content);
 
-        try{
+        try {
             Class terminationClass = registeredTerminations.get(content.identifier);
             Constructor terminationConstructor = terminationClass.getConstructor
-                    (new Class[] {TerminationContent.class});
+                    (new Class[]{TerminationContent.class});
             Termination ter = (Termination) terminationConstructor.newInstance(new Object[]{content});
             return ter;
 
-        }catch (NoSuchMethodException e)
-        {
+        } catch (NoSuchMethodException e) {
             throw new Exception("Line: " + content.lineNumber + " Error creating termination condition " + content.identifier);
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new Exception("Line: " + content.lineNumber + " Error creating termination condition " + content.identifier);
         }
     }
 
     /**
      * Parses the parameters from content, assigns them to variables in obj.
+     *
      * @param content contains the parameters to read.
-     * @param obj object with the variables to assign.
-     * @throws Exception 
+     * @param obj     object with the variables to assign.
+     * @throws Exception
      */
-    public void parseParameters(Content content, Object obj)
-    {
+    public void parseParameters(Content content, Object obj) {
         //Get all fields from the class and store it as key->field
         Field[] fields = obj.getClass().getFields();
         HashMap<String, Field> fieldMap = new HashMap<String, Field>();
-        for (Field field : fields)
-        {
+        for (Field field : fields) {
             String strField = field.toString();
             int lastDot = strField.lastIndexOf(".");
             String fieldName = strField.substring(lastDot + 1).trim();
@@ -465,11 +447,9 @@ public class VGDLFactory
         Object objVal = null;
         Field cfield = null;
         //Check all parameters from content
-        for (String parameter : content.parameters.keySet())
-        {
+        for (String parameter : content.parameters.keySet()) {
             String value = content.parameters.get(parameter);
-            if (fieldMap.containsKey(parameter))
-            {
+            if (fieldMap.containsKey(parameter)) {
 
                 try {
                     cfield = Types.processField(value);
@@ -484,9 +464,9 @@ public class VGDLFactory
                             objVal = Double.parseDouble(value);
                         } catch (NumberFormatException e2) {
                             try {
-                                if((value.equalsIgnoreCase("true") ||
-                                   value.equalsIgnoreCase("false") ) && !parameter.equalsIgnoreCase("win")
-                                        && !parameter.equalsIgnoreCase("hidden")  && !parameter.equalsIgnoreCase("invisible"))
+                                if ((value.equalsIgnoreCase("true") ||
+                                        value.equalsIgnoreCase("false")) && !parameter.equalsIgnoreCase("win")
+                                        && !parameter.equalsIgnoreCase("hidden") && !parameter.equalsIgnoreCase("invisible"))
                                     objVal = Boolean.parseBoolean(value);
                                 else
                                     objVal = value;
@@ -500,27 +480,23 @@ public class VGDLFactory
                     fieldMap.get(parameter).set(obj, objVal);
                 } catch (IllegalAccessException e) {
                     //TODO: Do it later
-                    
+
                 } catch (Exception e) {
                     //TODO: Do it later
                 }
-            }
-            else
-            {
+            } else {
                 //Ignore unknown fields in dependent Effects (TimeEffect).
                 boolean warn = true;
                 boolean isInteraction = (content instanceof InteractionContent);
-                if(isInteraction)
-                {
-                    boolean isTimeEffect = ((InteractionContent)content).object2[0].equalsIgnoreCase("TIME") ||
-                                            ((InteractionContent)content).object1.equalsIgnoreCase("TIME") ||
-                                            (((InteractionContent) content).line.contains("addTimer")) ;
-                    if(isTimeEffect) warn = false;
+                if (isInteraction) {
+                    boolean isTimeEffect = ((InteractionContent) content).object2[0].equalsIgnoreCase("TIME") ||
+                            ((InteractionContent) content).object1.equalsIgnoreCase("TIME") ||
+                            (((InteractionContent) content).line.contains("addTimer"));
+                    if (isTimeEffect) warn = false;
                 }
 
-                if( warn ){
-                    Logger.getInstance().addMessage(new Message(Message.ERROR, "Unknown field (" + parameter + "=" + value +
-                            ") from " + content.toString()));
+                if (warn) {
+                    log.error("Unknown field ({}={}) from {}", parameter, value, content.toString());
                 }
             }
         }
@@ -529,24 +505,21 @@ public class VGDLFactory
 
     /**
      * Returns the value of an int field in the object specified
-     * @param obj object that holds the field.
+     *
+     * @param obj       object that holds the field.
      * @param fieldName name of the field to retrieve.
      * @return the value, or -1 if the parameter does not exist or it is not an int.
      */
-    public int requestFieldValueInt(Object obj, String fieldName)
-    {
+    public int requestFieldValueInt(Object obj, String fieldName) {
         //Get all fields from the class and store it as key->field
         Field[] fields = obj.getClass().getFields();
-        for (Field field : fields)
-        {
+        for (Field field : fields) {
             String strField = field.getName();
-            if(strField.equalsIgnoreCase(fieldName))
-            {
-                try{
+            if (strField.equalsIgnoreCase(fieldName)) {
+                try {
                     Object objVal = field.get(obj);
-                    return ((Integer)objVal).intValue();
-                }catch(Exception e)
-                {
+                    return ((Integer) objVal).intValue();
+                } catch (Exception e) {
                     System.out.println("ERROR: invalid requested int parameter " + fieldName);
                     return -1;
                 }

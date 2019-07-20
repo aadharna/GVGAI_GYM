@@ -1,9 +1,8 @@
 package qmul.gvgai.engine.ontology.effects.unary;
 
+import lombok.extern.slf4j.Slf4j;
 import qmul.gvgai.engine.core.content.InteractionContent;
 import qmul.gvgai.engine.core.game.Game;
-import qmul.gvgai.engine.core.logging.Logger;
-import qmul.gvgai.engine.core.logging.Message;
 import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
 import qmul.gvgai.engine.core.vgdl.VGDLSprite;
 import qmul.gvgai.engine.ontology.effects.Effect;
@@ -13,6 +12,7 @@ import java.util.ArrayList;
 
 import static qmul.gvgai.engine.ontology.Types.UP;
 
+@Slf4j
 public class SpawnAbove extends Effect {
 
     public String stype;
@@ -30,7 +30,7 @@ public class SpawnAbove extends Effect {
     public void execute(VGDLSprite sprite1, VGDLSprite sprite2, Game game)
     {
 	if(sprite2 == null){
-	    Logger.getInstance().addMessage(new Message(Message.WARNING, "1st sprite can't be EOS with SpawnBehind interaction."));
+	    log.warn( "1st sprite can't be EOS with SpawnBehind interaction.");
 	    return;
 	}
 	

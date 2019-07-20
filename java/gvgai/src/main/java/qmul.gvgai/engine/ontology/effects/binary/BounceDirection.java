@@ -1,16 +1,16 @@
 package qmul.gvgai.engine.ontology.effects.binary;
 
-import qmul.gvgai.engine.core.vgdl.VGDLSprite;
+import lombok.extern.slf4j.Slf4j;
 import qmul.gvgai.engine.core.content.InteractionContent;
 import qmul.gvgai.engine.core.game.Game;
-import qmul.gvgai.engine.core.logging.*;
+import qmul.gvgai.engine.core.vgdl.VGDLSprite;
 import qmul.gvgai.engine.ontology.effects.Effect;
 import qmul.gvgai.engine.tools.Direction;
 import qmul.gvgai.engine.tools.Vector2d;
 
 import java.awt.*;
 
-
+@Slf4j
 public class BounceDirection extends Effect
 {
     public double maxBounceAngleDeg;
@@ -27,7 +27,7 @@ public class BounceDirection extends Effect
     public void execute(VGDLSprite sprite1, VGDLSprite sprite2, Game game)
     {
 	if(sprite1 == null || sprite2 == null){
-	    Logger.getInstance().addMessage(new Message(Message.WARNING, "Neither 1st not 2nd sprite can be EOS with BounceDirection interaction."));
+	    log.warn( "Neither 1st not 2nd sprite can be EOS with BounceDirection interaction.");
 	    return;
 	}
 	

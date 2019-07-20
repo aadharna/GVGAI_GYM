@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.GdxNativesLoader;
+import lombok.extern.slf4j.Slf4j;
 import qmul.gvgai.engine.core.content.SpriteContent;
 import qmul.gvgai.engine.core.game.Game;
 import qmul.gvgai.engine.ontology.Types;
@@ -24,8 +25,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 
-
-
+@Slf4j
 public abstract class VGDLSprite {
 
     static {
@@ -367,11 +367,11 @@ public abstract class VGDLSprite {
         isFirstTick = true;
         disabled = false;
         limitHealthPoints = 1000;
-        resources = new TreeMap<Integer, Integer>();
-        itypes = new ArrayList<Integer>();
+        resources = new TreeMap<>();
+        itypes = new ArrayList<>();
         rotation = 0.0;
         max_speed = -1.0;
-        textures = new HashMap<String, ArrayList<Pixmap>>();
+        textures = new HashMap<>();
 
         this.size = size;
         determinePhysics(physicstype, size);
@@ -986,18 +986,21 @@ public abstract class VGDLSprite {
             //There is autotiling (disabled now) or animations
             if (this.autotiling || this.randomtiling >= 0 || this.frameRate >= 0) {
 
-                if (str.contains(".png"))
+                if (str.contains(".png")) {
                     str = str.substring(0, str.length() - 3);
+                }
 
+                str += "_";
 
                 //Get all the images for each orientation
-                if (isOrientedImg) for (Direction dir : directions) {
-                    String strDir = Types.v2DirStr(dir.getVector());
-                    String imagePath = strDir + "_";
-                    ArrayList<Pixmap> theImages = getAnimatedImages(imagePath);
-                    textures.put(strDir, theImages);
-                }
-                else {
+                if (isOrientedImg) {
+                    for (Direction dir : directions) {
+                        String strDir = Types.v2DirStr(dir.getVector());
+                        String imagePath = strDir + "_";
+                        ArrayList<Pixmap> theImages = getAnimatedImages(imagePath);
+                        textures.put(strDir, theImages);
+                    }
+                } else {
                     ArrayList<Pixmap> theImages = getAnimatedImages(str);
                     textures.put("NONE", theImages);
                 }
@@ -1007,16 +1010,15 @@ public abstract class VGDLSprite {
                 //Get all the images for each orientation
                 if (isOrientedImg) {
 
-                    if (str.contains(".png"))
+                    if (str.contains(".png")) {
                         str = str.substring(0, str.length() - 4);
-
-                    Pixmap onlyImage;
+                    }
 
                     for (Direction dir : directions) {
                         String strDir = Types.v2DirStr(dir.getVector());
                         ArrayList<Pixmap> theImages = new ArrayList<Pixmap>();
                         String imageFile = strDir + ".png";
-                        onlyImage = getTexture(imageFile);
+                        var onlyImage = getTexture(imageFile);
                         theImages.add(onlyImage);
 
                         textures.put(strDir, theImages);
@@ -1038,7 +1040,9 @@ public abstract class VGDLSprite {
     }
 
     private Pixmap getTexture(String imageFile) {
-        return new Pixmap(new FileHandle(new File(getClass().getResource("/sprites/" + imageFile).getPath())));
+        var resource = "/sprites/" + imageFile;
+        log.debug("Loading resource [{}]", resource);
+        return new Pixmap(new FileHandle(new File(getClass().getResource(resource).getPath())));
     }
 
 
@@ -1050,7 +1054,7 @@ public abstract class VGDLSprite {
 
             do {
                 String currentFile = imagePath + i + ".png";
-                if ((new File(currentFile).exists())) {
+                if (getClass().getResource("/sprites/" + currentFile) != null) {
                     theImages.add(getTexture(currentFile));
                 } else {
                     noMoreFiles = true;

@@ -1,7 +1,5 @@
 package qmul.gvgai.engine.core.game;
 
-import qmul.gvgai.engine.core.logging.Logger;
-import qmul.gvgai.engine.core.logging.Message;
 import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
 import qmul.gvgai.engine.ontology.Types;
 import qmul.gvgai.engine.ontology.avatar.MovingAvatar;
@@ -177,7 +175,6 @@ public class GameDescription {
      * return null when there is errors
      */
     public StateObservation testLevel(String level, HashMap<Character, ArrayList<String>> charMapping) {
-        Logger.getInstance().flushMessages();
 
         if (charMapping != null) {
             currentGame.setCharMapping(charMapping);
@@ -188,37 +185,7 @@ public class GameDescription {
         currentGame.buildStringLevel(lines, new Random().nextInt());
         currentGame.setCharMapping(this.charMapping);
 
-        if (Logger.getInstance().getMessageCount(1) > 0) {
-            return null;
-        }
         return currentGame.getObservation();
-    }
-
-    /**
-     * Disable/Enable the logger
-     *
-     * @param value enable or disable
-     */
-    public void enableLogger(boolean value) {
-        Logger.getInstance().active = value;
-    }
-
-    /**
-     * get list of errors from the system
-     *
-     * @return a list of errors
-     */
-    public ArrayList<Message> getErrors() {
-        return Logger.getInstance().getMessages(Message.ERROR);
-    }
-
-    /**
-     * get list of warnings from the system
-     *
-     * @return a list of warning
-     */
-    public ArrayList<Message> getWarnings() {
-        return Logger.getInstance().getMessages(Message.WARNING);
     }
 
     /**

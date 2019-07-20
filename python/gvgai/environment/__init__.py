@@ -540,13 +540,14 @@ environments = [
     "avoidgeorge-lvl2",
     "avoidgeorge-lvl0",
     "avoidgeorge-lvl3",
+
 ]
 
 for env in environments:
 
     register(
         id='gvgai-{}-v0'.format(env),
-        entry_point='gvgai.environment.client.gvgai_client:GVGAIClient',
+        entry_point='gvgai.environment.gvgai_gym:GVGAI_Env',
         kwargs={'environment_id': env},  # 'obs_type': obs_type
         max_episode_steps=2000
         # nondeterministic=nondeterministic,

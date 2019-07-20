@@ -27,8 +27,6 @@ public class LearningServer {
     public void start() {
 
         log.debug("Starting GVGAI server on port [{}]", port);
-        VGDLFactory.GetInstance().init();
-        VGDLRegistry.GetInstance().init();
 
         // Player array to hold the single player
         var player = new LearningPlayer(port);
@@ -43,6 +41,8 @@ public class LearningServer {
 
         while (!level.equals("END")) {
             playOneLevel(level, player);
+
+            level = player.chooseLevel();
         }
 
         player.finishPlayerCommunication();
@@ -58,6 +58,10 @@ public class LearningServer {
         var environmentInfo = parseLevelName(level);
 
         assert environmentInfo != null;
+
+        // Reset VGDL
+        VGDLFactory.GetInstance().init();
+        VGDLRegistry.GetInstance().init();
 
         Game toPlay = new VGDLParser().parseGame(environmentInfo.getGameFile());
         toPlay.buildLevel(environmentInfo.getLevelFile(), randomSeed);
