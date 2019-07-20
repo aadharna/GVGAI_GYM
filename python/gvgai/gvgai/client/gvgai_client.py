@@ -4,13 +4,12 @@ import sys
 import subprocess
 from struct import pack_into
 
-import gym
 import numpy as np
 
-from gvgai.environment.client.iosocket import IOSocket
-from gvgai.environment.client.serialization import State
-from gvgai.environment.client.types import GamePhase, Action, AgentPhase
-from gvgai.environment.client.utils import LogPipe
+from gvgai.client.iosocket import IOSocket
+from gvgai.client.serialization.State import State
+from gvgai.client.types import AgentPhase, GamePhase, Action
+from gvgai.client.utils.logpipe import LogPipe
 
 
 class GVGAIClient():

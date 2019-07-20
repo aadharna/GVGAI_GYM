@@ -1,5 +1,7 @@
 from gym.envs.registration import register
 
+from gvgai.client.gvgai_client import GVGAIClient
+
 environments = [
     "boloadventures-lvl4",
     "boloadventures-lvl0",
@@ -547,7 +549,7 @@ for env in environments:
 
     register(
         id='gvgai-{}-v0'.format(env),
-        entry_point='gvgai.environment.gvgai_gym:GVGAI_Env',
+        entry_point='gvgai.gym:GVGAI_Env',
         kwargs={'environment_id': env},  # 'obs_type': obs_type
         max_episode_steps=2000
         # nondeterministic=nondeterministic,

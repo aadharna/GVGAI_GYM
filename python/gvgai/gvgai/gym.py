@@ -4,11 +4,10 @@
 """
 Simulate VGDL Games
 """
-import sys
-from os import path
-import numpy as np
 import gym
-from gym import error, spaces, utils
+import numpy as np
+from gym import spaces
+
 from gvgai import GVGAIClient
 
 
@@ -103,10 +102,6 @@ class GVGAI_Env(gym.Env):
             return self.img
         elif mode == 'human':
             if not self.viewer:
-                global pyglet
-                import pyglet
-                global gl
-                import pyglet.gl as gl
                 self.viewer = SimpleImageViewer(maxwidth=500)
             self.viewer.imshow(self.img)
             return self.viewer.isopen
@@ -128,12 +123,16 @@ class GVGAI_Env(gym.Env):
         self.close()
 
 class SimpleImageViewer(object):
+
+
     def __init__(self, display=None, maxwidth=500):
         self.window = None
         self.isopen = False
         self.display = display
         self.maxwidth = maxwidth
-        # self.scale = scale
+
+        self._pyglet = __import__('pyglet')
+        self._gl = self._pyglet.gl
 
     def imshow(self, arr):
         if self.window is None:
@@ -142,7 +141,7 @@ class SimpleImageViewer(object):
             scale = self.maxwidth / width
             width = int(scale * width)
             height = int(scale * height)
-            self.window = pyglet.window.Window(width=width, height=height,
+            self.window = self._pyglet.window.Window(width=width, height=height,
                                                display=self.display, vsync=False, resizable=True)
             self.width = width
             self.height = height
@@ -158,10 +157,10 @@ class SimpleImageViewer(object):
                 self.isopen = False
 
         assert len(arr.shape) == 3, "You passed in an image with the wrong number shape"
-        image = pyglet.image.ImageData(arr.shape[1], arr.shape[0],
+        image = self._pyglet.image.ImageData(arr.shape[1], arr.shape[0],
                                        'RGB', arr.tobytes(), pitch=arr.shape[1] * -3)
-        gl.glTexParameteri(gl.GL_TEXTURE_2D,
-                           gl.GL_TEXTURE_MAG_FILTER, gl.GL_NEAREST)
+        self._gl.glTexParameteri(self._gl.GL_TEXTURE_2D,
+                           self._gl.GL_TEXTURE_MAG_FILTER, self._gl.GL_NEAREST)
         texture = image.get_texture()
         texture.width = self.width
         texture.height = self.height

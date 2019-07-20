@@ -2,7 +2,7 @@ import logging
 import time
 import numpy as np
 
-from gvgai.environment.gvgai_gym import GVGAI_Env
+from gvgai.gym import GVGAI_Env
 
 """
 A test client that connects directly to the server environment and does not start one itself

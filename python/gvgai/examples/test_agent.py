@@ -4,15 +4,14 @@ import gvgai
 import time
 import numpy as np
 
-# Predefined names referring to framework
-from gvgai.environment.gvgai_gym import GVGAI_Env
+from gvgai.gym import GVGAI_Env
 
 games = ['gvgai-testgame1', 'gvgai-testgame2', 'gvgai-testgame3']
 trainingLevels = ['lvl0-v0', 'lvl1-v0']
 testLevels = ['lvl2-v0', 'lvl3-v0', 'lvl4-v0']
 
 # Turn debug logging on
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 logger = logging.getLogger("Test Agent")
 
@@ -25,12 +24,12 @@ for game in games:
         actions = env.unwrapped.get_action_meanings()
         start = time.time()
         frames = 0
-        for t in range(200):
+        for t in range(2000):
             # choose action based on trained policy
             # do action and get new state and its reward
             action_id = np.random.randint(5)
             stateObs, diffScore, done, debug = env.step(action_id)
-            env.render()
+            #env.render()
 
             frames += 1
 
@@ -38,7 +37,7 @@ for game in games:
                 end = time.time()
                 total_time = end - start
                 fps = (frames / total_time)
-                logger.debug(f'frames per second: {fps}')
+                logger.info(f'frames per second: {fps}')
 
             # break loop when terminal state is reached
             if done:
@@ -47,6 +46,6 @@ for game in games:
         end = time.time()
         total_time = end - start
         fps = (frames / total_time)
-        logger.debug(f'frames per second: {fps}')
+        logger.info(f'frames per second: {fps}')
 
 GVGAI_Env.stop_client()
