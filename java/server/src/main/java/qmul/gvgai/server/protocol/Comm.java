@@ -132,15 +132,15 @@ public abstract class Comm {
             byte agentPhase = inputStream.readByte();
             int length = inputStream.readInt();
 
-            //if (receivedId == (messageId - 1)) {
+            if (receivedId == (messageId - 1)) {
                 byte[] data = new byte[length];
                 inputStream.read(data, 0, length);
                 return new Message(agentPhase, data);
-//            } else {
-//                //A message from the future? Ignore and return null;
-//                System.err.println("commRecv: Communication Error! Message received out of order!");
-//                return null;
-//            }
+            } else {
+                //A message from the future? Ignore and return null;
+                System.err.println("commRecv: Communication Error! Message received out of order!");
+                return null;
+            }
 
         } catch (IOException e) {
             System.err.println("commRecv: Communication Error!" + e.getMessage());

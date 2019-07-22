@@ -855,6 +855,8 @@ public abstract class Game {
 
             this.gameCycle(); // Execute a game cycle.
 
+            player.observe(getObservation());
+
             if (firstRun && isHuman) {
                 firstRun = false;
             }

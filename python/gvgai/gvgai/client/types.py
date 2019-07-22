@@ -20,13 +20,15 @@ class GamePhase(Enum):
     CHOOSE_LEVEL = 1
     INIT_STATE = 2
     ACT_STATE = 3
-    END_STATE = 4
-    ABORT_STATE = 5
+    OBSERVE_STATE = 4
+    END_STATE = 5
+    ABORT_STATE = 6
 
 class AgentPhase(Enum):
     START_STATE = 0
     CHOOSE_LEVEL_STATE = 1
     INIT_STATE = 2
     ACT_STATE = 3
-    END_STATE = 4
-    ABORT_STATE = 5
+    OBSERVE_STATE = 4
+    END_STATE = 5
+    ABORT_STATE = 6

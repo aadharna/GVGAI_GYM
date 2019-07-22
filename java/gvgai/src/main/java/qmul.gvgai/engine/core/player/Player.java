@@ -69,6 +69,11 @@ public abstract class Player {
      */
     public abstract Types.ACTIONS act(StateObservation stateObs, ElapsedCpuTimer elapsedTimer);
 
+    /**
+     * Used in learning agents to send observations of the state directly after an action has been performed
+     */
+    public void observe(StateObservation stateObservation) {
+    }
 
     /**
      * Picks an action. This function is called every game step to request an

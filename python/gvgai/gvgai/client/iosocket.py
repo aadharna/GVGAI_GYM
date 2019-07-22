@@ -36,6 +36,8 @@ class IOSocket:
 
     def writeToServer(self, agent_phase, data=None):
 
+        self._logger.debug(f'Writing to server phase {agent_phase}')
+
         payload_size = len(data) if data is not None else 0
         buffer_size = 13 + payload_size
 

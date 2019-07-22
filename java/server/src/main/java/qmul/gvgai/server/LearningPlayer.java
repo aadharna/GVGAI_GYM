@@ -47,6 +47,31 @@ public class LearningPlayer extends Player {
         return null;
     }
 
+    @Override
+    public void observe(StateObservation so) {
+
+        log.debug("OBSERVE");
+
+        try {
+            renderer.paintFrameBuffer();
+            FlatBufferStateObservation fbso = new FlatBufferStateObservation(so, includeSemanticData, renderer.getBuffer());
+
+            Message message = new Message(Types.AgentPhase.OBSERVE_STATE.ordinal(), fbso.serialize());
+            comm.commSend(message);
+
+            Message response = comm.commRecv();
+
+            if (response.phase != Types.AgentPhase.OBSERVE_STATE.ordinal()) {
+                log.debug("Client not sending ACT phase message. Aborting game [{}]", response.phase);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
     /**
      * Picks an action. This function is called every game step to request an
      * action from the player. The action returned must be contained in the
@@ -64,10 +89,8 @@ public class LearningPlayer extends Player {
 
         // Sending messages.
         try {
-            renderer.paintFrameBuffer();
-            FlatBufferStateObservation fbso = new FlatBufferStateObservation(so, includeSemanticData, renderer.getBuffer());
 
-            Message message = new Message(Types.GamePhase.ACT_STATE.ordinal(), fbso.serialize());
+            Message message = new Message(Types.AgentPhase.ACT_STATE.ordinal());
             comm.commSend(message);
 
             so.currentGameState = Types.GamePhase.ACT_STATE;
@@ -106,7 +129,7 @@ public class LearningPlayer extends Player {
             so.currentGameState = Types.GamePhase.INIT_STATE;
             FlatBufferStateObservation sso = new FlatBufferStateObservation(so, includeSemanticData, renderer.getBuffer());
 
-            Message message = new Message(Types.GamePhase.INIT_STATE.ordinal(), sso.serialize());
+            Message message = new Message(Types.AgentPhase.INIT_STATE.ordinal(), sso.serialize());
 
             comm.commSend(message);
             Message response = comm.commRecv();
@@ -125,7 +148,7 @@ public class LearningPlayer extends Player {
 
         try {
 
-            Message message = new Message(Types.GamePhase.CHOOSE_ENVIRONMENT_STATE.ordinal());
+            Message message = new Message(Types.AgentPhase.CHOOSE_ENVIRONMENT_STATE.ordinal());
 
             comm.commSend(message);
             Message response = comm.commRecv();

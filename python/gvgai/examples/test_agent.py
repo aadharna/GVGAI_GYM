@@ -4,6 +4,7 @@ import gvgai
 import time
 import numpy as np
 
+from gvgai.client.utils.agent import get_action_by_value
 from gvgai.gym import GVGAI_Env
 
 games = ['gvgai-testgame1', 'gvgai-testgame2', 'gvgai-testgame3']
@@ -24,12 +25,17 @@ for game in games:
         actions = env.unwrapped.get_action_meanings()
         start = time.time()
         frames = 0
-        for t in range(2000):
+        env.render()
+
+        for t in range(200):
             # choose action based on trained policy
             # do action and get new state and its reward
             action_id = np.random.randint(5)
+
+            action_description = get_action_by_value(action_id, actions)
+
             stateObs, diffScore, done, debug = env.step(action_id)
-            #env.render()
+            env.render()
 
             frames += 1
 

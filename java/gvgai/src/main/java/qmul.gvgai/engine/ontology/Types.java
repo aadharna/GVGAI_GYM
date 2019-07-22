@@ -199,7 +199,7 @@ public class Types {
      * This is an enum type that describes the potential states of the game
      */
     public static enum GamePhase {
-        START_STATE, CHOOSE_ENVIRONMENT_STATE, INIT_STATE, ACT_STATE, END_STATE, ABORT_STATE
+        START_STATE, CHOOSE_ENVIRONMENT_STATE, INIT_STATE, ACT_STATE, OBSERVE_STATE, END_STATE, ABORT_STATE
     }
 
 
@@ -209,11 +209,11 @@ public class Types {
         MOVE
     }
 
-    public static enum AgentPhase {
-        START_STATE, CHOOSE_ENVIRONMENT_STATE, INIT_STATE, ACT_STATE, END_STATE, ABORT_STATE
-    }
-
     public static final int SCORE_DISQ = -1000;
+
+    public static enum AgentPhase {
+        START_STATE, CHOOSE_ENVIRONMENT_STATE, INIT_STATE, ACT_STATE, OBSERVE_STATE, END_STATE, ABORT_STATE
+    }
 
     public static final Color GREEN = new Color(0, 200, 0);
     public static final Color BLUE = new Color(0, 0, 200);

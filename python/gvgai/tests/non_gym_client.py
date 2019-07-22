@@ -12,12 +12,12 @@ This can be used for debugging
 if __name__ == '__main__':
 
     # Turn debug logging on
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
 
     logger = logging.getLogger('Test Agent')
 
     environments = [
-        'sokoban-lvl0'
+        'cec1-lvl0'
     ]
 
     start = time.time()
@@ -31,12 +31,13 @@ if __name__ == '__main__':
 
             actions = env.unwrapped.get_action_meanings()
 
-            for t in range(2):
+            for t in range(10000):
                 # choose action based on trained policy
                 # do action and get new state and its reward
                 action_id = np.random.randint(5)
                 stateObs, diffScore, done, debug = env.step(action_id)
-                #env.render()
+
+                env.render()
 
                 frames += 1
 

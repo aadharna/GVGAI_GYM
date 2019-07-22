@@ -49,11 +49,6 @@ class GVGAIClient():
 
         self.io.initBuffers()
 
-        # Firstly we should receive a choose-level state
-        game_phase, _, _ = self._read_and_process_server_response()
-        assert game_phase == GamePhase.START_STATE, "Expecting START_STATE from GVGAI, but received %s" % GamePhase(
-            game_phase)
-
         self._start()
 
     def step(self, act):
@@ -61,8 +56,11 @@ class GVGAIClient():
         if hasattr(act, 'shape'):
             act = int(act)
 
-        game_phase, state, image = self._read_and_process_server_response()
+        # We send the action first and then wait for the response
+        game_phase, _, _ = self._read_and_process_server_response()
         self.io.writeToServer(AgentPhase.ACT_STATE, act.to_bytes(4, byteorder='big'))
+
+        state, image = self._observe()
 
         current_score, reward = self._get_reward(state)
         self._previous_score = current_score
@@ -98,6 +96,9 @@ class GVGAIClient():
                 self._init(state)
                 self._running = True
                 reset = True
+
+            if game_phase == GamePhase.END_STATE:
+                self.io.writeToServer(AgentPhase.END_STATE)
 
     def _get_dimensions(self, state):
         dims = state.WorldDimensionAsNumpy().astype(np.int32)
@@ -142,11 +143,25 @@ class GVGAIClient():
             # traceback.print_exc()
             sys.exit()
 
+
+    def _observe(self):
+        agent_phase, state, image = self._read_and_process_server_response()
+        assert agent_phase == GamePhase.OBSERVE_STATE, "Expecting OBSERVE_STATE from GVGAI, but received %s" % GamePhase(
+            agent_phase)
+        self.io.writeToServer(AgentPhase.OBSERVE_STATE)
+
+        return state, image
+
     def _start(self):
+        # Firstly we should receive a choose-level state
+        game_phase, _, _ = self._read_and_process_server_response()
+        assert game_phase == GamePhase.START_STATE, "Expecting START_STATE from GVGAI, but received %s" % GamePhase(
+            game_phase)
         self.io.writeToServer(AgentPhase.START_STATE)
 
     def _abort_game(self):
         self.io.writeToServer(AgentPhase.ABORT_STATE)
+        self._observe()
         self._end_game()
 
     def _end_game(self):
@@ -180,7 +195,6 @@ class GVGAIClient():
                 game_phase, state, image = self._read_and_process_server_response()
                 assert game_phase == GamePhase.ACT_STATE, "Expecting ACT_STATE from GVGAI, but received %s" % GamePhase(
                     game_phase)
-                # Tells Java Process to end
                 self._abort_game()
                 self._choose_level("END")
                 if hasattr(self, 'java'):
