@@ -1,6 +1,5 @@
-package qmul.gvgai.server;
+package qmul.gvgai.server.player;
 
-import com.badlogic.gdx.graphics.Pixmap;
 import lombok.extern.slf4j.Slf4j;
 import qmul.gvgai.engine.core.game.Game;
 import qmul.gvgai.engine.core.game.StateObservation;
@@ -8,7 +7,6 @@ import qmul.gvgai.engine.core.game.StateObservationMulti;
 import qmul.gvgai.engine.core.game.serialization.FlatBufferStateObservation;
 import qmul.gvgai.engine.core.player.Player;
 import qmul.gvgai.engine.core.vgdl.VGDLRenderer;
-import qmul.gvgai.engine.core.vgdl.VGDLViewer;
 import qmul.gvgai.engine.ontology.Types;
 import qmul.gvgai.engine.tools.ElapsedCpuTimer;
 import qmul.gvgai.server.protocol.Comm;
@@ -29,7 +27,6 @@ public class LearningPlayer extends Player {
      * Server communication channel
      */
     private Comm comm;
-    private String currentLevel;
     private boolean includeSemanticData = false;
 
     private VGDLRenderer renderer = null;
@@ -142,9 +139,9 @@ public class LearningPlayer extends Player {
 
     }
 
-    public String chooseLevel() {
+    public EnvironmentChoice chooseEnvironment() {
 
-        log.debug("CHOOSE LEVEL");
+        log.debug("CHOOSE ENVIRONMENT");
 
         try {
 
@@ -156,11 +153,20 @@ public class LearningPlayer extends Player {
             if (Types.AgentPhase.CHOOSE_ENVIRONMENT_STATE.ordinal() == response.phase) {
                 DataInputStream data = new DataInputStream(new ByteArrayInputStream(response.data));
 
-                int levelLength = data.readInt();
-                this.currentLevel = new String(data.readNBytes(levelLength), StandardCharsets.UTF_8);
+                int environmentIdLength = data.readInt();
+                String environmentId = new String(data.readNBytes(environmentIdLength), StandardCharsets.UTF_8);
 
-                log.debug("Level chosen: [{}]", this.currentLevel);
-                return currentLevel;
+                log.debug("Environment chosen: [{}]", environmentId);
+                int levelDataLength = data.readInt();
+
+                if (levelDataLength > 0) {
+                    String levelData = new String(data.readNBytes(levelDataLength), StandardCharsets.UTF_8);
+                    log.debug("Custom Level Data [{}]", levelData);
+
+                    return new EnvironmentChoice(environmentId, levelData);
+                }
+
+                return new EnvironmentChoice(environmentId);
             }
 
 
@@ -169,7 +175,7 @@ public class LearningPlayer extends Player {
         }
 
         // No level chosen or an error. End
-        return "END";
+        return EnvironmentChoice.END;
     }
 
     @Override
@@ -178,11 +184,10 @@ public class LearningPlayer extends Player {
     }
 
     /**
-     * Function called when the game is over. This method must finish before CompetitionParameters.TEAR_DOWN_TIME,
-     * or the agent will be DISQUALIFIED
+     * Ends communication with client
      *
-     * @param stateObs the game state at the end of the game
-     * @returns Level to be plated.
+     * @param stateObs
+     * @return
      */
     public int endGame(StateObservation stateObs) {
         return this.comm.endGame(stateObs);

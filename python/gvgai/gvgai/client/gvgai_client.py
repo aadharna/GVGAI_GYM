@@ -75,7 +75,7 @@ class GVGAIClient():
         info = {'winner': state.GameWinner(), 'actions': [a.value for a in actions]}
         return image, reward, done, info
 
-    def reset(self, environment_id=None):
+    def reset(self, environment_id=None, level_data=None):
         self._previous_score = 0
         self.image = None
 
@@ -90,7 +90,7 @@ class GVGAIClient():
                 self._abort_game()
 
             if game_phase == GamePhase.CHOOSE_LEVEL:
-                self._choose_level(environment_id)
+                self._choose_level(environment_id, level_data=level_data)
 
             if game_phase == GamePhase.INIT_STATE:
                 self._init(state)
@@ -170,15 +170,30 @@ class GVGAIClient():
             game_phase)
         self.io.writeToServer(AgentPhase.END_STATE)
 
-    def _choose_level(self, environment_id):
+    def _choose_level(self, environment_id, level_data=None):
 
         environment_id_bytes = environment_id.encode()
         environment_id_bytes_length = len(environment_id_bytes)
 
-        choose_level_data = bytearray(4 + environment_id_bytes_length)
+        level_data_bytes_length = 0
+        # If we have a custom environment we should also pass the data
+        if 'custom' in environment_id:
+            assert level_data is not None, 'If using a custom environment, level data must be supplied'
+            level_data_bytes = level_data.encode()
+            level_data_bytes_length = len(level_data_bytes)
 
+
+        choose_level_data = bytearray(4 + environment_id_bytes_length + 4 + level_data_bytes_length)
+
+        # Environment Id
         pack_into('>i', choose_level_data, 0, environment_id_bytes_length)
         pack_into('%ds' % environment_id_bytes_length, choose_level_data, 4, environment_id_bytes)
+
+        # Level Data
+        pack_into('>i', choose_level_data, 4 + environment_id_bytes_length, level_data_bytes_length)
+        if level_data_bytes_length > 0:
+            data_start = 4 + environment_id_bytes_length + 4
+            pack_into('%ds' % level_data_bytes_length, choose_level_data, data_start, level_data_bytes)
 
         self.io.writeToServer(AgentPhase.CHOOSE_LEVEL_STATE, choose_level_data)
 

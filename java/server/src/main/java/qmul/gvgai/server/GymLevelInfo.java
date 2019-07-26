@@ -1,15 +1,14 @@
 package qmul.gvgai.server;
 
-import lombok.AllArgsConstructor;
-import lombok.Value;
+import lombok.Data;
 
-@Value
+@Data
 public class GymLevelInfo {
     private final String game;
     private final String lvl;
 
-    private final String gameFile;
-    private final String levelFile;
+    private final String gameFileName;
+    private String levelFileName = null;
 
     public GymLevelInfo(String game, String lvl) {
         this.game = game;
@@ -17,7 +16,10 @@ public class GymLevelInfo {
 
         var gameDirectory = game + "_v0";
 
-        this.gameFile = gameDirectory + "/" + game + ".txt";
-        this.levelFile = gameDirectory + "/" + game + "_" + lvl + ".txt";
+        this.gameFileName = gameDirectory + "/" + game + ".txt";
+
+        if(!this.lvl.equals("custom")) {
+            this.levelFileName = gameDirectory + "/" + game + "_" + lvl + ".txt";
+        }
     }
 }

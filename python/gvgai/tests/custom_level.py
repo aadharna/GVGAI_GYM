@@ -3,35 +3,42 @@ import time
 import numpy as np
 
 from gvgai.gym import GVGAI_Env
+from tests.level_data_generator import SokobanGenerator
 
 """
 A test client that connects directly to the server environment and does not start one itself
-This can be used for debugging
+
+This client tests that we can create custom levels through this API
 """
 
 if __name__ == '__main__':
 
     # Turn debug logging on
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
 
     logger = logging.getLogger('Test Agent')
 
-    environments = [
-        'cec1-lvl0'
-    ]
+    config = {
+        'prob_hole': 0.1,
+        'prob_box': 0.1,
+        'prob_wall': 0.3,
+        'width': 50,
+        'height': 50
+    }
+
+    level_generator = SokobanGenerator()
 
     start = time.time()
     frames = 0
 
     for i in range(1):
-        for environment_id in environments:
+        for level_data in level_generator.generate(10, config):
 
-            # This should reuse the underlying client
-            env = GVGAI_Env(environment_id, client_only=True)
+            env = GVGAI_Env('sokoban-custom', level_data=level_data, client_only=True)
 
             actions = env.unwrapped.get_action_meanings()
 
-            for t in range(10000):
+            for t in range(500):
                 # choose action based on trained policy
                 # do action and get new state and its reward
                 action_id = np.random.randint(5)

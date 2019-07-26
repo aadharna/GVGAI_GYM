@@ -6,11 +6,13 @@ import qmul.gvgai.engine.core.game.StateObservation;
 import qmul.gvgai.engine.core.vgdl.VGDLFactory;
 import qmul.gvgai.engine.core.vgdl.VGDLParser;
 import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
+import qmul.gvgai.server.player.EnvironmentChoice;
+import qmul.gvgai.server.player.LearningPlayer;
 
-import java.io.IOException;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -22,7 +24,7 @@ public class LearningServer {
         this.port = port;
     }
 
-    private static final Pattern levelPattern = Pattern.compile("(?<game>.*)-(?<level>lvl\\d+)");
+    private static final Pattern levelPattern = Pattern.compile("(?<game>.*)-(?<level>\\w+)");
 
     public void start() {
 
@@ -37,25 +39,25 @@ public class LearningServer {
             return;
         }
 
-        String level = player.chooseLevel();
+        var choice = player.chooseEnvironment();
 
-        while (!level.equals("END")) {
-            playOneLevel(level, player);
+        while (!choice.equals(EnvironmentChoice.END)) {
+            playOneLevel(choice, player);
 
-            level = player.chooseLevel();
+            choice = player.chooseEnvironment();
         }
 
         player.finishPlayerCommunication();
     }
 
-    public static void playOneLevel(String level, LearningPlayer player) {
+    public static void playOneLevel(EnvironmentChoice environment, LearningPlayer player) {
 
-        log.debug("Starting level [{}]", level);
+        log.debug("Starting level [{}]", environment);
 
         // Create a new random seed for the next level.
         int randomSeed = new Random().nextInt();
 
-        var environmentInfo = parseLevelName(level);
+        var environmentInfo = parseLevelName(environment.getEnvironmentId());
 
         assert environmentInfo != null;
 
@@ -63,8 +65,13 @@ public class LearningServer {
         VGDLFactory.GetInstance().init();
         VGDLRegistry.GetInstance().init();
 
-        Game toPlay = new VGDLParser().parseGame(environmentInfo.getGameFile());
-        toPlay.buildLevel(environmentInfo.getLevelFile(), randomSeed);
+        Game toPlay = new VGDLParser().parseGame(environmentInfo.getGameFileName());
+
+        if(environmentInfo.getLvl().equals("custom")) {
+            toPlay.buildStringLevel(environment.getLevelData().lines().collect(Collectors.toList()), randomSeed);
+        } else {
+            toPlay.buildLevel(environmentInfo.getLevelFileName(), randomSeed);
+        }
 
         // Initialize the new learningPlayer instance.
         boolean initialized = LearningServer.initPlayer(player, randomSeed, toPlay);
@@ -76,7 +83,7 @@ public class LearningServer {
 
         StateObservation so = toPlay.getObservation();
 
-        log.debug("Ending level [{}]", level);
+        log.debug("Ending level [{}]", environment);
         player.endGame(so);
 
         //reset the game.
@@ -112,6 +119,7 @@ public class LearningServer {
 
         Matcher m = levelPattern.matcher(level);
         if (m.find()) {
+
             String game = m.group("game");
             String lvl = m.group("level");
 

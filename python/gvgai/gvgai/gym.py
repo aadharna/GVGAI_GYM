@@ -32,15 +32,17 @@ class GVGAI_Env(gym.Env):
         if GVGAI_Env.gvgai_client is not None:
             GVGAI_Env.gvgai_client.stop()
 
-    def __init__(self, environment_id=None, client_only=False):
+    def __init__(self, environment_id=None, level_data=None, client_only=False):
         self.__version__ = "0.0.2"
         metadata = {'render.modes': ['human', 'rgb_array']}
 
         # Get or create the client and set the environment
         self.GVGAI = GVGAI_Env.get_client(client_only)
-        self.GVGAI.reset(environment_id)
+        self.GVGAI.reset(environment_id, level_data)
 
         self.environment_id = environment_id
+        self.level_data = level_data
+
         self.actions = self.GVGAI.actions
         self.world_dimensions = self.GVGAI.world_dimensions
         self.viewer = None
@@ -80,7 +82,7 @@ class GVGAI_Env(gym.Env):
         self.img = state
         return state, reward, isOver, info
 
-    def reset(self, environment_id=None):
+    def reset(self, environment_id=None, level_data=None):
         """
         Reset the state of the environment and returns an initial observation.
         Returns
@@ -89,9 +91,9 @@ class GVGAI_Env(gym.Env):
         """
 
         if environment_id is not None:
-            self._set_environment_id(environment_id)
+            self._set_environment(environment_id, level_data)
 
-        self.img = self.GVGAI.reset(self.environment_id)
+        self.img = self.GVGAI.reset(self.environment_id, self.level_data)
         return self.img
 
     def render(self, mode='human'):
@@ -111,10 +113,10 @@ class GVGAI_Env(gym.Env):
             self.viewer.close()
             self.viewer = None
 
-    # Expects path string or int value
-    def _set_environment_id(self, environment_id):
+    def _set_environment(self, environment_id, level_data):
         self.close()
         self.environment_id = environment_id
+        self.level_data = level_data
 
     def get_action_meanings(self):
         return self.actions
