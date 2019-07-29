@@ -162,13 +162,13 @@ public class BasicGame extends Game {
                         }
                         if (s.autotiling) {
 
-                            ArrayList<Pixmap> textures = s.textures.get("NONE");
+                            ArrayList<byte[]> textures = s.textures.get("NONE");
                             if (textures.size() > 0)
                                 s.texture = textures.get(similarTiles);
                         }
                         if (s.randomtiling >= 0) {
                             Random random = new Random(randomSeed);
-                            ArrayList<Pixmap> allTextures = s.textures.get("NONE");
+                            ArrayList<byte[]> allTextures = s.textures.get("NONE");
                             if (random.nextDouble() > s.randomtiling && allTextures.size() > 0) {
                                 s.texture = allTextures.get(random.nextInt(allTextures.size()));
                             }

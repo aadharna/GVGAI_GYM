@@ -4,7 +4,9 @@ package qmul.gvgai.engine.core.vgdl;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.utils.ByteArray;
 import com.badlogic.gdx.utils.GdxNativesLoader;
+import com.badlogic.gdx.utils.StreamUtils;
 import lombok.extern.slf4j.Slf4j;
 import qmul.gvgai.engine.core.content.SpriteContent;
 import qmul.gvgai.engine.core.game.Game;
@@ -17,6 +19,8 @@ import qmul.gvgai.engine.tools.Utils;
 import qmul.gvgai.engine.tools.Vector2d;
 
 import java.awt.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -215,12 +219,12 @@ public abstract class VGDLSprite {
     /**
      * All images in case there's orientation changes and/or animations.
      */
-    public HashMap<String, ArrayList<Pixmap>> textures;
+    public HashMap<String, ArrayList<byte[]>> textures;
 
     /**
      * Unique and current texture of this sprite.
      */
-    public Pixmap texture;
+    public byte[] texture;
 
     /**
      * String that represents the texture in VGDL.
@@ -493,7 +497,7 @@ public abstract class VGDLSprite {
 
         if (textures.size() > 0) {
 
-            ArrayList<Pixmap> allImages;
+            ArrayList<byte[]> allImages;
             boolean isOrientedImg = (orientedImg != null);
             if (!isOrientedImg)
                 allImages = textures.get("NONE");
@@ -710,7 +714,7 @@ public abstract class VGDLSprite {
 
             if (!is_avatar || !is_oriented) {
                 if (texture != null)
-                    _drawImage(pixmap, game, r);
+                    _drawImage(pixmap, r);
                 else
                     _draw(pixmap, r);
 
@@ -774,12 +778,18 @@ public abstract class VGDLSprite {
             r.y += (rect.height - r.height) / 2;
         }
 
-        int w = texture.getWidth();
-        int h = texture.getHeight();
+        var sprite = new Pixmap(texture, 0, texture.length);
 
-        Pixmap rotated = rotation != 0 ? rotatePixmap(texture, rotation) : texture;
+        int w = sprite.getWidth();
+        int h = sprite.getHeight();
+
+        Pixmap rotated = rotation != 0 ? rotatePixmap(sprite, rotation) : sprite;
 
         pixmap.drawPixmap(rotated, 0, 0, w, h, r.x, r.y, r.width, r.height);
+
+        // Have to dispose so theres no memory leak
+        sprite.dispose();
+        rotated.dispose();
 
         // We only draw the arrow if the directional sprites are null
         if (draw_arrow) {
@@ -842,11 +852,9 @@ public abstract class VGDLSprite {
 
     /**
      * Draws the not-oriented part of the sprite, as an texture. this.texture must be not null.
-     *
      * @param pixmap graphics object to draw in.
-     * @param game   reference to the game that is being played now.
      */
-    public void _drawImage(Pixmap pixmap, Game game, Rectangle r) {
+    public void _drawImage(Pixmap pixmap, Rectangle r) {
         if (shrinkfactor != 1) {
             r.width *= shrinkfactor;
             r.height *= shrinkfactor;
@@ -854,10 +862,15 @@ public abstract class VGDLSprite {
             r.y += (rect.height - r.height) / 2;
         }
 
-        int w = texture.getWidth();
-        int h = texture.getHeight();
+        var sprite = new Pixmap(texture, 0, texture.length);
 
-        pixmap.drawPixmap(texture, 0, 0, w, h, r.x, r.y, r.width, r.height);
+        int w = sprite.getWidth();
+        int h = sprite.getHeight();
+
+        pixmap.drawPixmap(sprite, 0, 0, w, h, r.x, r.y, r.width, r.height);
+
+        // Have to do this to stop memory leak
+        sprite.dispose();
 
     }
 
@@ -997,11 +1010,11 @@ public abstract class VGDLSprite {
                     for (Direction dir : directions) {
                         String strDir = Types.v2DirStr(dir.getVector());
                         String imagePath = strDir + "_";
-                        ArrayList<Pixmap> theImages = getAnimatedImages(imagePath);
+                        ArrayList<byte[]> theImages = getAnimatedImages(imagePath);
                         textures.put(strDir, theImages);
                     }
                 } else {
-                    ArrayList<Pixmap> theImages = getAnimatedImages(str);
+                    ArrayList<byte[]> theImages = getAnimatedImages(str);
                     textures.put("NONE", theImages);
                 }
 
@@ -1016,7 +1029,7 @@ public abstract class VGDLSprite {
 
                     for (Direction dir : directions) {
                         String strDir = Types.v2DirStr(dir.getVector());
-                        ArrayList<Pixmap> theImages = new ArrayList<Pixmap>();
+                        var theImages = new ArrayList<byte[]>();
                         String imageFile = strDir + ".png";
                         var onlyImage = getTexture(imageFile);
                         theImages.add(onlyImage);
@@ -1039,15 +1052,20 @@ public abstract class VGDLSprite {
         }
     }
 
-    private Pixmap getTexture(String imageFile) {
+    private byte[] getTexture(String imageFile) {
         var resource = "/sprites/" + imageFile;
         log.debug("Loading resource [{}]", resource);
-        return new Pixmap(new FileHandle(new File(getClass().getResource(resource).getPath())));
+
+        try {
+            return StreamUtils.copyStreamToByteArray(getClass().getResourceAsStream(resource));
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
-    private ArrayList<Pixmap> getAnimatedImages(String imagePath) {
-        ArrayList<Pixmap> theImages = new ArrayList<>();
+    private ArrayList<byte[]> getAnimatedImages(String imagePath) {
+        ArrayList<byte[]> theImages = new ArrayList<>();
         try {
             boolean noMoreFiles = false;
             int i = 0;

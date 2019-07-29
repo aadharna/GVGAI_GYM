@@ -209,4 +209,10 @@ public class LearningPlayer extends Player {
         return this.comm.endComm();
     }
 
+    @Override
+    public void teardown(Game played) {
+        super.teardown(played);
+
+        renderer.dispose();
+    }
 }

@@ -3,7 +3,8 @@ import time
 import numpy as np
 
 from gvgai.gym import GVGAI_Env
-from tests.level_data_generator import SokobanGenerator
+from gvgai.utils.level_data_generator import SokobanGenerator
+
 
 """
 A test client that connects directly to the server environment and does not start one itself
@@ -18,33 +19,33 @@ if __name__ == '__main__':
 
     logger = logging.getLogger('Test Agent')
 
-    config = {
-        'prob_hole': 0.1,
-        'prob_box': 0.1,
-        'prob_wall': 0.3,
-        'width': 50,
-        'height': 50
-    }
-
     level_generator = SokobanGenerator()
 
     start = time.time()
     frames = 0
 
-    for i in range(1):
+    for i in range(10000):
+
+        config = {
+            'prob_hole': 0.05,
+            'prob_box': 0.05,
+            'prob_wall': 0.3,
+            'width': np.random.randint(8, 20),
+            'height': np.random.randint(8, 20)
+        }
         for level_data in level_generator.generate(10, config):
 
             env = GVGAI_Env('sokoban-custom', level_data=level_data, client_only=True)
 
             actions = env.unwrapped.get_action_meanings()
 
-            for t in range(500):
+            for t in range(10):
                 # choose action based on trained policy
                 # do action and get new state and its reward
                 action_id = np.random.randint(5)
                 stateObs, diffScore, done, debug = env.step(action_id)
 
-                env.render()
+                # env.render()
 
                 frames += 1
 
@@ -57,7 +58,6 @@ if __name__ == '__main__':
                 # break loop when terminal state is reached
                 if done:
                     env.reset()
-
 
     end = time.time()
     total_time = end - start

@@ -51,4 +51,8 @@ public class VGDLRenderer {
 
         return observationBuffer;
     }
+
+    public void dispose() {
+        image.dispose();
+    }
 }
