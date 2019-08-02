@@ -1,10 +1,8 @@
 package qmul.gvgai.engine.core.vgdl;
 
 
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.utils.ByteArray;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.badlogic.gdx.utils.StreamUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +17,6 @@ import qmul.gvgai.engine.tools.Utils;
 import qmul.gvgai.engine.tools.Vector2d;
 
 import java.awt.*;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -800,7 +795,7 @@ public abstract class VGDLSprite {
     }
 
     private void cleanupPixmap(Pixmap sprite) {
-        if(!sprite.isDisposed()) {
+        if (!sprite.isDisposed()) {
             sprite.dispose();
         }
     }
@@ -858,6 +853,7 @@ public abstract class VGDLSprite {
 
     /**
      * Draws the not-oriented part of the sprite, as an texture. this.texture must be not null.
+     *
      * @param pixmap graphics object to draw in.
      */
     public void _drawImage(Pixmap pixmap, Rectangle r) {
@@ -1064,7 +1060,7 @@ public abstract class VGDLSprite {
 
         try {
             return StreamUtils.copyStreamToByteArray(getClass().getResourceAsStream(resource));
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

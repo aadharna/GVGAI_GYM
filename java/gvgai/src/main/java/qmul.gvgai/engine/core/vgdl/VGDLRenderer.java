@@ -53,7 +53,7 @@ public class VGDLRenderer {
     }
 
     public void dispose() {
-        if(!image.isDisposed()) {
+        if (!image.isDisposed()) {
             image.dispose();
         }
     }
