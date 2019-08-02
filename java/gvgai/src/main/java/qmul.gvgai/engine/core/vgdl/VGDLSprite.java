@@ -788,8 +788,8 @@ public abstract class VGDLSprite {
         pixmap.drawPixmap(rotated, 0, 0, w, h, r.x, r.y, r.width, r.height);
 
         // Have to dispose so theres no memory leak
-        sprite.dispose();
-        rotated.dispose();
+        cleanupPixmap(sprite);
+        cleanupPixmap(rotated);
 
         // We only draw the arrow if the directional sprites are null
         if (draw_arrow) {
@@ -797,6 +797,12 @@ public abstract class VGDLSprite {
             pixmap.fillTriangle(p.xpoints[0], p.ypoints[0], p.xpoints[1], p.ypoints[1], p.xpoints[2], p.ypoints[2]);
         }
 
+    }
+
+    private void cleanupPixmap(Pixmap sprite) {
+        if(!sprite.isDisposed()) {
+            sprite.dispose();
+        }
     }
 
     public static Pixmap rotatePixmap(Pixmap src, double angle) {
@@ -870,7 +876,7 @@ public abstract class VGDLSprite {
         pixmap.drawPixmap(sprite, 0, 0, w, h, r.x, r.y, r.width, r.height);
 
         // Have to do this to stop memory leak
-        sprite.dispose();
+        cleanupPixmap(sprite);
 
     }
 
