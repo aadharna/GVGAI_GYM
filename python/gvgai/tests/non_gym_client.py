@@ -17,13 +17,13 @@ if __name__ == '__main__':
     logger = logging.getLogger('Test Agent')
 
     environments = [
-        'cec1-lvl0'
+        'digdug-lvl0'
     ]
 
     start = time.time()
     frames = 0
 
-    for i in range(1):
+    for i in range(100):
         for environment_id in environments:
 
             # This should reuse the underlying client
@@ -31,10 +31,10 @@ if __name__ == '__main__':
 
             actions = env.unwrapped.get_action_meanings()
 
-            for t in range(10000):
+            for t in range(100):
                 # choose action based on trained policy
                 # do action and get new state and its reward
-                action_id = np.random.randint(5)
+                action_id = np.random.randint(6)
                 stateObs, diffScore, done, debug = env.step(action_id)
 
                 env.render()
