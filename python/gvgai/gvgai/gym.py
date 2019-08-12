@@ -31,6 +31,7 @@ class GVGAI_Env(gym.Env):
     def stop_client():
         if GVGAI_Env.gvgai_client is not None:
             GVGAI_Env.gvgai_client.stop()
+            GVGAI_Env.gvgai_client = None
 
     def __init__(self, environment_id=None, level_data=None, client_only=False):
         self.__version__ = "0.0.2"
@@ -103,13 +104,13 @@ class GVGAI_Env(gym.Env):
         if mode == 'rgb_array':
             return self.img
         elif mode == 'human':
-            if not self.viewer:
+            if self.viewer is None:
                 self.viewer = SimpleImageViewer(maxwidth=500)
             self.viewer.imshow(self.img)
             return self.viewer.isopen
 
     def close(self):
-        if self.viewer is not None:
+        if hasattr(self, 'viewer') and self.viewer is not None:
             self.viewer.close()
             self.viewer = None
 

@@ -1,6 +1,6 @@
 BasicGame square_size=30
     SpriteSet
-        floor > Immovable hidden=True img=oryx/backlBrown
+        floor > Immovable hidden=True img=oryx/backLBrown
         goodies > Immovable
             gold > color=GOLD img=oryx/gold2 shrinkfactor=0.5
             gem  > color=GREEN shrinkfactor=0.6 img=oryx/diamond1
