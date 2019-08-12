@@ -12,7 +12,7 @@ trainingLevels = ['lvl0-v0', 'lvl1-v0']
 testLevels = ['lvl2-v0', 'lvl3-v0', 'lvl4-v0']
 
 # Turn debug logging on
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 logger = logging.getLogger("Test Agent")
 
