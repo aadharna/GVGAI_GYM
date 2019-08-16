@@ -17,7 +17,7 @@ if __name__ == '__main__':
     logger = logging.getLogger('Test Agent')
 
     environments = [
-        'digdug-lvl0'
+        'sokoban-lvl0'
     ]
 
     start = time.time()
@@ -31,13 +31,15 @@ if __name__ == '__main__':
 
             actions = env.unwrapped.get_action_meanings()
 
-            for t in range(100):
+            for t in range(10):
                 # choose action based on trained policy
                 # do action and get new state and its reward
-                action_id = np.random.randint(6)
+                action_id = np.random.randint(5)
                 stateObs, diffScore, done, debug = env.step(action_id)
 
                 env.render()
+
+                time.sleep(1)
 
                 frames += 1
 
