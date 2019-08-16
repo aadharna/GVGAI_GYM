@@ -7,9 +7,8 @@ import numpy as np
 from gvgai.client.utils.agent import get_action_by_value
 from gvgai.gym import GVGAI_Env
 
-games = ['gvgai-testgame1', 'gvgai-testgame2', 'gvgai-testgame3']
-trainingLevels = ['lvl0-v0', 'lvl1-v0']
-testLevels = ['lvl2-v0', 'lvl3-v0', 'lvl4-v0']
+games = ['assemblyline']
+levels = ['lvl0-v0', 'lvl1-v0', 'lvl2-v0', 'lvl3-v0', 'lvl4-v0']
 
 # Turn debug logging on
 logging.basicConfig(level=logging.INFO)
@@ -17,8 +16,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("Test Agent")
 
 for game in games:
-    for level in trainingLevels:  # testLevels:
-        env = gym.make(f'{game}-{level}')
+    for level in levels:
+        env = gym.make(f'gvgai-{game}-{level}')
         logger.info(f'Starting {env.spec.id}')
         # reset environment
         stateObs = env.reset()
@@ -27,7 +26,7 @@ for game in games:
         frames = 0
         env.render()
 
-        for t in range(200):
+        for t in range(2000):
             # choose action based on trained policy
             # do action and get new state and its reward
             action_id = np.random.randint(5)

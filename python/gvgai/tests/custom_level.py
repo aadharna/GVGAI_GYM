@@ -30,8 +30,8 @@ if __name__ == '__main__':
             'prob_hole': 0.05,
             'prob_box': 0.05,
             'prob_wall': 0.3,
-            'width': np.random.randint(8, 20),
-            'height': np.random.randint(8, 20)
+            'width': np.random.randint(4, 5),
+            'height': np.random.randint(4, 5)
         }
         for level_data in level_generator.generate(10, config):
 
@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
             actions = env.unwrapped.get_action_meanings()
 
-            for t in range(10):
+            for t in range(32):
                 # choose action based on trained policy
                 # do action and get new state and its reward
                 action_id = np.random.randint(5)

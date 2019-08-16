@@ -1058,8 +1058,8 @@ public abstract class VGDLSprite {
         var resource = "/sprites/" + imageFile;
         log.debug("Loading resource [{}]", resource);
 
-        try {
-            return StreamUtils.copyStreamToByteArray(getClass().getResourceAsStream(resource));
+        try(var textureData = getClass().getResourceAsStream(resource)) {
+            return StreamUtils.copyStreamToByteArray(textureData);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -1083,6 +1083,7 @@ public abstract class VGDLSprite {
             } while (!noMoreFiles);
             texture = theImages.get(0); //Default.
         } catch (Exception e) {
+            log.error("Could not load textures", e);
         }
         return theImages;
     }
