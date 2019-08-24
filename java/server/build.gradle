@@ -1,0 +1,28 @@
+
+plugins {
+    id 'application'
+    id 'java'
+}
+
+application {
+    mainClassName = 'qmul.gvgai.server.Application'
+}
+
+dependencies {
+    compile project(':gvgai')
+
+    // Command-line parsing
+    compile group: 'info.picocli', name: 'picocli', version: '4.0.0'
+
+}
+
+// Have to include the resources from gvgai when running so the assets can be found on the classpath
+sourceSets {
+    main {
+        resources {
+            srcDirs += [
+                    project(':gvgai').sourceSets.main.resources
+            ]
+        }
+    }
+}

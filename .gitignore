@@ -211,3 +211,7 @@ fabric.properties
 /logs/
 
 
+# Gradle
+.gradle/
+
+*.orig
