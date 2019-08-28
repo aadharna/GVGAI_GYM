@@ -1502,10 +1502,10 @@ public abstract class Game {
      */
     @SuppressWarnings("unchecked")
     public VGDLSprite addSprite(SpriteContent content, Vector2d position, int itype, boolean force) {
-        if (num_sprites > MAX_SPRITES) {
-            log.warn( "Sprite limit reached.");
-            return null;
-        }
+//        if (num_sprites > MAX_SPRITES) {
+//            log.warn( "Sprite limit reached.");
+//            return null;
+//        }
 
         // Check for singleton Sprites
         boolean anyother = false;
