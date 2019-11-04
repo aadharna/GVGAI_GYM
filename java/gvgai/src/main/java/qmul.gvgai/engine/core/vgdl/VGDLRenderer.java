@@ -10,18 +10,46 @@ public class VGDLRenderer {
 
     private final Pixmap image;
     private final Game game;
+    private final int gridHeight;
+    private final int gridWidth;
+    private final int numSprites;
 
     public VGDLRenderer(Game game) {
 
         this.game = game;
         var size = game.getScreenSize();
+        var blockSize = game.getBlockSize();
+
+        this.gridHeight = (int)size.getHeight() / blockSize;
+        this.gridWidth = (int)size.getHeight() / blockSize;
+
+        this.numSprites = game.getSpriteGroups().length;
 
         image = new Pixmap((int) size.getWidth(), (int) size.getHeight(), Pixmap.Format.RGB888);
         image.setBlending(Pixmap.Blending.SourceOver);
         image.setFilter(Pixmap.Filter.BiLinear);
     }
 
-    public void paintFrameBuffer() {
+    public byte[] paintOneHotBuffer() {
+        var gameSpriteOrder = game.getSpriteOrder();
+        var spriteGroups = game.getSpriteGroups();
+
+        var oneHotBuffer = new byte[numSprites*gridWidth*gridHeight];
+
+        for (Integer spriteTypeInt : gameSpriteOrder) {
+            if (spriteGroups[spriteTypeInt] != null) {
+                ArrayList<VGDLSprite> spritesList = spriteGroups[spriteTypeInt].getSprites();
+                for (VGDLSprite sp : spritesList) {
+                    int spriteX = (int) sp.getPosition().x;
+                    int spriteY = (int) sp.getPosition().y;
+
+
+                }
+            }
+        }
+    }
+
+    public byte[] paintFrameBuffer() {
 
         image.setColor(Color.BLACK);
         image.fill();
@@ -40,7 +68,7 @@ public class VGDLRenderer {
             }
         }
 
-        //player.draw(image);
+        return getBuffer();
     }
 
 

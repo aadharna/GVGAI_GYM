@@ -3,6 +3,7 @@ import time
 import numpy as np
 
 from gvgai.gym import GVGAI_Env
+from gvgai.utils.level_data_generator import SokobanGenerator
 
 """
 A test client that connects directly to the server environment and does not start one itself
@@ -16,18 +17,30 @@ if __name__ == '__main__':
 
     logger = logging.getLogger('Test Agent')
 
+    level_generator = SokobanGenerator()
+
     environments = [
-        'sokoban-lvl0'
+        'sokoban-custom'
     ]
 
     start = time.time()
     frames = 0
 
+    config = {
+        'prob_hole': 0.05,
+        'prob_box': 0.05,
+        'prob_wall': 0.3,
+        'width': np.random.randint(4, 5),
+        'height': np.random.randint(4, 5)
+    }
+
     for i in range(100):
         for environment_id in environments:
 
+            level_data = level_generator.generate(1, config).__next__()
+
             # This should reuse the underlying client
-            env = GVGAI_Env(environment_id, client_only=True)
+            env = GVGAI_Env(environment_id, level_data=level_data, client_only=True)
 
             actions = env.unwrapped.get_action_meanings()
 
@@ -39,7 +52,7 @@ if __name__ == '__main__':
 
                 env.render()
 
-                time.sleep(1)
+                #time.sleep(1)
 
                 frames += 1
 

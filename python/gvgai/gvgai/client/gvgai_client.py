@@ -41,7 +41,8 @@ class GVGAIClient():
 
             self._logpipe = LogPipe("JAVA", level=java_log_level)
             # Run the application using gradle
-            cmd = [f'{gradle_path}/gradlew', 'run', f'--args=-p {self.io.port} -l {logging.getLevelName(java_log_level)}']
+            cmd = [f'{gradle_path}/gradlew', 'run',
+                   f'--args=-p {self.io.port} -l {logging.getLevelName(java_log_level)}']
             try:
                 # Pump the logging output to a logger so we can see it
                 self.java = subprocess.Popen(cmd, stdout=self._logpipe, stderr=self._logpipe, cwd=gradle_path)
@@ -77,7 +78,7 @@ class GVGAIClient():
         info = {'winner': state.GameWinner(), 'actions': [a.value for a in actions]}
         return image, reward, done, info
 
-    def reset(self, environment_id=None, level_data=None):
+    def reset(self, environment_id=None, level_data=None, include_semantic_data=False, one_hot_observations=False):
         self._previous_score = 0
         self.image = None
 
@@ -92,7 +93,11 @@ class GVGAIClient():
                 self._abort_game()
 
             if game_phase == GamePhase.CHOOSE_LEVEL:
-                self._choose_level(environment_id, level_data=level_data)
+                self._choose_level(environment_id,
+                                   level_data=level_data,
+                                   include_semantic_data=include_semantic_data,
+                                   one_hot_observations=one_hot_observations
+                                   )
 
             if game_phase == GamePhase.INIT_STATE:
                 self._init(state)
@@ -145,7 +150,6 @@ class GVGAIClient():
             # traceback.print_exc()
             sys.exit()
 
-
     def _observe(self):
         agent_phase, state, image = self._read_and_process_server_response()
         assert agent_phase == GamePhase.OBSERVE_STATE, "Expecting OBSERVE_STATE from GVGAI, but received %s" % GamePhase(
@@ -172,7 +176,10 @@ class GVGAIClient():
             game_phase)
         self.io.writeToServer(AgentPhase.END_STATE)
 
-    def _choose_level(self, environment_id, level_data=None):
+    def _bool2bytes(self, value):
+        return bytearray(b'\x01' if value else b'\x00')
+
+    def _choose_level(self, environment_id, level_data=None, include_semantic_data=False, one_hot_observations=False):
 
         environment_id_bytes = environment_id.encode()
         environment_id_bytes_length = len(environment_id_bytes)
@@ -184,17 +191,20 @@ class GVGAIClient():
             level_data_bytes = level_data.encode()
             level_data_bytes_length = len(level_data_bytes)
 
-
-        choose_level_data = bytearray(4 + environment_id_bytes_length + 4 + level_data_bytes_length)
+        choose_level_data = bytearray(4 + environment_id_bytes_length + 6 + level_data_bytes_length)
 
         # Environment Id
         pack_into('>i', choose_level_data, 0, environment_id_bytes_length)
         pack_into('%ds' % environment_id_bytes_length, choose_level_data, 4, environment_id_bytes)
 
+        # Environment Data Options
+        pack_into('?', choose_level_data, environment_id_bytes_length + 4, include_semantic_data)
+        pack_into('?', choose_level_data, environment_id_bytes_length + 5, one_hot_observations)
+
         # Level Data
-        pack_into('>i', choose_level_data, 4 + environment_id_bytes_length, level_data_bytes_length)
+        pack_into('>i', choose_level_data, environment_id_bytes_length + 6, level_data_bytes_length)
         if level_data_bytes_length > 0:
-            data_start = 4 + environment_id_bytes_length + 4
+            data_start = environment_id_bytes_length + 10
             pack_into('%ds' % level_data_bytes_length, choose_level_data, data_start, level_data_bytes)
 
         self.io.writeToServer(AgentPhase.CHOOSE_LEVEL_STATE, choose_level_data)

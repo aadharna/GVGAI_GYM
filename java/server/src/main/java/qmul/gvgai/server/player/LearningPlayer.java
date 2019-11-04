@@ -28,6 +28,7 @@ public class LearningPlayer extends Player {
      */
     private Comm comm;
     private boolean includeSemanticData = false;
+    private boolean oneHotObservation = false;
 
     private VGDLRenderer renderer = null;
 
@@ -50,7 +51,12 @@ public class LearningPlayer extends Player {
         log.debug("OBSERVE");
 
         try {
-            renderer.paintFrameBuffer();
+
+            if(oneHotObservation) {
+
+            } else {
+                renderer.paintFrameBuffer();
+            }
             FlatBufferStateObservation fbso = new FlatBufferStateObservation(so, includeSemanticData, renderer.getBuffer());
 
             Message message = new Message(Types.AgentPhase.OBSERVE_STATE.ordinal(), fbso.serialize());
@@ -156,6 +162,9 @@ public class LearningPlayer extends Player {
                 int environmentIdLength = data.readInt();
                 String environmentId = new String(data.readNBytes(environmentIdLength), StandardCharsets.UTF_8);
 
+                this.includeSemanticData = data.readBoolean();
+                this.oneHotObservation = data.readBoolean();
+
                 log.debug("Environment chosen: [{}]", environmentId);
                 int levelDataLength = data.readInt();
 
@@ -163,10 +172,10 @@ public class LearningPlayer extends Player {
                     String levelData = new String(data.readNBytes(levelDataLength), StandardCharsets.UTF_8);
                     log.debug("Custom Level Data [{}]", levelData);
 
-                    return new EnvironmentChoice(environmentId, levelData);
+                    return new EnvironmentChoice(environmentId, levelData, includeSemanticData, oneHotObservation);
                 }
 
-                return new EnvironmentChoice(environmentId);
+                return new EnvironmentChoice(environmentId, includeSemanticData, oneHotObservation);
             }
 
 
