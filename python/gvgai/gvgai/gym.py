@@ -33,16 +33,28 @@ class GVGAI_Env(gym.Env):
             GVGAI_Env.gvgai_client.stop()
             GVGAI_Env.gvgai_client = None
 
-    def __init__(self, environment_id=None, level_data=None, client_only=False):
+    def __init__(self, environment_id=None,
+                 level_data=None,
+                 one_hot_observations=False,
+                 include_semantic_data=False,
+                 client_only=False
+                 ):
+
         self.__version__ = "0.0.2"
         metadata = {'render.modes': ['human', 'rgb_array']}
 
         # Get or create the client and set the environment
         self.GVGAI = GVGAI_Env.get_client(client_only)
-        self.GVGAI.reset(environment_id, level_data)
+        self.GVGAI.reset(environment_id,
+                         level_data,
+                         include_semantic_data=include_semantic_data,
+                         one_hot_observations=one_hot_observations
+                         )
 
         self.environment_id = environment_id
         self.level_data = level_data
+        self._one_hot_observations = one_hot_observations
+        self._include_semantic_data = include_semantic_data
 
         self.actions = self.GVGAI.actions
         self.world_dimensions = self.GVGAI.world_dimensions
@@ -94,7 +106,7 @@ class GVGAI_Env(gym.Env):
         if environment_id is not None:
             self._set_environment(environment_id, level_data)
 
-        self.img = self.GVGAI.reset(self.environment_id, self.level_data)
+        self.img = self.GVGAI.reset(self.environment_id, self.level_data, include_semantic_data=self._include_semantic_data, one_hot_observations=self._one_hot_observations)
         return self.img
 
     def render(self, mode='human'):
@@ -125,8 +137,8 @@ class GVGAI_Env(gym.Env):
     def __del__(self):
         self.close()
 
-class SimpleImageViewer(object):
 
+class SimpleImageViewer(object):
 
     def __init__(self, display=None, maxwidth=500):
         self.window = None
@@ -145,7 +157,7 @@ class SimpleImageViewer(object):
             width = int(scale * width)
             height = int(scale * height)
             self.window = self._pyglet.window.Window(width=width, height=height,
-                                               display=self.display, vsync=False, resizable=True)
+                                                     display=self.display, vsync=False, resizable=True)
             self.width = width
             self.height = height
             self.isopen = True
@@ -161,9 +173,9 @@ class SimpleImageViewer(object):
 
         assert len(arr.shape) == 3, "You passed in an image with the wrong number shape"
         image = self._pyglet.image.ImageData(arr.shape[1], arr.shape[0],
-                                       'RGB', arr.tobytes(), pitch=arr.shape[1] * -3)
+                                             'RGB', arr.tobytes(), pitch=arr.shape[1] * -3)
         self._gl.glTexParameteri(self._gl.GL_TEXTURE_2D,
-                           self._gl.GL_TEXTURE_MAG_FILTER, self._gl.GL_NEAREST)
+                                 self._gl.GL_TEXTURE_MAG_FILTER, self._gl.GL_NEAREST)
         texture = image.get_texture()
         texture.width = self.width
         texture.height = self.height

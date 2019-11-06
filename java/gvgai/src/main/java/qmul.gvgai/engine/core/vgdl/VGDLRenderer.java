@@ -13,12 +13,13 @@ public class VGDLRenderer {
     private final int gridHeight;
     private final int gridWidth;
     private final int numSprites;
+    private final int blockSize;
 
     public VGDLRenderer(Game game) {
 
         this.game = game;
         var size = game.getScreenSize();
-        var blockSize = game.getBlockSize();
+        this.blockSize = game.getBlockSize();
 
         this.gridHeight = (int)size.getHeight() / blockSize;
         this.gridWidth = (int)size.getHeight() / blockSize;
@@ -40,13 +41,17 @@ public class VGDLRenderer {
             if (spriteGroups[spriteTypeInt] != null) {
                 ArrayList<VGDLSprite> spritesList = spriteGroups[spriteTypeInt].getSprites();
                 for (VGDLSprite sp : spritesList) {
-                    int spriteX = (int) sp.getPosition().x;
-                    int spriteY = (int) sp.getPosition().y;
+                    int spriteX = (int) sp.getPosition().x / blockSize;
+                    int spriteY = (int) sp.getPosition().y / blockSize;
 
+                    int spriteIdx = spriteTypeInt;
 
+                    oneHotBuffer[spriteY*numSprites*gridWidth + spriteX*numSprites + spriteIdx] = 1;
                 }
             }
         }
+
+        return oneHotBuffer;
     }
 
     public byte[] paintFrameBuffer() {
@@ -56,7 +61,6 @@ public class VGDLRenderer {
 
         var gameSpriteOrder = game.getSpriteOrder();
         var spriteGroups = game.getSpriteGroups();
-
 
         for (Integer spriteTypeInt : gameSpriteOrder) {
             if (spriteGroups[spriteTypeInt] != null) {

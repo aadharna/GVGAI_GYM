@@ -13,7 +13,7 @@ This can be used for debugging
 if __name__ == '__main__':
 
     # Turn debug logging on
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
 
     logger = logging.getLogger('Test Agent')
 
@@ -23,15 +23,12 @@ if __name__ == '__main__':
         'sokoban-custom'
     ]
 
-    start = time.time()
-    frames = 0
-
     config = {
         'prob_hole': 0.05,
         'prob_box': 0.05,
         'prob_wall': 0.3,
-        'width': np.random.randint(4, 5),
-        'height': np.random.randint(4, 5)
+        'width': np.random.randint(9, 10),
+        'height': np.random.randint(9, 10)
     }
 
     for i in range(100):
@@ -40,17 +37,20 @@ if __name__ == '__main__':
             level_data = level_generator.generate(1, config).__next__()
 
             # This should reuse the underlying client
-            env = GVGAI_Env(environment_id, level_data=level_data, client_only=True)
+            env = GVGAI_Env(environment_id, level_data=level_data, one_hot_observations=True, client_only=True)
 
             actions = env.unwrapped.get_action_meanings()
 
-            for t in range(10):
+            start = time.time()
+            frames = 0
+
+            for t in range(10000):
                 # choose action based on trained policy
                 # do action and get new state and its reward
                 action_id = np.random.randint(5)
                 stateObs, diffScore, done, debug = env.step(action_id)
 
-                env.render()
+                #env.render()
 
                 #time.sleep(1)
 
@@ -60,7 +60,7 @@ if __name__ == '__main__':
                     end = time.time()
                     total_time = end - start
                     fps = (frames / total_time)
-                    logger.debug(f'frames per second: {fps}')
+                    logger.info(f'frames per second: {fps}')
 
                 # break loop when terminal state is reached
                 if done:

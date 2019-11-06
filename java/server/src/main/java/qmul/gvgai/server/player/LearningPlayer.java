@@ -45,6 +45,14 @@ public class LearningPlayer extends Player {
         return null;
     }
 
+    private byte[] getObservationBytes() {
+        if(oneHotObservation) {
+            return renderer.paintOneHotBuffer();
+        } else {
+            return renderer.paintFrameBuffer();
+        }
+    }
+
     @Override
     public void observe(StateObservation so) {
 
@@ -52,12 +60,8 @@ public class LearningPlayer extends Player {
 
         try {
 
-            if(oneHotObservation) {
-
-            } else {
-                renderer.paintFrameBuffer();
-            }
-            FlatBufferStateObservation fbso = new FlatBufferStateObservation(so, includeSemanticData, renderer.getBuffer());
+            var observeratonBytes = getObservationBytes();
+            FlatBufferStateObservation fbso = new FlatBufferStateObservation(so, includeSemanticData, oneHotObservation, observeratonBytes);
 
             Message message = new Message(Types.AgentPhase.OBSERVE_STATE.ordinal(), fbso.serialize());
             comm.commSend(message);
@@ -124,13 +128,14 @@ public class LearningPlayer extends Player {
         var so = game.getObservation();
 
         renderer = new VGDLRenderer(game);
-        renderer.paintFrameBuffer();
+
+        var observeratonBytes = getObservationBytes();
 
         //Sending messages.
         try {
             // Set the game state to the appropriate state and the millisecond counter, then send the serialized observation.
             so.currentGameState = Types.GamePhase.INIT_STATE;
-            FlatBufferStateObservation sso = new FlatBufferStateObservation(so, includeSemanticData, renderer.getBuffer());
+            FlatBufferStateObservation sso = new FlatBufferStateObservation(so, includeSemanticData, oneHotObservation, observeratonBytes);
 
             Message message = new Message(Types.AgentPhase.INIT_STATE.ordinal(), sso.serialize());
 

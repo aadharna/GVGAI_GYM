@@ -24,7 +24,7 @@ public class FlatBufferStateObservation {
         actions = Arrays.asList(Action.names);
     }
 
-    public FlatBufferStateObservation(StateObservation so, boolean includeSemanticData, byte[] imageArray) {
+    public FlatBufferStateObservation(StateObservation so, boolean includeSemanticData, boolean oneHotObservations, byte[] imageArray) {
 
         b = new FlatBufferBuilder(0);
 
@@ -33,6 +33,12 @@ public class FlatBufferStateObservation {
         double[] worldDimensionVector = new double[2];
         worldDimensionVector[0] = so.getWorldDimension().width;
         worldDimensionVector[1] = so.getWorldDimension().height;
+
+        if (oneHotObservations) {
+            worldDimensionVector[0] /= so.getBlockSize();
+            worldDimensionVector[1] /= so.getBlockSize();
+        }
+
         int worldDimensionOffset = State.createWorldDimensionVector(b, worldDimensionVector);
 
         int availableActions = addAvailableActions(b, so);

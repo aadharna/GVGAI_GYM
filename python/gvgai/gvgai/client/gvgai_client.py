@@ -81,6 +81,7 @@ class GVGAIClient():
     def reset(self, environment_id=None, level_data=None, include_semantic_data=False, one_hot_observations=False):
         self._previous_score = 0
         self.image = None
+        self._one_hot_observations = one_hot_observations
 
         reset = False
 
@@ -138,7 +139,7 @@ class GVGAIClient():
                 image = None
                 if state.ImageArrayLength() != 0:
                     width, height = self._get_dimensions(state)
-                    image = np.reshape(state.ImageArrayAsNumpy().astype(np.uint8), (height, width, 3))
+                    image = np.reshape(state.ImageArrayAsNumpy().astype(np.uint8), (height, width, -1))
 
                 return state, image
 
