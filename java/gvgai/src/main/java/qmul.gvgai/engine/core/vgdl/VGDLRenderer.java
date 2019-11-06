@@ -22,7 +22,7 @@ public class VGDLRenderer {
         this.blockSize = game.getBlockSize();
 
         this.gridHeight = (int)size.getHeight() / blockSize;
-        this.gridWidth = (int)size.getHeight() / blockSize;
+        this.gridWidth = (int)size.getWidth() / blockSize;
 
         this.numSprites = game.getSpriteGroups().length;
 
