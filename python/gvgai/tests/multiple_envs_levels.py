@@ -30,23 +30,24 @@ if __name__ == '__main__':
     start = time.time()
     frames = 0
 
-    env1 = GVGAI_Env('sokoban-custom', tile_observations=True, level_data=generate_level())
-    env2 = GVGAI_Env('sokoban-custom', tile_observations=True, level_data=generate_level())
-    env3 = GVGAI_Env('sokoban-custom', tile_observations=True, level_data=generate_level())
+    num_envs = 10
+
+    envs = [
+        GVGAI_Env('sokoban-custom', tile_observations=True, level_data=generate_level())
+        for e in range(num_envs)
+    ]
 
     for i in range(100):
 
-        env1.reset(level_data=generate_level())
-        env2.reset(level_data=generate_level())
-        env3.reset(level_data=generate_level())
+        for env in envs:
+            env.reset(level_data=generate_level())
 
         for t in range(1000):
             # choose action based on trained policy
             # do action and get new state and its reward
             action_id = np.random.randint(5)
-            step1 = env1.step(action_id)
-            step2 = env2.step(action_id)
-            step3 = env3.step(action_id)
+
+            steps = [env.step(action_id) for env in envs]
 
             #env1.render()
             #env2.render()
@@ -58,14 +59,11 @@ if __name__ == '__main__':
                 end = time.time()
                 total_time = end - start
                 fps = (frames / total_time)
-                logger.info(f'frames per second: {fps * 3}')
+                logger.info(f'frames per second: {fps * num_envs}')
 
-            # break loop when terminal state is reached
-            if step1[2]:
-                env1.reset()
+                start = time.time()
+                frames = 0
 
-            if step2[2]:
-                env2.reset()
-
-            if step3[2]:
-                env3.reset()
+            for step, env in zip(steps, envs):
+                if step[2]:
+                    env.reset()
