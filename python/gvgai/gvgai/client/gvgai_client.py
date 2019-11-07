@@ -35,17 +35,17 @@ class GVGAIClient():
 
         # Client only mode stops the service from being started
         if not client_only:
-            gradle_path = os.path.realpath(os.path.dirname(os.path.realpath(__file__)) + "/../../../../")
+            root_path = os.path.realpath(os.path.dirname(os.path.realpath(__file__)) + "/../../../../")
 
             java_log_level = logging.INFO
 
             self._logpipe = LogPipe("JAVA", level=java_log_level)
             # Run the application using gradle
-            cmd = [f'{gradle_path}/gradlew', 'run',
-                   f'--args=-p {self.io.port} -l {logging.getLevelName(java_log_level)}']
+            cmd = [f'{root_path}/gradlew', 'run',
+                   f'--args=-i {root_path}/games -p {self.io.port} -l {logging.getLevelName(java_log_level)}']
             try:
                 # Pump the logging output to a logger so we can see it
-                self.java = subprocess.Popen(cmd, stdout=self._logpipe, stderr=self._logpipe, cwd=gradle_path)
+                self.java = subprocess.Popen(cmd, stdout=self._logpipe, stderr=self._logpipe, cwd=root_path)
             except subprocess.CalledProcessError as e:
                 self._logger.error(f'exit code: {e.returncode}')
                 self._logger.error(f'stderr: {e.stderr.decode(sys.getfilesystemencoding())}')

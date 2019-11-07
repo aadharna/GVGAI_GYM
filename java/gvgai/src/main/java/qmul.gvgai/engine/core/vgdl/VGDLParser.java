@@ -70,9 +70,8 @@ public class VGDLParser {
      */
     public Game parseGame(String gameFile) {
         try {
-            var resource = "/games/" + gameFile;
-            log.debug("Loading game: [{}]", resource);
-            var desc_lines = Files.readAllLines(Path.of(getClass().getResource(resource).toURI()));
+            log.debug("Loading game: [{}]", gameFile);
+            var desc_lines = Files.readAllLines(Path.of(gameFile));
             if (desc_lines != null) {
                 Node rootNode = indentTreeParser(desc_lines);
 

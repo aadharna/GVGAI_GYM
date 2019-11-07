@@ -2,6 +2,8 @@ package qmul.gvgai.server;
 
 import lombok.Data;
 
+import java.nio.file.Path;
+
 @Data
 public class GymLevelInfo {
     private final String game;
@@ -10,16 +12,16 @@ public class GymLevelInfo {
     private final String gameFileName;
     private String levelFileName = null;
 
-    public GymLevelInfo(String game, String lvl) {
+    public GymLevelInfo(String gameDirectory, String game, String lvl) {
         this.game = game;
         this.lvl = lvl;
 
-        var gameDirectory = game + "_v0";
+        var fullGameDirectory = Path.of(gameDirectory,game).toString() + "_v0";
 
-        this.gameFileName = gameDirectory + "/" + game + ".txt";
+        this.gameFileName = Path.of(fullGameDirectory, game + ".txt").toString();
 
         if(!this.lvl.equals("custom")) {
-            this.levelFileName = gameDirectory + "/" + game + "_" + lvl + ".txt";
+            this.levelFileName = Path.of(fullGameDirectory, game + "_" + lvl + ".txt").toString();
         }
     }
 }

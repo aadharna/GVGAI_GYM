@@ -9,6 +9,7 @@ import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
 import qmul.gvgai.server.player.EnvironmentChoice;
 import qmul.gvgai.server.player.LearningPlayer;
 
+import java.nio.file.Path;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,9 +20,11 @@ import java.util.stream.Collectors;
 public class LearningServer {
 
     private final int port;
+    private final String gameDir;
 
-    public LearningServer(int port) {
+    public LearningServer(int port, String gameDir) {
         this.port = port;
+        this.gameDir = gameDir;
     }
 
     private static final Pattern levelPattern = Pattern.compile("(?<game>.*)-(?<level>\\w+)");
@@ -50,14 +53,14 @@ public class LearningServer {
         player.finishPlayerCommunication();
     }
 
-    public static void playOneLevel(EnvironmentChoice environment, LearningPlayer player) {
+    public void playOneLevel(EnvironmentChoice environment, LearningPlayer player) {
 
         log.debug("Starting level [{}]", environment);
 
         // Create a new random seed for the next level.
         int randomSeed = new Random().nextInt();
 
-        var environmentInfo = parseLevelName(environment.getEnvironmentId());
+        var environmentInfo = parseLevelName(environment.getEnvironmentId(), gameDir);
 
         assert environmentInfo != null;
 
@@ -115,7 +118,7 @@ public class LearningServer {
         player.teardown(toPlay);
     }
 
-    private static GymLevelInfo parseLevelName(String level) {
+    private static GymLevelInfo parseLevelName(String level, String gameDir) {
 
         Matcher m = levelPattern.matcher(level);
         if (m.find()) {
@@ -123,7 +126,7 @@ public class LearningServer {
             String game = m.group("game");
             String lvl = m.group("level");
 
-            return new GymLevelInfo(game, lvl);
+            return new GymLevelInfo(gameDir, game, lvl);
         }
 
         return null;

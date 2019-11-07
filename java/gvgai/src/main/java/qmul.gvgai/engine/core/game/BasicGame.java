@@ -65,7 +65,7 @@ public class BasicGame extends Game {
      */
     public void buildLevel(String levelFile, int randomSeed) {
         try {
-            var lines = Files.readAllLines(Path.of(getClass().getResource("/games/" + levelFile).toURI()));
+            var lines = Files.readAllLines(Path.of(levelFile));
             // Pathfinder
             obstacles = new ArrayList<>();
             boolean doPathf = false;

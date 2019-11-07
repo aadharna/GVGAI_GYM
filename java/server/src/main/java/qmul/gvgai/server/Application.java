@@ -10,6 +10,9 @@ import picocli.CommandLine.Option;
 @Command(name = "gvgai-server")
 public class Application implements Runnable {
 
+    @Option(names= {"-i", "--input-dir"}, defaultValue = "./games", description="A directory where additional games are stored")
+    private String gameDir;
+
     @Option(names = {"-p", "--port"}, defaultValue = "8083", description = "The port number this server will listen on")
     private int port;
 
@@ -28,7 +31,7 @@ public class Application implements Runnable {
         Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         root.setLevel(Level.toLevel(logLevel));
 
-        var server = new LearningServer(port);
+        var server = new LearningServer(port, gameDir);
         server.start();
     }
 }

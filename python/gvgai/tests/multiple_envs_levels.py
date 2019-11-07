@@ -30,7 +30,7 @@ if __name__ == '__main__':
     start = time.time()
     frames = 0
 
-    num_envs = 10
+    num_envs = 3
 
     envs = [
         GVGAI_Env('sokoban-custom', tile_observations=True, level_data=generate_level())
@@ -42,20 +42,19 @@ if __name__ == '__main__':
         for env in envs:
             env.reset(level_data=generate_level())
 
-        for t in range(1000):
+        for t in range(100):
             # choose action based on trained policy
             # do action and get new state and its reward
             action_id = np.random.randint(5)
 
             steps = [env.step(action_id) for env in envs]
 
-            #env1.render()
-            #env2.render()
-            #env3.render()
+            for env in envs:
+                env.render()
 
             frames += 1
 
-            if t % 100 == 0:
+            if t % 10 == 0:
                 end = time.time()
                 total_time = end - start
                 fps = (frames / total_time)
