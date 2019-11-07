@@ -31,6 +31,7 @@ class GVGAI_Env(gym.Env):
 
         # Get or create the client and set the environment
         self.GVGAI = GVGAIClient(client_only=client_only)
+
         self.GVGAI.reset(environment_id,
                          level_data,
                          pixel_observations=pixel_observations,
@@ -91,8 +92,7 @@ class GVGAI_Env(gym.Env):
         observation (object): the initial observation of the space.
         """
 
-        if environment_id is not None:
-            self._set_environment(environment_id, level_data)
+        self._set_environment(environment_id, level_data)
 
         self._observations = self.GVGAI.reset(self.environment_id, self.level_data,
                                               include_semantic_data=self._include_semantic_data,
@@ -120,9 +120,17 @@ class GVGAI_Env(gym.Env):
             self.viewer = None
 
     def _set_environment(self, environment_id, level_data):
+
+        if environment_id is None and level_data is None:
+            return
+
         self.close()
-        self.environment_id = environment_id
-        self.level_data = level_data
+
+        if environment_id is not None:
+            self.environment_id = environment_id
+
+        if level_data is not None:
+            self.level_data = level_data
 
     def get_action_meanings(self):
         return self.actions

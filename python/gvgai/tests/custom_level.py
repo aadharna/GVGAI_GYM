@@ -5,13 +5,6 @@ import numpy as np
 from gvgai.gym import GVGAI_Env
 from gvgai.utils.level_data_generator import SokobanGenerator
 
-
-"""
-A test client that connects directly to the server environment and does not start one itself
-
-This client tests that we can create custom levels through this API
-"""
-
 if __name__ == '__main__':
 
     # Turn debug logging on
