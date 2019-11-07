@@ -78,16 +78,20 @@ class GVGAIClient():
         info = {'winner': state.GameWinner(), 'actions': [a.value for a in actions]}
         return image, reward, done, info
 
-    def reset(self, environment_id=None, level_data=None, include_semantic_data=False, one_hot_observations=False):
+    def reset(self, environment_id=None,
+              level_data=None,
+              pixel_observations=True,
+              tile_observations=False,
+              include_semantic_data=False
+              ):
         self._previous_score = 0
-        self.image = None
-        self._one_hot_observations = one_hot_observations
+        self._tile_observations = tile_observations
 
         reset = False
 
         while not reset:
 
-            game_phase, state, image = self._read_and_process_server_response()
+            game_phase, state, _ = self._read_and_process_server_response()
 
             # If we are in the act state then we abort
             if game_phase == GamePhase.ACT_STATE:
@@ -96,8 +100,9 @@ class GVGAIClient():
             if game_phase == GamePhase.CHOOSE_LEVEL:
                 self._choose_level(environment_id,
                                    level_data=level_data,
-                                   include_semantic_data=include_semantic_data,
-                                   one_hot_observations=one_hot_observations
+                                   pixel_observations=pixel_observations,
+                                   tile_observations=tile_observations,
+                                   include_semantic_data=include_semantic_data
                                    )
 
             if game_phase == GamePhase.INIT_STATE:
@@ -136,12 +141,31 @@ class GVGAIClient():
             if data is not None:
                 state = State.GetRootAsState(data, 0)
 
-                image = None
-                if state.ImageArrayLength() != 0:
-                    width, height = self._get_dimensions(state)
-                    image = np.reshape(state.ImageArrayAsNumpy().astype(np.uint8), (height, width, -1))
+                has_pixel_observation = state.ImageArrayLength() != 0
+                has_tile_obsevation = state.TileArrayLength() != 0
 
-                return state, image
+                width, height = self._get_dimensions(state)
+                block_size = state.BlockSize()
+
+                pixel_observation = None
+                tile_observation = None
+                observation = None
+
+                if has_pixel_observation:
+                    pixel_observation = np.reshape(state.ImageArrayAsNumpy().astype(np.uint8), (height, width, -1))
+
+                if has_tile_obsevation:
+                    tile_observation = np.reshape(state.TileArrayAsNumpy().astype(np.uint8),
+                                                  (height // block_size, width // block_size, -1))
+
+                if has_pixel_observation and has_tile_obsevation:
+                    observation = (pixel_observation, tile_observation)
+                elif has_tile_obsevation:
+                    observation = tile_observation
+                elif has_pixel_observation:
+                    observation = pixel_observation
+
+                return state, observation
 
             return None, None
 
@@ -180,7 +204,8 @@ class GVGAIClient():
     def _bool2bytes(self, value):
         return bytearray(b'\x01' if value else b'\x00')
 
-    def _choose_level(self, environment_id, level_data=None, include_semantic_data=False, one_hot_observations=False):
+    def _choose_level(self, environment_id, level_data=None, include_semantic_data=False, pixel_observations=True,
+                      tile_observations=False):
 
         environment_id_bytes = environment_id.encode()
         environment_id_bytes_length = len(environment_id_bytes)
@@ -192,7 +217,7 @@ class GVGAIClient():
             level_data_bytes = level_data.encode()
             level_data_bytes_length = len(level_data_bytes)
 
-        choose_level_data = bytearray(4 + environment_id_bytes_length + 6 + level_data_bytes_length)
+        choose_level_data = bytearray(4 + environment_id_bytes_length + 7 + level_data_bytes_length)
 
         # Environment Id
         pack_into('>i', choose_level_data, 0, environment_id_bytes_length)
@@ -200,12 +225,13 @@ class GVGAIClient():
 
         # Environment Data Options
         pack_into('?', choose_level_data, environment_id_bytes_length + 4, include_semantic_data)
-        pack_into('?', choose_level_data, environment_id_bytes_length + 5, one_hot_observations)
+        pack_into('?', choose_level_data, environment_id_bytes_length + 5, tile_observations)
+        pack_into('?', choose_level_data, environment_id_bytes_length + 6, pixel_observations)
 
         # Level Data
-        pack_into('>i', choose_level_data, environment_id_bytes_length + 6, level_data_bytes_length)
+        pack_into('>i', choose_level_data, environment_id_bytes_length + 7, level_data_bytes_length)
         if level_data_bytes_length > 0:
-            data_start = environment_id_bytes_length + 10
+            data_start = environment_id_bytes_length + 11
             pack_into('%ds' % level_data_bytes_length, choose_level_data, data_start, level_data_bytes)
 
         self.io.writeToServer(AgentPhase.CHOOSE_LEVEL_STATE, choose_level_data)

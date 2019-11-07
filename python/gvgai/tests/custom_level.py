@@ -33,6 +33,7 @@ if __name__ == '__main__':
             'width': np.random.randint(4, 5),
             'height': np.random.randint(4, 5)
         }
+
         for level_data in level_generator.generate(10, config):
 
             env = GVGAI_Env('sokoban-custom', level_data=level_data, client_only=True)

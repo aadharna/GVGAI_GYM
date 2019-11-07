@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Generate Java Code
-flatc -j -o core/game/serialization serializableFlatBuffer.fbs
+flatc -j -o java/core/game/serialization serializableFlatBuffer.fbs
 
 # Generate Python code
-flatc -p serializableFlatBuffer.fbs
+flatc -p -o python/ serializableFlatBuffer.fbs

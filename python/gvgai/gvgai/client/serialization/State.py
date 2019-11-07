@@ -41,43 +41,65 @@ class State(object):
         return 0
 
     # State
-    def IsValidation(self):
+    def TileArray(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        if o != 0:
+            a = self._tab.Vector(o)
+            return self._tab.Get(flatbuffers.number_types.Int8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
+        return 0
+
+    # State
+    def TileArrayAsNumpy(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        if o != 0:
+            return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Int8Flags, o)
+        return 0
+
+    # State
+    def TileArrayLength(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        if o != 0:
+            return self._tab.VectorLen(o)
+        return 0
+
+    # State
+    def IsValidation(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
     # State
     def GameScore(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Float64Flags, o + self._tab.Pos)
         return 0.0
 
     # State
     def GameTick(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
-        if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
-        return 0
-
-    # State
-    def GameWinner(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
     # State
-    def IsGameOver(self):
+    def GameWinner(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
+        if o != 0:
+            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
+        return 0
+
+    # State
+    def IsGameOver(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
         if o != 0:
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
     # State
     def WorldDimension(self, j):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         if o != 0:
             a = self._tab.Vector(o)
             return self._tab.Get(flatbuffers.number_types.Float64Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 8))
@@ -85,42 +107,42 @@ class State(object):
 
     # State
     def WorldDimensionAsNumpy(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Float64Flags, o)
         return 0
 
     # State
     def WorldDimensionLength(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # State
     def BlockSize(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
-        if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
-        return 0
-
-    # State
-    def NoOfPlayers(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
     # State
-    def AvatarSpeed(self):
+    def NoOfPlayers(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
+        if o != 0:
+            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
+        return 0
+
+    # State
+    def AvatarSpeed(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Float64Flags, o + self._tab.Pos)
         return 0.0
 
     # State
     def AvatarOrientation(self, j):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
         if o != 0:
             a = self._tab.Vector(o)
             return self._tab.Get(flatbuffers.number_types.Float64Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 8))
@@ -128,21 +150,21 @@ class State(object):
 
     # State
     def AvatarOrientationAsNumpy(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Float64Flags, o)
         return 0
 
     # State
     def AvatarOrientationLength(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # State
     def AvatarPosition(self, j):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
         if o != 0:
             a = self._tab.Vector(o)
             return self._tab.Get(flatbuffers.number_types.Float64Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 8))
@@ -150,63 +172,63 @@ class State(object):
 
     # State
     def AvatarPositionAsNumpy(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Float64Flags, o)
         return 0
 
     # State
     def AvatarPositionLength(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # State
     def AvatarLastAction(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
-        if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
-        return 0
-
-    # State
-    def AvatarType(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
     # State
-    def AvatarHealthPoints(self):
+    def AvatarType(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(32))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
     # State
-    def AvatarMaxHealthPoints(self):
+    def AvatarHealthPoints(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(34))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
     # State
-    def AvatarLimitHealthPoints(self):
+    def AvatarMaxHealthPoints(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(36))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
     # State
-    def IsAvatarAlive(self):
+    def AvatarLimitHealthPoints(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(38))
+        if o != 0:
+            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
+        return 0
+
+    # State
+    def IsAvatarAlive(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(40))
         if o != 0:
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
     # State
     def AvailableActions(self, j):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(40))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(42))
         if o != 0:
             a = self._tab.Vector(o)
             return self._tab.Get(flatbuffers.number_types.Int32Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 4))
@@ -214,21 +236,21 @@ class State(object):
 
     # State
     def AvailableActionsAsNumpy(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(40))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(42))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Int32Flags, o)
         return 0
 
     # State
     def AvailableActionsLength(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(40))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(42))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # State
     def AvatarResources(self, j):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(42))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(44))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
@@ -241,14 +263,14 @@ class State(object):
 
     # State
     def AvatarResourcesLength(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(42))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(44))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # State
     def ObservationGrid(self, j):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(44))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(46))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
@@ -261,35 +283,35 @@ class State(object):
 
     # State
     def ObservationGridLength(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(44))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(46))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # State
     def ObservationGridNum(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(46))
-        if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
-        return 0
-
-    # State
-    def ObservationGridMaxRow(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(48))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
     # State
-    def ObservationGridMaxCol(self):
+    def ObservationGridMaxRow(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(50))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
     # State
-    def NPCPositions(self, j):
+    def ObservationGridMaxCol(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(52))
+        if o != 0:
+            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
+        return 0
+
+    # State
+    def NPCPositions(self, j):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(54))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
@@ -302,28 +324,28 @@ class State(object):
 
     # State
     def NPCPositionsLength(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(52))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(54))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # State
     def NPCPositionsNum(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(54))
-        if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
-        return 0
-
-    # State
-    def NPCPositionsMaxRow(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(56))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
     # State
-    def ImmovablePositions(self, j):
+    def NPCPositionsMaxRow(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(58))
+        if o != 0:
+            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
+        return 0
+
+    # State
+    def ImmovablePositions(self, j):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(60))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
@@ -336,28 +358,28 @@ class State(object):
 
     # State
     def ImmovablePositionsLength(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(58))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(60))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # State
     def ImmovablePositionsNum(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(60))
-        if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
-        return 0
-
-    # State
-    def ImmovablePositionsMaxRow(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(62))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
     # State
-    def MovablePositions(self, j):
+    def ImmovablePositionsMaxRow(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(64))
+        if o != 0:
+            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
+        return 0
+
+    # State
+    def MovablePositions(self, j):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(66))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
@@ -370,28 +392,28 @@ class State(object):
 
     # State
     def MovablePositionsLength(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(64))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(66))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # State
     def MovablePositionsNum(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(66))
-        if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
-        return 0
-
-    # State
-    def MovablePositionsMaxRow(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(68))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
     # State
-    def ResourcesPositions(self, j):
+    def MovablePositionsMaxRow(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(70))
+        if o != 0:
+            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
+        return 0
+
+    # State
+    def ResourcesPositions(self, j):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(72))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
@@ -404,28 +426,28 @@ class State(object):
 
     # State
     def ResourcesPositionsLength(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(70))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(72))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # State
     def ResourcesPositionsNum(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(72))
-        if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
-        return 0
-
-    # State
-    def ResourcesPositionsMaxRow(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(74))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
     # State
-    def PortalsPositions(self, j):
+    def ResourcesPositionsMaxRow(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(76))
+        if o != 0:
+            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
+        return 0
+
+    # State
+    def PortalsPositions(self, j):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(78))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
@@ -438,28 +460,28 @@ class State(object):
 
     # State
     def PortalsPositionsLength(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(76))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(78))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # State
     def PortalsPositionsNum(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(78))
-        if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
-        return 0
-
-    # State
-    def PortalsPositionsMaxRow(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(80))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
     # State
-    def FromAvatarSpritesPositions(self, j):
+    def PortalsPositionsMaxRow(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(82))
+        if o != 0:
+            return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
+        return 0
+
+    # State
+    def FromAvatarSpritesPositions(self, j):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(84))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
@@ -472,79 +494,81 @@ class State(object):
 
     # State
     def FromAvatarSpritesPositionsLength(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(82))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(84))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # State
     def FromAvatarSpritesPositionsNum(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(84))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(86))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
     # State
     def FromAvatarSpritesPositionsMaxRow(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(86))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(88))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
-def StateStart(builder): builder.StartObject(42)
+def StateStart(builder): builder.StartObject(43)
 def StateAddImageArray(builder, imageArray): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(imageArray), 0)
 def StateStartImageArrayVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def StateAddIsValidation(builder, isValidation): builder.PrependBoolSlot(1, isValidation, 0)
-def StateAddGameScore(builder, gameScore): builder.PrependFloat64Slot(2, gameScore, 0.0)
-def StateAddGameTick(builder, gameTick): builder.PrependInt32Slot(3, gameTick, 0)
-def StateAddGameWinner(builder, gameWinner): builder.PrependInt32Slot(4, gameWinner, 0)
-def StateAddIsGameOver(builder, isGameOver): builder.PrependBoolSlot(5, isGameOver, 0)
-def StateAddWorldDimension(builder, worldDimension): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(worldDimension), 0)
+def StateAddTileArray(builder, tileArray): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(tileArray), 0)
+def StateStartTileArrayVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def StateAddIsValidation(builder, isValidation): builder.PrependBoolSlot(2, isValidation, 0)
+def StateAddGameScore(builder, gameScore): builder.PrependFloat64Slot(3, gameScore, 0.0)
+def StateAddGameTick(builder, gameTick): builder.PrependInt32Slot(4, gameTick, 0)
+def StateAddGameWinner(builder, gameWinner): builder.PrependInt32Slot(5, gameWinner, 0)
+def StateAddIsGameOver(builder, isGameOver): builder.PrependBoolSlot(6, isGameOver, 0)
+def StateAddWorldDimension(builder, worldDimension): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(worldDimension), 0)
 def StateStartWorldDimensionVector(builder, numElems): return builder.StartVector(8, numElems, 8)
-def StateAddBlockSize(builder, blockSize): builder.PrependInt32Slot(7, blockSize, 0)
-def StateAddNoOfPlayers(builder, noOfPlayers): builder.PrependInt32Slot(8, noOfPlayers, 0)
-def StateAddAvatarSpeed(builder, avatarSpeed): builder.PrependFloat64Slot(9, avatarSpeed, 0.0)
-def StateAddAvatarOrientation(builder, avatarOrientation): builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(avatarOrientation), 0)
+def StateAddBlockSize(builder, blockSize): builder.PrependInt32Slot(8, blockSize, 0)
+def StateAddNoOfPlayers(builder, noOfPlayers): builder.PrependInt32Slot(9, noOfPlayers, 0)
+def StateAddAvatarSpeed(builder, avatarSpeed): builder.PrependFloat64Slot(10, avatarSpeed, 0.0)
+def StateAddAvatarOrientation(builder, avatarOrientation): builder.PrependUOffsetTRelativeSlot(11, flatbuffers.number_types.UOffsetTFlags.py_type(avatarOrientation), 0)
 def StateStartAvatarOrientationVector(builder, numElems): return builder.StartVector(8, numElems, 8)
-def StateAddAvatarPosition(builder, avatarPosition): builder.PrependUOffsetTRelativeSlot(11, flatbuffers.number_types.UOffsetTFlags.py_type(avatarPosition), 0)
+def StateAddAvatarPosition(builder, avatarPosition): builder.PrependUOffsetTRelativeSlot(12, flatbuffers.number_types.UOffsetTFlags.py_type(avatarPosition), 0)
 def StateStartAvatarPositionVector(builder, numElems): return builder.StartVector(8, numElems, 8)
-def StateAddAvatarLastAction(builder, avatarLastAction): builder.PrependInt32Slot(12, avatarLastAction, 0)
-def StateAddAvatarType(builder, avatarType): builder.PrependInt32Slot(13, avatarType, 0)
-def StateAddAvatarHealthPoints(builder, avatarHealthPoints): builder.PrependInt32Slot(14, avatarHealthPoints, 0)
-def StateAddAvatarMaxHealthPoints(builder, avatarMaxHealthPoints): builder.PrependInt32Slot(15, avatarMaxHealthPoints, 0)
-def StateAddAvatarLimitHealthPoints(builder, avatarLimitHealthPoints): builder.PrependInt32Slot(16, avatarLimitHealthPoints, 0)
-def StateAddIsAvatarAlive(builder, isAvatarAlive): builder.PrependBoolSlot(17, isAvatarAlive, 0)
-def StateAddAvailableActions(builder, availableActions): builder.PrependUOffsetTRelativeSlot(18, flatbuffers.number_types.UOffsetTFlags.py_type(availableActions), 0)
+def StateAddAvatarLastAction(builder, avatarLastAction): builder.PrependInt32Slot(13, avatarLastAction, 0)
+def StateAddAvatarType(builder, avatarType): builder.PrependInt32Slot(14, avatarType, 0)
+def StateAddAvatarHealthPoints(builder, avatarHealthPoints): builder.PrependInt32Slot(15, avatarHealthPoints, 0)
+def StateAddAvatarMaxHealthPoints(builder, avatarMaxHealthPoints): builder.PrependInt32Slot(16, avatarMaxHealthPoints, 0)
+def StateAddAvatarLimitHealthPoints(builder, avatarLimitHealthPoints): builder.PrependInt32Slot(17, avatarLimitHealthPoints, 0)
+def StateAddIsAvatarAlive(builder, isAvatarAlive): builder.PrependBoolSlot(18, isAvatarAlive, 0)
+def StateAddAvailableActions(builder, availableActions): builder.PrependUOffsetTRelativeSlot(19, flatbuffers.number_types.UOffsetTFlags.py_type(availableActions), 0)
 def StateStartAvailableActionsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def StateAddAvatarResources(builder, avatarResources): builder.PrependUOffsetTRelativeSlot(19, flatbuffers.number_types.UOffsetTFlags.py_type(avatarResources), 0)
+def StateAddAvatarResources(builder, avatarResources): builder.PrependUOffsetTRelativeSlot(20, flatbuffers.number_types.UOffsetTFlags.py_type(avatarResources), 0)
 def StateStartAvatarResourcesVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def StateAddObservationGrid(builder, observationGrid): builder.PrependUOffsetTRelativeSlot(20, flatbuffers.number_types.UOffsetTFlags.py_type(observationGrid), 0)
+def StateAddObservationGrid(builder, observationGrid): builder.PrependUOffsetTRelativeSlot(21, flatbuffers.number_types.UOffsetTFlags.py_type(observationGrid), 0)
 def StateStartObservationGridVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def StateAddObservationGridNum(builder, observationGridNum): builder.PrependInt32Slot(21, observationGridNum, 0)
-def StateAddObservationGridMaxRow(builder, observationGridMaxRow): builder.PrependInt32Slot(22, observationGridMaxRow, 0)
-def StateAddObservationGridMaxCol(builder, observationGridMaxCol): builder.PrependInt32Slot(23, observationGridMaxCol, 0)
-def StateAddNPCPositions(builder, NPCPositions): builder.PrependUOffsetTRelativeSlot(24, flatbuffers.number_types.UOffsetTFlags.py_type(NPCPositions), 0)
+def StateAddObservationGridNum(builder, observationGridNum): builder.PrependInt32Slot(22, observationGridNum, 0)
+def StateAddObservationGridMaxRow(builder, observationGridMaxRow): builder.PrependInt32Slot(23, observationGridMaxRow, 0)
+def StateAddObservationGridMaxCol(builder, observationGridMaxCol): builder.PrependInt32Slot(24, observationGridMaxCol, 0)
+def StateAddNPCPositions(builder, NPCPositions): builder.PrependUOffsetTRelativeSlot(25, flatbuffers.number_types.UOffsetTFlags.py_type(NPCPositions), 0)
 def StateStartNPCPositionsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def StateAddNPCPositionsNum(builder, NPCPositionsNum): builder.PrependInt32Slot(25, NPCPositionsNum, 0)
-def StateAddNPCPositionsMaxRow(builder, NPCPositionsMaxRow): builder.PrependInt32Slot(26, NPCPositionsMaxRow, 0)
-def StateAddImmovablePositions(builder, immovablePositions): builder.PrependUOffsetTRelativeSlot(27, flatbuffers.number_types.UOffsetTFlags.py_type(immovablePositions), 0)
+def StateAddNPCPositionsNum(builder, NPCPositionsNum): builder.PrependInt32Slot(26, NPCPositionsNum, 0)
+def StateAddNPCPositionsMaxRow(builder, NPCPositionsMaxRow): builder.PrependInt32Slot(27, NPCPositionsMaxRow, 0)
+def StateAddImmovablePositions(builder, immovablePositions): builder.PrependUOffsetTRelativeSlot(28, flatbuffers.number_types.UOffsetTFlags.py_type(immovablePositions), 0)
 def StateStartImmovablePositionsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def StateAddImmovablePositionsNum(builder, immovablePositionsNum): builder.PrependInt32Slot(28, immovablePositionsNum, 0)
-def StateAddImmovablePositionsMaxRow(builder, immovablePositionsMaxRow): builder.PrependInt32Slot(29, immovablePositionsMaxRow, 0)
-def StateAddMovablePositions(builder, movablePositions): builder.PrependUOffsetTRelativeSlot(30, flatbuffers.number_types.UOffsetTFlags.py_type(movablePositions), 0)
+def StateAddImmovablePositionsNum(builder, immovablePositionsNum): builder.PrependInt32Slot(29, immovablePositionsNum, 0)
+def StateAddImmovablePositionsMaxRow(builder, immovablePositionsMaxRow): builder.PrependInt32Slot(30, immovablePositionsMaxRow, 0)
+def StateAddMovablePositions(builder, movablePositions): builder.PrependUOffsetTRelativeSlot(31, flatbuffers.number_types.UOffsetTFlags.py_type(movablePositions), 0)
 def StateStartMovablePositionsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def StateAddMovablePositionsNum(builder, movablePositionsNum): builder.PrependInt32Slot(31, movablePositionsNum, 0)
-def StateAddMovablePositionsMaxRow(builder, movablePositionsMaxRow): builder.PrependInt32Slot(32, movablePositionsMaxRow, 0)
-def StateAddResourcesPositions(builder, resourcesPositions): builder.PrependUOffsetTRelativeSlot(33, flatbuffers.number_types.UOffsetTFlags.py_type(resourcesPositions), 0)
+def StateAddMovablePositionsNum(builder, movablePositionsNum): builder.PrependInt32Slot(32, movablePositionsNum, 0)
+def StateAddMovablePositionsMaxRow(builder, movablePositionsMaxRow): builder.PrependInt32Slot(33, movablePositionsMaxRow, 0)
+def StateAddResourcesPositions(builder, resourcesPositions): builder.PrependUOffsetTRelativeSlot(34, flatbuffers.number_types.UOffsetTFlags.py_type(resourcesPositions), 0)
 def StateStartResourcesPositionsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def StateAddResourcesPositionsNum(builder, resourcesPositionsNum): builder.PrependInt32Slot(34, resourcesPositionsNum, 0)
-def StateAddResourcesPositionsMaxRow(builder, resourcesPositionsMaxRow): builder.PrependInt32Slot(35, resourcesPositionsMaxRow, 0)
-def StateAddPortalsPositions(builder, portalsPositions): builder.PrependUOffsetTRelativeSlot(36, flatbuffers.number_types.UOffsetTFlags.py_type(portalsPositions), 0)
+def StateAddResourcesPositionsNum(builder, resourcesPositionsNum): builder.PrependInt32Slot(35, resourcesPositionsNum, 0)
+def StateAddResourcesPositionsMaxRow(builder, resourcesPositionsMaxRow): builder.PrependInt32Slot(36, resourcesPositionsMaxRow, 0)
+def StateAddPortalsPositions(builder, portalsPositions): builder.PrependUOffsetTRelativeSlot(37, flatbuffers.number_types.UOffsetTFlags.py_type(portalsPositions), 0)
 def StateStartPortalsPositionsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def StateAddPortalsPositionsNum(builder, portalsPositionsNum): builder.PrependInt32Slot(37, portalsPositionsNum, 0)
-def StateAddPortalsPositionsMaxRow(builder, portalsPositionsMaxRow): builder.PrependInt32Slot(38, portalsPositionsMaxRow, 0)
-def StateAddFromAvatarSpritesPositions(builder, fromAvatarSpritesPositions): builder.PrependUOffsetTRelativeSlot(39, flatbuffers.number_types.UOffsetTFlags.py_type(fromAvatarSpritesPositions), 0)
+def StateAddPortalsPositionsNum(builder, portalsPositionsNum): builder.PrependInt32Slot(38, portalsPositionsNum, 0)
+def StateAddPortalsPositionsMaxRow(builder, portalsPositionsMaxRow): builder.PrependInt32Slot(39, portalsPositionsMaxRow, 0)
+def StateAddFromAvatarSpritesPositions(builder, fromAvatarSpritesPositions): builder.PrependUOffsetTRelativeSlot(40, flatbuffers.number_types.UOffsetTFlags.py_type(fromAvatarSpritesPositions), 0)
 def StateStartFromAvatarSpritesPositionsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def StateAddFromAvatarSpritesPositionsNum(builder, fromAvatarSpritesPositionsNum): builder.PrependInt32Slot(40, fromAvatarSpritesPositionsNum, 0)
-def StateAddFromAvatarSpritesPositionsMaxRow(builder, fromAvatarSpritesPositionsMaxRow): builder.PrependInt32Slot(41, fromAvatarSpritesPositionsMaxRow, 0)
+def StateAddFromAvatarSpritesPositionsNum(builder, fromAvatarSpritesPositionsNum): builder.PrependInt32Slot(41, fromAvatarSpritesPositionsNum, 0)
+def StateAddFromAvatarSpritesPositionsMaxRow(builder, fromAvatarSpritesPositionsMaxRow): builder.PrependInt32Slot(42, fromAvatarSpritesPositionsMaxRow, 0)
 def StateEnd(builder): return builder.EndObject()

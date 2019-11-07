@@ -24,20 +24,16 @@ public class FlatBufferStateObservation {
         actions = Arrays.asList(Action.names);
     }
 
-    public FlatBufferStateObservation(StateObservation so, boolean includeSemanticData, boolean oneHotObservations, byte[] imageArray) {
+    public FlatBufferStateObservation(StateObservation so, boolean includeSemanticData, byte[] tileArray, byte[] imageArray) {
 
         b = new FlatBufferBuilder(0);
 
-        int imageArrayOffset = imageArray != null ? b.createByteVector(imageArray): -1;
+        int imageArrayOffset = imageArray != null ? b.createByteVector(imageArray) : -1;
+        int tileArrayOffset = tileArray != null ? b.createByteVector(tileArray) : -1;
 
         double[] worldDimensionVector = new double[2];
         worldDimensionVector[0] = so.getWorldDimension().width;
         worldDimensionVector[1] = so.getWorldDimension().height;
-
-        if (oneHotObservations) {
-            worldDimensionVector[0] /= so.getBlockSize();
-            worldDimensionVector[1] /= so.getBlockSize();
-        }
 
         int worldDimensionOffset = State.createWorldDimensionVector(b, worldDimensionVector);
 
@@ -53,7 +49,7 @@ public class FlatBufferStateObservation {
         int avatarPositionOffset = 0;
         int avatarOrientationVectorOffset = 0;
 
-        if(includeSemanticData) {
+        if (includeSemanticData) {
             avatarResources = addAvatarResources(b, so);
             observations = addObservations(b, so);
             npcPositions = addNpcPositions(b, so);
@@ -65,13 +61,16 @@ public class FlatBufferStateObservation {
             avatarOrientationVectorOffset = convertVector(so.getAvatarOrientation());
         }
 
-
         State.startState(b);
 
         State.addIsValidation(b, isValidation);
 
-        if(imageArray != null) {
+        if (imageArray != null) {
             State.addImageArray(b, imageArrayOffset);
+        }
+
+        if (tileArray != null) {
+            State.addTileArray(b, tileArrayOffset);
         }
 
         State.addIsValidation(b, false);
@@ -93,7 +92,7 @@ public class FlatBufferStateObservation {
 
         State.addAvailableActions(b, availableActions);
 
-        if(includeSemanticData) {
+        if (includeSemanticData) {
             State.addAvatarResources(b, avatarResources);
             State.addObservationGrid(b, observations);
             State.addNPCPositions(b, npcPositions);

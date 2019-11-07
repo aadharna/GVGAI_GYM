@@ -25,6 +25,7 @@ table IntKeyValuePair {
 table State {
     // State Observation variables
     imageArray: [byte];
+    tileArray: [byte];
     isValidation: bool;
     gameScore: double;
     gameTick: int;

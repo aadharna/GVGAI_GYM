@@ -17,7 +17,7 @@ logger = logging.getLogger("Test Agent")
 
 for game in games:
     for level in levels:
-        env = gym.make(f'gvgai-{game}-{level}', one_hot_observations=True)
+        env = gym.make(f'gvgai-{game}-{level}', pixel_observations=False, tile_observations=True)
         logger.info(f'Starting {env.spec.id}')
         # reset environment
         stateObs = env.reset()

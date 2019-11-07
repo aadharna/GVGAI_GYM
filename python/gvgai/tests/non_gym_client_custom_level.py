@@ -20,19 +20,24 @@ if __name__ == '__main__':
     level_generator = SokobanGenerator()
 
     environments = [
-        'zelda-lvl0',
-        'zelda-lvl1',
-        'zelda-lvl2',
-        'zelda-lvl3',
-        'zelda-lvl4',
-
+        'sokoban-custom'
     ]
+
+    config = {
+        'prob_hole': 0.05,
+        'prob_box': 0.05,
+        'prob_wall': 0.3,
+        'width': np.random.randint(4, 5),
+        'height': np.random.randint(4, 5)
+    }
 
     for i in range(100):
         for environment_id in environments:
 
+            level_data = level_generator.generate(1, config).__next__()
+
             # This should reuse the underlying client
-            env = GVGAI_Env(environment_id, one_hot_observations=True, client_only=True)
+            env = GVGAI_Env(environment_id, level_data=level_data, tile_observations=True, client_only=True)
 
             actions = env.unwrapped.get_action_meanings()
 
@@ -45,7 +50,7 @@ if __name__ == '__main__':
                 action_id = np.random.randint(5)
                 stateObs, diffScore, done, debug = env.step(action_id)
 
-                #env.render()
+                env.render()
 
                 #time.sleep(1)
 

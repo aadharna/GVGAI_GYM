@@ -31,11 +31,11 @@ public class VGDLRenderer {
         image.setFilter(Pixmap.Filter.BiLinear);
     }
 
-    public byte[] paintOneHotBuffer() {
+    public byte[] renderTileObservation() {
         var gameSpriteOrder = game.getSpriteOrder();
         var spriteGroups = game.getSpriteGroups();
 
-        var oneHotBuffer = new byte[numSprites*gridWidth*gridHeight];
+        var tileBuffer = new byte[numSprites*gridWidth*gridHeight];
 
         for (Integer spriteTypeInt : gameSpriteOrder) {
             if (spriteGroups[spriteTypeInt] != null) {
@@ -46,16 +46,15 @@ public class VGDLRenderer {
 
                     int spriteIdx = spriteTypeInt;
 
-                    oneHotBuffer[spriteY*numSprites*gridWidth + spriteX*numSprites + spriteIdx] = 1;
+                    tileBuffer[spriteY*numSprites*gridWidth + spriteX*numSprites + spriteIdx] = 1;
                 }
             }
         }
 
-        return oneHotBuffer;
+        return tileBuffer;
     }
 
-    public byte[] paintFrameBuffer() {
-
+    public void printFramebuffer() {
         image.setColor(Color.BLACK);
         image.fill();
 
@@ -71,10 +70,12 @@ public class VGDLRenderer {
 
             }
         }
-
-        return getBuffer();
     }
 
+    public byte[] renderPixelObservation() {
+        printFramebuffer();
+        return getBuffer();
+    }
 
     public byte[] getBuffer() {
         byte[] observationBuffer = new byte[image.getHeight() * image.getWidth() * 3];

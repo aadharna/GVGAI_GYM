@@ -28,7 +28,8 @@ public class LearningPlayer extends Player {
      */
     private Comm comm;
     private boolean includeSemanticData = false;
-    private boolean oneHotObservation = false;
+    private boolean sendTileObservation = false;
+    private boolean sendPixelObservation = false;
 
     private VGDLRenderer renderer = null;
 
@@ -45,14 +46,6 @@ public class LearningPlayer extends Player {
         return null;
     }
 
-    private byte[] getObservationBytes() {
-        if(oneHotObservation) {
-            return renderer.paintOneHotBuffer();
-        } else {
-            return renderer.paintFrameBuffer();
-        }
-    }
-
     @Override
     public void observe(StateObservation so) {
 
@@ -60,8 +53,18 @@ public class LearningPlayer extends Player {
 
         try {
 
-            var observeratonBytes = getObservationBytes();
-            FlatBufferStateObservation fbso = new FlatBufferStateObservation(so, includeSemanticData, oneHotObservation, observeratonBytes);
+            byte[] tileObservationBytes = null;
+            byte[] pixelObservationBytes = null;
+
+            if (sendTileObservation) {
+                tileObservationBytes = renderer.renderTileObservation();
+            }
+
+            if (sendPixelObservation) {
+                pixelObservationBytes = renderer.renderPixelObservation();
+            }
+
+            FlatBufferStateObservation fbso = new FlatBufferStateObservation(so, includeSemanticData, tileObservationBytes, pixelObservationBytes);
 
             Message message = new Message(Types.AgentPhase.OBSERVE_STATE.ordinal(), fbso.serialize());
             comm.commSend(message);
@@ -129,13 +132,22 @@ public class LearningPlayer extends Player {
 
         renderer = new VGDLRenderer(game);
 
-        var observeratonBytes = getObservationBytes();
-
-        //Sending messages.
         try {
+
+            byte[] tileObservationBytes = null;
+            byte[] pixelObservationBytes = null;
+
+            if (sendTileObservation) {
+                tileObservationBytes = renderer.renderTileObservation();
+            }
+
+            if (sendPixelObservation) {
+                pixelObservationBytes = renderer.renderPixelObservation();
+            }
+
             // Set the game state to the appropriate state and the millisecond counter, then send the serialized observation.
             so.currentGameState = Types.GamePhase.INIT_STATE;
-            FlatBufferStateObservation sso = new FlatBufferStateObservation(so, includeSemanticData, oneHotObservation, observeratonBytes);
+            FlatBufferStateObservation sso = new FlatBufferStateObservation(so, includeSemanticData, tileObservationBytes, pixelObservationBytes);
 
             Message message = new Message(Types.AgentPhase.INIT_STATE.ordinal(), sso.serialize());
 
@@ -168,7 +180,8 @@ public class LearningPlayer extends Player {
                 String environmentId = new String(data.readNBytes(environmentIdLength), StandardCharsets.UTF_8);
 
                 this.includeSemanticData = data.readBoolean();
-                this.oneHotObservation = data.readBoolean();
+                this.sendTileObservation = data.readBoolean();
+                this.sendPixelObservation = data.readBoolean();
 
                 log.debug("Environment chosen: [{}]", environmentId);
                 int levelDataLength = data.readInt();
@@ -177,10 +190,10 @@ public class LearningPlayer extends Player {
                     String levelData = new String(data.readNBytes(levelDataLength), StandardCharsets.UTF_8);
                     log.debug("Custom Level Data [{}]", levelData);
 
-                    return new EnvironmentChoice(environmentId, levelData, includeSemanticData, oneHotObservation);
+                    return new EnvironmentChoice(environmentId, levelData, includeSemanticData, sendPixelObservation, sendTileObservation);
                 }
 
-                return new EnvironmentChoice(environmentId, includeSemanticData, oneHotObservation);
+                return new EnvironmentChoice(environmentId, includeSemanticData, sendPixelObservation, sendTileObservation);
             }
 
 

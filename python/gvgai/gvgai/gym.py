@@ -18,24 +18,10 @@ class GVGAI_Env(gym.Env):
     when the agent receives which reward.
     """
 
-    # Static client that we re-use if the level changes
-    gvgai_client = None
-
-    @staticmethod
-    def get_client(client_only=False):
-        if GVGAI_Env.gvgai_client is None:
-            GVGAI_Env.gvgai_client = GVGAIClient(client_only=client_only)
-        return GVGAI_Env.gvgai_client
-
-    @staticmethod
-    def stop_client():
-        if GVGAI_Env.gvgai_client is not None:
-            GVGAI_Env.gvgai_client.stop()
-            GVGAI_Env.gvgai_client = None
-
     def __init__(self, environment_id=None,
                  level_data=None,
-                 one_hot_observations=False,
+                 pixel_observations=True,
+                 tile_observations=False,
                  include_semantic_data=False,
                  client_only=False
                  ):
@@ -44,16 +30,18 @@ class GVGAI_Env(gym.Env):
         metadata = {'render.modes': ['human', 'rgb_array']}
 
         # Get or create the client and set the environment
-        self.GVGAI = GVGAI_Env.get_client(client_only)
+        self.GVGAI = GVGAIClient(client_only=client_only)
         self.GVGAI.reset(environment_id,
                          level_data,
+                         pixel_observations=pixel_observations,
                          include_semantic_data=include_semantic_data,
-                         one_hot_observations=one_hot_observations
+                         tile_observations=tile_observations
                          )
 
         self.environment_id = environment_id
         self.level_data = level_data
-        self._one_hot_observations = one_hot_observations
+        self._pixel_observations = pixel_observations
+        self._tile_observations = tile_observations
         self._include_semantic_data = include_semantic_data
 
         self.actions = self.GVGAI.actions
@@ -90,10 +78,10 @@ class GVGAI_Env(gym.Env):
                 info that can be added for debugging
                 info["winner"] == PLAYER_LOSES, PLAYER_WINS, NO_WINNER
         """
-        state, reward, isOver, info = self.GVGAI.step(action)
+        observations, reward, isOver, info = self.GVGAI.step(action)
 
-        self.img = state
-        return state, reward, isOver, info
+        self._observations = observations
+        return observations, reward, isOver, info
 
     def reset(self, environment_id=None, level_data=None):
         """
@@ -106,19 +94,24 @@ class GVGAI_Env(gym.Env):
         if environment_id is not None:
             self._set_environment(environment_id, level_data)
 
-        self.img = self.GVGAI.reset(self.environment_id, self.level_data, include_semantic_data=self._include_semantic_data, one_hot_observations=self._one_hot_observations)
-        return self.img
+        self._observations = self.GVGAI.reset(self.environment_id, self.level_data,
+                                              include_semantic_data=self._include_semantic_data,
+                                              pixel_observations=self._pixel_observations,
+                                              tile_observations=self._tile_observations
+                                              )
+        return self._observations
 
     def render(self, mode='human'):
-        if self.img is None:
+        if self._observations is None:
             return
 
         if mode == 'rgb_array':
-            return self.img
-        elif mode == 'human':
+            return self._observations
+        elif mode == 'human' and self._pixel_observations:
+            image = self._observations if not self._tile_observations else self._observations[0]
             if self.viewer is None:
                 self.viewer = SimpleImageViewer(maxwidth=500)
-            self.viewer.imshow(self.img)
+            self.viewer.imshow(image)
             return self.viewer.isopen
 
     def close(self):

@@ -62,7 +62,7 @@ public class VGDLViewer extends JComponent {
      * @param spriteGroupsGame sprites to paint.
      */
     public void paint(SpriteGroup[] spriteGroupsGame) {
-        renderer.paintFrameBuffer();
+        renderer.renderPixelObservation();
         this.repaint();
     }
 
