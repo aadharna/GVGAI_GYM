@@ -40,7 +40,7 @@ if __name__ == '__main__':
     for i in range(100):
 
         for env in envs:
-            env.reset(level_data=generate_level())
+            env.reset(environment_id='sokoban-custom', level_data=generate_level())
 
         for t in range(100):
             # choose action based on trained policy

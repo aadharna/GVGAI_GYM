@@ -68,8 +68,8 @@ public class LearningServer {
         VGDLFactory.GetInstance().init();
         VGDLRegistry.GetInstance().init();
 
-        Game toPlay = new VGDLParser().parseGame(environmentInfo.getGameFileName());
 
+        Game toPlay = new VGDLParser().parseGame(environmentInfo.getGameFileName());
         if(environmentInfo.getLvl().equals("custom")) {
             toPlay.buildStringLevel(environment.getLevelData().lines().collect(Collectors.toList()), randomSeed);
         } else {

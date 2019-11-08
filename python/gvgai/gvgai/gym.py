@@ -7,7 +7,7 @@ Simulate VGDL Games
 import gym
 import numpy as np
 from gym import spaces
-
+import re
 from gvgai import GVGAIClient
 
 
@@ -91,6 +91,12 @@ class GVGAI_Env(gym.Env):
         -------
         observation (object): the initial observation of the space.
         """
+
+        if environment_id.startswith('gvgai'):
+            expression = 'gvgai-(?P<env>.+)-v(?P<version>.+)'
+            env_name_parts = re.search(expression, environment_id)
+            environment_id = env_name_parts.group('env')
+            version = env_name_parts.group('version')
 
         self._set_environment(environment_id, level_data)
 

@@ -14,7 +14,12 @@ if __name__ == '__main__':
 
     level_generator = SokobanGenerator()
 
-    env = GVGAI_Env('zelda-lvl0', tile_observations=False, client_only=True)
+    level1 = 'wwwwwwwwwwwww\nw...........w\nw.+.........w\nw.....A.....w\nw...........w\nw...........w\nw...........w\nw.g.........w\nwwwwwwwwwwwww\n'
+    level2 = 'wwwwwwwwwwwww\nw..+........w\nw...........w\nw.....A.....w\nw...........w\nw...........w\nw...........w\nw.g.........w\nwwwwwwwwwwwww\n'
+
+    env = GVGAI_Env('zelda-custom', level_data=level1, tile_observations=False, client_only=True)
+
+    env.reset(environment_id='zelda-custom', level_data=level2)
 
     actions = env.unwrapped.get_action_meanings()
 
