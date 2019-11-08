@@ -92,12 +92,6 @@ class GVGAI_Env(gym.Env):
         observation (object): the initial observation of the space.
         """
 
-        if environment_id.startswith('gvgai'):
-            expression = 'gvgai-(?P<env>.+)-v(?P<version>.+)'
-            env_name_parts = re.search(expression, environment_id)
-            environment_id = env_name_parts.group('env')
-            version = env_name_parts.group('version')
-
         self._set_environment(environment_id, level_data)
 
         self._observations = self.GVGAI.reset(self.environment_id, self.level_data,
@@ -133,7 +127,12 @@ class GVGAI_Env(gym.Env):
         self.close()
 
         if environment_id is not None:
-            self.environment_id = environment_id
+            if environment_id.startswith('gvgai'):
+                expression = 'gvgai-(?P<env>.+)-v(?P<version>.+)'
+                env_name_parts = re.search(expression, environment_id)
+                self.environment_id = env_name_parts.group('env')
+            else:
+                self.environment_id = environment_id
 
         if level_data is not None:
             self.level_data = level_data
