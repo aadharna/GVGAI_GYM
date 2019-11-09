@@ -84,7 +84,7 @@ class GVGAI_Env(gym.Env):
         self._observations = observations
         return observations, reward, isOver, info
 
-    def reset(self, environment_id=None, level_data=None):
+    def reset(self, id=None, environment_id=None, level_data=None):
         """
         Reset the state of the environment and returns an initial observation.
         Returns
@@ -92,6 +92,8 @@ class GVGAI_Env(gym.Env):
         observation (object): the initial observation of the space.
         """
 
+        if id is not None:
+            environment_id = id
         self._set_environment(environment_id, level_data)
 
         self._observations = self.GVGAI.reset(self.environment_id, self.level_data,

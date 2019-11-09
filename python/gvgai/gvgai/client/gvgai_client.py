@@ -213,7 +213,8 @@ class GVGAIClient():
         level_data_bytes_length = 0
         # If we have a custom environment we should also pass the data
         if 'custom' in environment_id:
-            assert level_data is not None, 'If using a custom environment, level data must be supplied'
+            if level_data is None:
+                level_data = 'wwww\nwA.w\nw0ww\nwwww\n'
             level_data_bytes = level_data.encode()
             level_data_bytes_length = len(level_data_bytes)
 
