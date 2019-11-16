@@ -13,7 +13,7 @@ BasicGame square_size=30
             monster > Missile color=RED orientation=DOWN cooldown=4 img=oryx/scorpion3
             falling > Missile orientation=DOWN color=YELLOW speed=0.5 img=oryx/planet
         entrance > SpawnPoint total=5 cooldown=200 stype=monster img=newset/hole1 portal=True
-        wall > Immovable img=oryx/dirtwall autotiling=True
+        wall > Immovable img=oryx/dirtWall autotiling=True
 
     LevelMapping
         0 > gem floor

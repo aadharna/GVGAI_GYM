@@ -5,7 +5,7 @@ BasicGame key_handler=Pulse
         box    > Passive img=newset/block3
         exit > Door color=GREEN img=newset/cheese
         hole   > Immovable color=DARKBLUE img=newset/hole1 portal=True
-        wall > Immovable img=oryx/dirtwall autotiling=True
+        wall > Immovable img=oryx/dirtWall autotiling=True
 
     LevelMapping
         x > exit floor

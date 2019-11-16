@@ -17,7 +17,7 @@ BasicGame key_handler=Pulse  square_size=50
             inWhite > img=newset/girl1
             inBlue > img=newset/girl3
 
-        wall > Immovable img=oryx/dirtwall autotiling=True
+        wall > Immovable img=oryx/dirtWall autotiling=True
     
     LevelMapping
         . > black

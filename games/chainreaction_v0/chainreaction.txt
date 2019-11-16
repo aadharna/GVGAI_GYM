@@ -14,7 +14,7 @@ BasicGame key_handler=Pulse
                 normalBoulder > speed=0.0
                 stoppingBoulder > speed=0.0
                 boulderm > speed=1.0
-        wall > Immovable img=oryx/dirtwall autotiling=True
+        wall > Immovable img=oryx/dirtWall autotiling=True
 
     LevelMapping
         A > avatar floor
