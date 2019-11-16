@@ -26,7 +26,7 @@ for game in games:
                 id=f'gvgai-{level}-v{version}',
                 entry_point='gvgai.gym:GVGAI_Env',
                 kwargs={'environment_id': level},
-                max_episode_steps=2000
+                #max_episode_steps=2000
             )
 
         level = f'{name}-custom'
@@ -35,5 +35,5 @@ for game in games:
             id=f'gvgai-{level}-v{version}',
             entry_point='gvgai.gym:GVGAI_Env',
             kwargs={'environment_id': level},
-            max_episode_steps=2000
+            #max_episode_steps=2000
         )

@@ -52,5 +52,3 @@ for game in games:
         total_time = end - start
         fps = (frames / total_time)
         logger.info(f'frames per second: {fps}')
-
-GVGAI_Env.stop_client()

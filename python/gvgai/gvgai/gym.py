@@ -39,26 +39,16 @@ class GVGAI_Env(gym.Env):
                          tile_observations=tile_observations
                          )
 
+        self.viewer = None
+
+        self._reset_env_params()
+
         self.environment_id = environment_id
         self.level_data = level_data
         self._pixel_observations = pixel_observations
         self._tile_observations = tile_observations
         self._include_semantic_data = include_semantic_data
 
-        self.actions = self.GVGAI.actions
-        self.world_dimensions = self.GVGAI.world_dimensions
-        self.viewer = None
-
-        # Only allow gridphysics games for now
-        # Get number of moves for a selected game
-        self.action_space = spaces.Discrete(len(self.actions))
-
-        height, width = self.world_dimensions
-
-        observation_space = np.array([width, height, 3])
-
-        # Observation is the remaining time
-        self.observation_space = spaces.Box(low=0, high=255, shape=observation_space, dtype=np.int32)
 
     def step(self, action):
         """
@@ -84,6 +74,17 @@ class GVGAI_Env(gym.Env):
         self._observations = observations
         return observations, reward, isOver, info
 
+    def _reset_env_params(self):
+
+        self.actions = self.GVGAI.actions
+        self.action_space = spaces.Discrete(len(self.actions))
+
+        self.world_dimensions = self.GVGAI.world_dimensions
+        
+        height, width = self.world_dimensions
+        observation_space = np.array([width, height, 3])
+        self.observation_space = spaces.Box(low=0, high=255, shape=observation_space, dtype=np.int32)
+
     def reset(self, id=None, environment_id=None, level_data=None):
         """
         Reset the state of the environment and returns an initial observation.
@@ -101,6 +102,9 @@ class GVGAI_Env(gym.Env):
                                               pixel_observations=self._pixel_observations,
                                               tile_observations=self._tile_observations
                                               )
+
+        self._reset_env_params()
+
         return self._observations
 
     def render(self, mode='human'):
