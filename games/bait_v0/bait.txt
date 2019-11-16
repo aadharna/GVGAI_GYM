@@ -12,7 +12,7 @@ BasicGame  key_handler=Pulse square_size=50
         key > Passive img=oryx/key2 shrinkfactor=0.7
         goal > Immovable img=oryx/doorclosed1
         box    > Passive img=newset/block3 shrinkfactor=0.8
-        wall > Immovable img=oryx/dirtwall autotiling=True
+        wall > Immovable img=oryx/dirtWall autotiling=True
 
     LevelMapping
         A > nokey floor

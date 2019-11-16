@@ -7,7 +7,7 @@ import numpy as np
 from gvgai.client.utils.agent import get_action_by_value
 from gvgai.gym import GVGAI_Env
 
-games = ['zelda']
+games = ['zenpuzzle']
 levels = ['lvl0-v0', 'lvl1-v0', 'lvl2-v0', 'lvl3-v0', 'lvl4-v0']
 
 # Turn debug logging on
@@ -17,7 +17,7 @@ logger = logging.getLogger("Test Agent")
 
 for game in games:
     for level in levels:
-        env = gym.make(f'gvgai-{game}-{level}', pixel_observations=False, tile_observations=True)
+        env = gym.make(f'gvgai-{game}-{level}', pixel_observations=True, include_semantic_data=True)
         logger.info(f'Starting {env.spec.id}')
         # reset environment
         stateObs = env.reset()
@@ -34,7 +34,7 @@ for game in games:
             action_description = get_action_by_value(action_id, actions)
 
             stateObs, diffScore, done, debug = env.step(action_id)
-            #env.render()
+            env.render()
 
             frames += 1
 
