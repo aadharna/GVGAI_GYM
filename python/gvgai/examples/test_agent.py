@@ -7,8 +7,8 @@ import numpy as np
 from gvgai.client.utils.agent import get_action_by_value
 from gvgai.gym import GVGAI_Env
 
-games = ['zenpuzzle']
-levels = ['lvl0-v0', 'lvl1-v0', 'lvl2-v0', 'lvl3-v0', 'lvl4-v0']
+games = ['sokoban']
+levels = ['lvl3-v0', 'lvl4-v0']
 
 # Turn debug logging on
 logging.basicConfig(level=logging.INFO)
