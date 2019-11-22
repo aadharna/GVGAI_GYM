@@ -16,40 +16,39 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("Test Agent")
 
 for game in games:
-    for r in range(10):
-        for level in levels:
-            env = gym.make(f'gvgai-{game}-{level}', pixel_observations=True, include_semantic_data=True)
-            logger.info(f'Starting {env.spec.id}')
-            # reset environment
-            stateObs = env.reset()
-            actions = env.unwrapped.get_action_meanings()
-            start = time.time()
-            frames = 0
+    for level in levels:
+        env = gym.make(f'gvgai-{game}-{level}', pixel_observations=True, include_semantic_data=True)
+        logger.info(f'Starting {env.spec.id}')
+        # reset environment
+        stateObs = env.reset()
+        actions = env.unwrapped.get_action_meanings()
+        start = time.time()
+        frames = 0
+        env.render()
+
+        for t in range(10000):
+            # choose action based on trained policy
+            # do action and get new state and its reward
+            action_id = np.random.randint(5)
+
+            action_description = get_action_by_value(action_id, actions)
+
+            stateObs, diffScore, done, debug = env.step(action_id)
             env.render()
 
-            for t in range(10):
-                # choose action based on trained policy
-                # do action and get new state and its reward
-                action_id = np.random.randint(5)
+            frames += 1
 
-                action_description = get_action_by_value(action_id, actions)
+            if t % 100 == 0:
+                end = time.time()
+                total_time = end - start
+                fps = (frames / total_time)
+                logger.info(f'frames per second: {fps}')
 
-                stateObs, diffScore, done, debug = env.step(action_id)
-                env.render()
+            # break loop when terminal state is reached
+            if done:
+                env.reset()
 
-                frames += 1
-
-                if t % 100 == 0:
-                    end = time.time()
-                    total_time = end - start
-                    fps = (frames / total_time)
-                    logger.info(f'frames per second: {fps}')
-
-                # break loop when terminal state is reached
-                if done:
-                    env.reset()
-
-            end = time.time()
-            total_time = end - start
-            fps = (frames / total_time)
-            logger.info(f'frames per second: {fps}')
+        end = time.time()
+        total_time = end - start
+        fps = (frames / total_time)
+        logger.info(f'frames per second: {fps}')
