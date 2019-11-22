@@ -252,11 +252,15 @@ class GVGAIClient():
                     game_phase)
                 self._abort_game()
                 self._choose_level("END")
-                if hasattr(self, 'java'):
-                    self.java.kill()
-                    self._logpipe.close()
             except AssertionError as e:
                 self._logger.error(e)
+
+        try:
+            if hasattr(self, 'java'):
+                self.java.kill()
+                self._logpipe.close()
+        except AssertionError as e:
+            self._logger.error(e)
 
     def __del__(self):
         self.stop()

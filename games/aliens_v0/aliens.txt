@@ -9,7 +9,7 @@ BasicGame square_size=32
         alien   > Bomber       stype=bomb   prob=0.01  cooldown=3 speed=0.8
             alienGreen > img=oryx/alien3
             alienBlue > img=oryx/alien1
-        portal  > invisible=True hidden=True
+        portal  > invisible=False hidden=False
         	portalSlow  > SpawnPoint   stype=alienBlue  cooldown=16   total=20 img=portal
         	portalFast  > SpawnPoint   stype=alienGreen  cooldown=12   total=20 img=portal
 

@@ -97,7 +97,7 @@ class GVGAI_Env(gym.Env):
             environment_id = id
         self._set_environment(environment_id, level_data)
 
-        self._observations = self.GVGAI.reset(self.environment_id, self.level_data,
+        self.GVGAI.reset(self.environment_id, self.level_data,
                                               include_semantic_data=self._include_semantic_data,
                                               pixel_observations=self._pixel_observations,
                                               tile_observations=self._tile_observations
@@ -105,7 +105,11 @@ class GVGAI_Env(gym.Env):
 
         self._reset_env_params()
 
-        return self._observations
+        initial_step = self.GVGAI.step(0)
+
+        self._observations = initial_step[0]
+
+        return initial_step
 
     def render(self, mode='human'):
         if self._observations is None:
@@ -146,8 +150,22 @@ class GVGAI_Env(gym.Env):
     def get_action_meanings(self):
         return self.actions
 
+    def get_keys_to_action(self):
+        return {
+            (ord('w'), ): 1,
+            (ord('a'), ): 2,
+            (ord('s'), ): 3,
+            (ord('d'), ): 4,
+            (ord(' '), ): 5
+        }
+
+    def stop(self):
+        self.close()
+        self.GVGAI.stop()
+
     def __del__(self):
         self.close()
+        self.GVGAI.stop()
 
 
 class SimpleImageViewer(object):
