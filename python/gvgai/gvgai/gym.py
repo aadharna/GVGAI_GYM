@@ -105,12 +105,6 @@ class GVGAI_Env(gym.Env):
 
         self._reset_env_params()
 
-        initial_step = self.GVGAI.step(0)
-
-        self._observations = initial_step[0]
-
-        return initial_step
-
     def render(self, mode='human'):
         if self._observations is None:
             return
