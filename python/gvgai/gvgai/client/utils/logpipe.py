@@ -2,10 +2,12 @@ import logging
 import threading
 import os
 
+
 class LogPipe(threading.Thread):
 
     def __init__(self, name, level):
-        """Setup the object with a logger and a loglevel
+        """
+        Setup the object with a logger and a loglevel
         and start the thread
         """
         threading.Thread.__init__(self)
@@ -19,12 +21,14 @@ class LogPipe(threading.Thread):
         self.start()
 
     def fileno(self):
-        """Return the write file descriptor of the pipe
+        """
+        Return the write file descriptor of the pipe
         """
         return self.fdWrite
 
     def run(self):
-        """Run the thread, logging everything.
+        """
+        Run the thread, logging everything.
         """
         for line in iter(self.pipeReader.readline, ''):
             self._logger.log(self.level, line.strip('\n'))
@@ -32,6 +36,9 @@ class LogPipe(threading.Thread):
         self.pipeReader.close()
 
     def close(self):
-        """Close the write end of the pipe.
         """
-        os.close(self.fdWrite)
+        Close the write end of the pipe.
+        """
+        if self.fdWrite is not None:
+            os.close(self.fdWrite)
+            self.fdWrite = None
