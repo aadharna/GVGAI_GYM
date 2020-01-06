@@ -850,6 +850,8 @@ public abstract class Game {
 
         boolean firstRun = true;
 
+        player.observe(getObservation());
+
         // Play until the game is ended
         while (!isEnded && !wi.windowClosed) {
 

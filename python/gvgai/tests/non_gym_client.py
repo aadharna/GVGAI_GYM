@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     env = GVGAI_Env('bait-lvl0', tile_observations=False, include_semantic_data=True, client_only=True)
 
-    env.reset()
+    initial_frame = env.reset()
 
     actions = env.unwrapped.get_action_meanings()
 

@@ -106,9 +106,11 @@ class GVGAIClient():
                                    )
 
             if game_phase == GamePhase.INIT_STATE:
-                self._init(state)
+                initial_observation = self._init(state)
                 self._running = True
                 reset = True
+
+                return initial_observation
 
             if game_phase == GamePhase.END_STATE:
                 self.io.writeToServer(AgentPhase.END_STATE)
@@ -241,6 +243,9 @@ class GVGAIClient():
         self.actions = self._get_actions(state)
         self.world_dimensions = state.WorldDimensionAsNumpy().astype(np.int32)
         self.io.writeToServer(AgentPhase.INIT_STATE)
+
+        state, image = self._observe()
+        return image
 
     def stop(self):
 

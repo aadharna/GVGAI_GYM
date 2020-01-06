@@ -97,13 +97,16 @@ class GVGAI_Env(gym.Env):
             environment_id = id
         self._set_environment(environment_id, level_data)
 
-        self.GVGAI.reset(self.environment_id, self.level_data,
+        initial_observation = self.GVGAI.reset(self.environment_id, self.level_data,
                                               include_semantic_data=self._include_semantic_data,
                                               pixel_observations=self._pixel_observations,
                                               tile_observations=self._tile_observations
                                               )
-
         self._reset_env_params()
+
+        self._observations = initial_observation
+
+        return initial_observation
 
     def render(self, mode='human'):
         if self._observations is None:
