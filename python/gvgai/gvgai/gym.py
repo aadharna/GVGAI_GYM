@@ -69,10 +69,9 @@ class GVGAI_Env(gym.Env):
                 info that can be added for debugging
                 info["winner"] == PLAYER_LOSES, PLAYER_WINS, NO_WINNER
         """
-        observations, reward, isOver, info = self.GVGAI.step(action)
+        self._observations, reward, isOver, info = self.GVGAI.step(action)
 
-        self._observations = observations
-        return observations, reward, isOver, info
+        return self._observations, reward, isOver, info
 
     def _reset_env_params(self):
 
@@ -97,16 +96,14 @@ class GVGAI_Env(gym.Env):
             environment_id = id
         self._set_environment(environment_id, level_data)
 
-        initial_observation = self.GVGAI.reset(self.environment_id, self.level_data,
+        self._observations = self.GVGAI.reset(self.environment_id, self.level_data,
                                               include_semantic_data=self._include_semantic_data,
                                               pixel_observations=self._pixel_observations,
                                               tile_observations=self._tile_observations
                                               )
         self._reset_env_params()
 
-        self._observations = initial_observation
-
-        return initial_observation
+        return self._observations
 
     def render(self, mode='human'):
         if self._observations is None:
