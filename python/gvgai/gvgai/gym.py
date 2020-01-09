@@ -20,6 +20,7 @@ class GVGAI_Env(gym.Env):
 
     def __init__(self, environment_id=None,
                  level_data=None,
+                 max_steps=-1,
                  pixel_observations=True,
                  tile_observations=False,
                  include_semantic_data=False,
@@ -34,6 +35,7 @@ class GVGAI_Env(gym.Env):
 
         self.GVGAI.reset(environment_id,
                          level_data,
+                         max_steps=max_steps,
                          pixel_observations=pixel_observations,
                          include_semantic_data=include_semantic_data,
                          tile_observations=tile_observations
@@ -48,7 +50,7 @@ class GVGAI_Env(gym.Env):
         self._pixel_observations = pixel_observations
         self._tile_observations = tile_observations
         self._include_semantic_data = include_semantic_data
-
+        self._max_steps = max_steps
 
     def step(self, action):
         """
@@ -80,7 +82,7 @@ class GVGAI_Env(gym.Env):
         self.action_space = spaces.Discrete(len(self.actions))
 
         self.world_dimensions = self.GVGAI.world_dimensions
-        
+
         height, width = self.world_dimensions
         observation_space = np.array([width, height, 3])
         self.observation_space = spaces.Box(low=0, high=255, shape=observation_space, dtype=np.int32)
@@ -98,10 +100,11 @@ class GVGAI_Env(gym.Env):
         self._set_environment(environment_id, level_data)
 
         initial_observation = self.GVGAI.reset(self.environment_id, self.level_data,
-                                              include_semantic_data=self._include_semantic_data,
-                                              pixel_observations=self._pixel_observations,
-                                              tile_observations=self._tile_observations
-                                              )
+                                               max_steps=self._max_steps,
+                                               include_semantic_data=self._include_semantic_data,
+                                               pixel_observations=self._pixel_observations,
+                                               tile_observations=self._tile_observations
+                                               )
         self._reset_env_params()
 
         self._observations = initial_observation
@@ -149,11 +152,11 @@ class GVGAI_Env(gym.Env):
 
     def get_keys_to_action(self):
         return {
-            (ord('w'), ): 1,
-            (ord('a'), ): 2,
-            (ord('s'), ): 3,
-            (ord('d'), ): 4,
-            (ord(' '), ): 5
+            (ord('w'),): 1,
+            (ord('a'),): 2,
+            (ord('s'),): 3,
+            (ord('d'),): 4,
+            (ord(' '),): 5
         }
 
     def stop(self):

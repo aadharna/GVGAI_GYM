@@ -3,6 +3,7 @@ package qmul.gvgai.server;
 import lombok.extern.slf4j.Slf4j;
 import qmul.gvgai.engine.core.game.Game;
 import qmul.gvgai.engine.core.game.StateObservation;
+import qmul.gvgai.engine.core.termination.Timeout;
 import qmul.gvgai.engine.core.vgdl.VGDLFactory;
 import qmul.gvgai.engine.core.vgdl.VGDLParser;
 import qmul.gvgai.engine.core.vgdl.VGDLRegistry;
@@ -74,6 +75,11 @@ public class LearningServer {
             toPlay.buildStringLevel(environment.getLevelData().lines().collect(Collectors.toList()), randomSeed);
         } else {
             toPlay.buildLevel(environmentInfo.getLevelFileName(), randomSeed);
+        }
+
+        int maxSteps = environment.getMaxSteps();
+        if(maxSteps > 0) {
+            toPlay.getTerminations().add(new Timeout(maxSteps));
         }
 
         // Initialize the new learningPlayer instance.

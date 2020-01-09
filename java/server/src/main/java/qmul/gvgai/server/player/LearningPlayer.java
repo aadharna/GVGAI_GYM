@@ -32,6 +32,7 @@ public class LearningPlayer extends Player {
     private boolean sendPixelObservation = false;
 
     private VGDLRenderer renderer = null;
+    private int maxSteps = -1;
 
     /**
      * Learning Player constructor.
@@ -182,6 +183,7 @@ public class LearningPlayer extends Player {
                 this.includeSemanticData = data.readBoolean();
                 this.sendTileObservation = data.readBoolean();
                 this.sendPixelObservation = data.readBoolean();
+                this.maxSteps = data.readInt();
 
                 log.debug("Environment chosen: [{}]", environmentId);
                 int levelDataLength = data.readInt();
@@ -190,10 +192,10 @@ public class LearningPlayer extends Player {
                     String levelData = new String(data.readNBytes(levelDataLength), StandardCharsets.UTF_8);
                     log.debug("Custom Level Data [{}]", levelData);
 
-                    return new EnvironmentChoice(environmentId, levelData, includeSemanticData, sendPixelObservation, sendTileObservation);
+                    return new EnvironmentChoice(environmentId, levelData, maxSteps, includeSemanticData, sendPixelObservation, sendTileObservation);
                 }
 
-                return new EnvironmentChoice(environmentId, includeSemanticData, sendPixelObservation, sendTileObservation);
+                return new EnvironmentChoice(environmentId, maxSteps, includeSemanticData, sendPixelObservation, sendTileObservation);
             }
 
 

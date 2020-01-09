@@ -779,7 +779,7 @@ public abstract class Game {
 
         factory.parseParameters(content, this);
 
-		ki = new KeyInput();
+        ki = new KeyInput();
     }
 
     /**
@@ -1093,7 +1093,7 @@ public abstract class Game {
                 }
             }
         } else {
-            log.warn( "No avatars found.");
+            log.warn("No avatars found.");
         }
     }
 
@@ -1237,7 +1237,7 @@ public abstract class Game {
                                 }
                             }
                         } catch (ConcurrentModificationException e) {
-                            log.warn( "you can't spawn sprites outside of the screen.");
+                            log.warn("you can't spawn sprites outside of the screen.");
                         }
                     }
             }

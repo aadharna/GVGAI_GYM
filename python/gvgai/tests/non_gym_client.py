@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     level_generator = SokobanGenerator()
 
-    env = GVGAI_Env('bait-lvl0', tile_observations=False, include_semantic_data=True, client_only=True)
+    env = GVGAI_Env('sokoban-lvl0', max_steps=10, tile_observations=False, include_semantic_data=True, client_only=True)
 
     initial_frame = env.reset()
 

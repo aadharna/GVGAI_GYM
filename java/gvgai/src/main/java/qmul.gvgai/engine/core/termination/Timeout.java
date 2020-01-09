@@ -13,7 +13,12 @@ public class Timeout extends Termination
     public boolean compare = false;
     public String limits = "0";
 
+
     public Timeout(){}
+
+    public Timeout(int limit) {
+        this.limit = limit;
+    }
 
     public Timeout(TerminationContent cnt)
     {

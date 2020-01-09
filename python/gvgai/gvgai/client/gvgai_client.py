@@ -80,6 +80,7 @@ class GVGAIClient():
 
     def reset(self, environment_id=None,
               level_data=None,
+              max_steps=-1,
               pixel_observations=True,
               tile_observations=False,
               include_semantic_data=False
@@ -100,6 +101,7 @@ class GVGAIClient():
             if game_phase == GamePhase.CHOOSE_LEVEL:
                 self._choose_level(environment_id,
                                    level_data=level_data,
+                                   max_steps=max_steps,
                                    pixel_observations=pixel_observations,
                                    tile_observations=tile_observations,
                                    include_semantic_data=include_semantic_data
@@ -206,7 +208,7 @@ class GVGAIClient():
     def _bool2bytes(self, value):
         return bytearray(b'\x01' if value else b'\x00')
 
-    def _choose_level(self, environment_id, level_data=None, include_semantic_data=False, pixel_observations=True,
+    def _choose_level(self, environment_id, level_data=None, max_steps=-1, include_semantic_data=False, pixel_observations=True,
                       tile_observations=False):
 
         environment_id_bytes = environment_id.encode()
@@ -220,7 +222,7 @@ class GVGAIClient():
             level_data_bytes = level_data.encode()
             level_data_bytes_length = len(level_data_bytes)
 
-        choose_level_data = bytearray(4 + environment_id_bytes_length + 7 + level_data_bytes_length)
+        choose_level_data = bytearray(4 + environment_id_bytes_length + 13 + level_data_bytes_length)
 
         # Environment Id
         pack_into('>i', choose_level_data, 0, environment_id_bytes_length)
@@ -230,11 +232,12 @@ class GVGAIClient():
         pack_into('?', choose_level_data, environment_id_bytes_length + 4, include_semantic_data)
         pack_into('?', choose_level_data, environment_id_bytes_length + 5, tile_observations)
         pack_into('?', choose_level_data, environment_id_bytes_length + 6, pixel_observations)
+        pack_into('>i',choose_level_data, environment_id_bytes_length + 7, max_steps)
 
         # Level Data
-        pack_into('>i', choose_level_data, environment_id_bytes_length + 7, level_data_bytes_length)
+        pack_into('>i', choose_level_data, environment_id_bytes_length + 11, level_data_bytes_length)
         if level_data_bytes_length > 0:
-            data_start = environment_id_bytes_length + 11
+            data_start = environment_id_bytes_length + 15
             pack_into('%ds' % level_data_bytes_length, choose_level_data, data_start, level_data_bytes)
 
         self.io.writeToServer(AgentPhase.CHOOSE_LEVEL_STATE, choose_level_data)
