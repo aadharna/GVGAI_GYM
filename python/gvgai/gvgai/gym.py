@@ -142,7 +142,7 @@ class GVGAI_Env(gym.Env):
             self.level_data = level_data
 
     def get_action_meanings(self):
-        return self.actions
+        return sorted(self.actions, key=lambda k: k.value)
 
     def get_keys_to_action(self):
         return {
