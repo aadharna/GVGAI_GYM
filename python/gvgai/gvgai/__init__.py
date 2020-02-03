@@ -8,6 +8,9 @@ dir = os.path.dirname(__file__)
 gamesPath = os.path.normpath(os.path.join(dir, '../../../games'))
 games = os.listdir(gamesPath)
 
+def get_games_path():
+    return gamesPath
+
 for game in games:
     gamePath = os.path.join(gamesPath, game)
     if (os.path.isdir(gamePath)):
