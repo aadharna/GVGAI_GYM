@@ -1,4 +1,4 @@
 numpy==1.18.1
-gym==0.12.5
+gym==0.15.6
 flatbuffers==1.11
 pygame==1.9.6

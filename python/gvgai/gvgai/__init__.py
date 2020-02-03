@@ -8,8 +8,10 @@ dir = os.path.dirname(__file__)
 gamesPath = os.path.normpath(os.path.join(dir, '../../../games'))
 games = os.listdir(gamesPath)
 
+
 def get_games_path():
     return gamesPath
+
 
 for game in games:
     gamePath = os.path.join(gamesPath, game)
@@ -29,7 +31,7 @@ for game in games:
                 id=f'gvgai-{level}-v{version}',
                 entry_point='gvgai.gym:GVGAI_Env',
                 kwargs={'environment_id': level},
-                #max_episode_steps=2000
+                # max_episode_steps=2000
             )
 
         level = f'{name}-custom'
@@ -38,5 +40,5 @@ for game in games:
             id=f'gvgai-{level}-v{version}',
             entry_point='gvgai.gym:GVGAI_Env',
             kwargs={'environment_id': level},
-            #max_episode_steps=2000
+            # max_episode_steps=2000
         )
