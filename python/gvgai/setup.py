@@ -8,7 +8,7 @@ with open("../../LICENSE", "r") as fh:
 
 setup(
     name='gvgai-gym',
-    version="0.1.0",
+    version="0.1.1",
     author_email="chrisbam4d@gmail.com",
     description="GVGAI Gym Python",
     long_description=long_description,
@@ -17,8 +17,8 @@ setup(
     packages=find_packages(),
     license=license,
     install_requires = [
-        "gym==0.12.5",
+        "gym==0.15.6",
         "flatbuffers==1.11",
-        "numpy==1.16.4"
+        "numpy==1.18.1"
     ]
 )

@@ -201,14 +201,14 @@ class SimpleImageViewer(object):
         assert len(arr.shape) == 3, "You passed in an image with the wrong number shape"
         image = self._pyglet.image.ImageData(arr.shape[1], arr.shape[0],
                                              'RGB', arr.tobytes(), pitch=arr.shape[1] * -3)
-        self._gl.glTexParameteri(self._gl.GL_TEXTURE_2D,
-                                 self._gl.GL_TEXTURE_MAG_FILTER, self._gl.GL_NEAREST)
         texture = image.get_texture()
         texture.width = self.width
         texture.height = self.height
         self.window.clear()
         self.window.switch_to()
         self.window.dispatch_events()
+        self._gl.glTexParameteri(self._gl.GL_TEXTURE_2D, self._gl.GL_TEXTURE_MAG_FILTER, self._gl.GL_NEAREST)
+        self._gl.glTexParameteri(self._gl.GL_TEXTURE_2D, self._gl.GL_TEXTURE_MIN_FILTER, self._gl.GL_NEAREST)
         texture.blit(0, 0)  # draw
         self.window.flip()
 
