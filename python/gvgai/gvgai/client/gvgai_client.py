@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+import time
 import subprocess
 from struct import pack_into
 
@@ -41,8 +42,15 @@ class GVGAIClient():
 
             self._logpipe = LogPipe("JAVA", level=java_log_level)
             # Run the application using gradle
-            cmd = [f'{root_path}/gradlew', 'run',
+            _time = int(time.time())
+            home = os.path.expanduser("~")
+            if not os.path.exists(os.path.join(home, '.gradle/uniqueGradles')):
+                os.mkdir(os.path.join(home, '.gradle/uniqueGradles'))
+            gradle_path = os.path.join(home, '.gradle/uniqueGradles', str(_time))
+            os.mkdir(gradle_path)
+            cmd = [f'{root_path}/gradlew', f'-g {gradle_path}', 'run',
                    f'--args=-i {root_path}/games -p {self.io.port} -l {logging.getLevelName(java_log_level)}']
+            
             try:
                 # Pump the logging output to a logger so we can see it
                 self.java = subprocess.Popen(cmd, stdout=self._logpipe, stderr=self._logpipe, cwd=root_path)
