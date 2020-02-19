@@ -11,7 +11,7 @@ BasicGame square_size=32
       enemy >  
         monsterHorz > Missile orientation=LEFT cooldown=2 img=oryx/spider2
         monsterVert > Missile orientation=RIGHT cooldown=2 img=oryx/scorpion1
-        monsterChase > Chaser cooldown=8 img=oryx/ogre1.png
+        monsterChase > Chaser stype=avatar cooldown=8 img=oryx/ogre1.png
       wall > Immovable autotiling=true img=oryx/wall3
       	
 
