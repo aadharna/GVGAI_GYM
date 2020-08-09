@@ -35,7 +35,7 @@ BasicGame square_size=25
 
     InteractionSet
         avatar wall enemy enemyground shot > killSprite scoreChange=-10
-	shot enemyground > killSprite
+        shot enemyground > killSprite
 
         blib avatar > killSprite scoreChange=1
 
